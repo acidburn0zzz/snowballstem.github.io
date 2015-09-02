@@ -96,7 +96,7 @@ boi<BR>
 bóia<BR>
 boiando<BR>
 </TD>
-<TD></TD><TD> &nbsp;<TT><B> => </B></TT>&nbsp; </TD>
+<TD></TD><TD> &nbsp;<TT><B> =&gt; </B></TT>&nbsp; </TD>
 <TD></TD><TD>
 boa<BR>
 boainain<BR>
@@ -182,7 +182,7 @@ quinze<BR>
 quinzena<BR>
 quiosque<BR>
 </TD>
-<TD></TD><TD> &nbsp;<TT><B> => </B></TT>&nbsp; </TD>
+<TD></TD><TD> &nbsp;<TT><B> =&gt; </B></TT>&nbsp; </TD>
 <TD></TD><TD>
 quiab<BR>
 quic<BR>
@@ -239,8 +239,7 @@ quiosqu<BR>
 <BR><BR>
 Letters in Portuguese include the following accented forms,
 <DL><DD>
-    <B><I>á  &nbsp;  é  &nbsp;  í  &nbsp;  ó  &nbsp;  ú  &nbsp;  â  &nbsp;  ê  &nbsp;  ô  &nbsp;  ç  &nbsp;  ã  &nbsp;  õ  &nbsp;  ü  &nbsp;
-    ñ</I></B>
+    <B><I>á  &nbsp;  é  &nbsp;  í  &nbsp;  ó  &nbsp;  ú  &nbsp;  â  &nbsp;  ê  &nbsp;  ô  &nbsp;  ç  &nbsp;  ã  &nbsp;  õ  &nbsp;  ü</I></B>
 </DL>
 The following letters are vowels:
 <DL><DD>
@@ -276,10 +275,10 @@ Step 1: Standard suffix removal
     ante  &nbsp;  antes  &nbsp;  ância</I></B>
         <DD>delete if in <I>R</I>2
 <BR><BR>
-    <DT><B><I>logía  &nbsp;  logías</I></B>
+    <DT><B><I>logia  &nbsp;  logias</I></B>
         <DD>replace with <B><I>log</I></B> if in <I>R</I>2
 <BR><BR>
-    <DT><B><I>ución  &nbsp;  uciones</I></B>
+    <DT><B><I>ução  &nbsp;  uções</I></B>
         <DD>replace with <B><I>u</I></B> if in <I>R</I>2
 <BR><BR>
     <DT><B><I>ência  &nbsp;  ências</I></B>
@@ -407,8 +406,8 @@ define v 'aeiou{a'}{e'}{i'}{o'}{u'}{a^}{e^}{o^}'
 
 define prelude as repeat (
     [substring] among(
-        '{a~}' (<- 'a~')
-        '{o~}' (<- 'o~')
+        '{a~}' (&lt;- 'a~')
+        '{o~}' (&lt;- 'o~')
         ''     (next)
     ) //or next
 )
@@ -433,17 +432,17 @@ define mark_regions as (
 
 define postlude as repeat (
     [substring] among(
-        'a~' (<- '{a~}')
-        'o~' (<- '{o~}')
+        'a~' (&lt;- '{a~}')
+        'o~' (&lt;- '{o~}')
         ''   (next)
     ) //or next
 )
 
 backwardmode (
 
-    define RV as $pV <= cursor
-    define R1 as $p1 <= cursor
-    define R2 as $p2 <= cursor
+    define RV as $pV &lt;= cursor
+    define R1 as $p1 &lt;= cursor
+    define R2 as $p2 &lt;= cursor
 
     define standard_suffix as (
         [substring] among(
@@ -464,18 +463,18 @@ backwardmode (
             (
                 R2 delete
             )
-            'log{i'}a'
-            'log{i'}as'
+            'logia'
+            'logias'
             (
-                R2 <- 'log'
+                R2 &lt;- 'log'
             )
-            'uci{o'}n' 'uciones'
+            'u{c,}a~o' 'u{c,}o~es'
             (
-                R2 <- 'u'
+                R2 &lt;- 'u'
             )
             '{e^}ncia' '{e^}ncias'
             (
-                R2 <- 'ente'
+                R2 &lt;- 'ente'
             )
             'amente'
             (
@@ -523,7 +522,7 @@ backwardmode (
             'ira' 'iras'
             (
                 RV 'e'  // -eira -eiras usually non-verbal
-                <- 'ir'
+                &lt;- 'ir'
             )
         )
     )
@@ -565,7 +564,7 @@ backwardmode (
             'e' '{e'}' '{e^}'
                 ( RV delete [('u'] test 'g') or
                              ('i'] test 'c') RV delete )
-            '{c,}' (<-'c')
+            '{c,}' (&lt;-'c')
         )
     )
 )
