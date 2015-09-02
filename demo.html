@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>Snowball - Demo</title>
+</head>
+<body bgcolor=white>
+<table><tr><td valign=center>
+<center><img src="snub-dodecahedron.gif"></center>
+</td><td>
+<h1 align=center>Snowball - Demo</h1>
+</td></tr>
+<tr><td valign=top bgcolor=cyan width=128><a href=".">Introduction</a><br>
+<b>Demo</b><br>
+<a href="download.html">Download</a><br>
+<a href="lists.html">Mailing Lists</a><br>
+<a href="license.html">License</a><br>
+<a href="credits.html">Credits</a><br>
+<a href="projects.html">Projects</a><br>
+<a href="http://svn.tartarus.org/?root=snowball">Browse SVN</a><br>
+<br>
+
+<!--
+<form NAME=P METHOD=GET ACTION="omega.cgi" TARGET="_top">
+<center>
+<input NAME=P VALUE="" SIZE=12>
+<input TYPE=SUBMIT VALUE="Search" BORDER=0>
+<input TYPE=hidden NAME=DB VALUE="snowball-website">
+<input TYPE=hidden NAME=FMT VALUE="snquery">
+</form>
+<br>
+-->
+
+</td>
+<td valign=top>
+<table width=95% align=center cols=1>
+<TR><TD>
+
+[The demo will return...]
+<!--
+<form method="POST" action="demo.php">
+Enter some words to stem, using the English stemming algorithm, and then click on Submit:<br>
+<textarea name="words" rows="10" cols="50"><?php
+$words = $_POST['words'];
+$tmp = preg_replace('|\\\\|', '', $words);
+echo "$tmp";
+?></textarea>
+<br>
+<input type="submit" name="Submit" value="Submit">
+</form>
+-->
+</TD></TR>
+
+<!--
+<?php
+if ($words != '')
+{
+  echo "<TR><TD>";
+  echo "<h2>Results</h2><pre>";
+  $tmpname = tempnam("/tmp", "snowball_stemdemo");
+  $tmpfile = fopen($tmpname, "w");
+  $words = strtolower($words);
+  $words = preg_replace('|[^-A-Za-z\']|', ' ', $words);
+  $words = preg_replace('|[-\']|', '', $words);
+  $words = preg_replace('| *$|', '', $words);
+  $words = preg_replace('|  *|', "\n", $words);
+  $language = "english";
+  # Have a limit of 10000 bytes, just in case.
+  fwrite($tmpfile, $words, 10000);
+  fclose($tmpfile);
+  passthru ("/home/snowball-svn/pub/compiled/stemwords -p -i $tmpname");
+  unlink($tmpname);
+  echo "</pre>";
+  echo "</TR></TD>";
+}
+?>
+-->
+
+</table>
+</td></tr></table>
+<address>
+
+<br>
+<a href="mailto:snowball-discuss@lists.tartarus.org">Write to our mailing list</a> if you have comments or questions about the project.  Note that this mailing list will reject postings from non-subscribers (due to the immense amount of spam received otherwise).  The list is fairly low-traffic, but if you don't wish to receive messages (but wish to be able to post), you can disable sending of messages in the mailing list options after subscribing.
+</address>
+</body>
+</html>
