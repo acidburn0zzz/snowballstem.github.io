@@ -10,7 +10,7 @@ function w = porterStemmer2(w)
    % This matlab implementation is based on great previous one done by Juan
    % Carlos Lopez http://tartarus.org/~martin/PorterStemmer/matlab.txt it
    % is slightly faster (13-33%) when using test words here
-   % http://snowballstem.org/algorithms/english/diffs.txt and about
+   % http://snowballstem.org/algorithms/english/ and about
    % 33% faster when used in real life text form a book with 124'370 words
    % - mainly due to the fact that smaller words (less than 6 letters) are
    % handled little bit more effectively, skipping some argument passing
@@ -22,7 +22,7 @@ function w = porterStemmer2(w)
    % http://www.cs.cmu.edu/afs/cs.cmu.edu/project/listen/NLP/
    % Parsers/Stanford/stanford-parser-2005-07-21/MCALL/tsurgeon/MCALL/
    % WordNet/prolog/misc/PREFIXES/BAR120.pdf
-   % to reorder switch case conditions so that more freqent ones are
+   % to reorder switch case conditions so that more frequent ones are
    % checked first.
    
    l = length(w);
