@@ -1,8 +1,17 @@
-<HTML>
-<HEAD>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>The English (Porter2) stemming algorithm</title>
+  </head>
 
-<TITLE>The English (Porter2) stemming algorithm</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 <H1 ALIGN=CENTER>The English (Porter2) stemming algorithm</H1>
 
@@ -712,248 +721,244 @@ The definition of the English stemmer above is therefore supplemented by the fol
 </DL>
 <BR><BR>
 
-
-
-
 </TR>
 
-<TR><TD BGCOLOR="lightblue">
-<BR>&nbsp;<H2>The full algorithm in Snowball</H2>
+<TR><TD>
+<H2>The full algorithm in Snowball</H2>
 
-<BR><PRE>
-<DL><DD>
-integers ( p1 p2 )
-booleans ( Y_found )
+<pre><div class="highlight"><pre><span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
+<span class="kd">booleans</span> <span class="p">(</span> <span class="n">Y_found</span> <span class="p">)</span>
 
-routines (
-    prelude postlude
-    mark_regions
-    shortv
-    R1 R2
-    Step_1a Step_1b Step_1c Step_2 Step_3 Step_4 Step_5
-    exception1
-    exception2
-)
+<span class="kd">routines</span> <span class="p">(</span>
+    <span class="n">prelude</span> <span class="n">postlude</span>
+    <span class="n">mark_regions</span>
+    <span class="n">shortv</span>
+    <span class="n">R1</span> <span class="n">R2</span>
+    <span class="n">Step_1a</span> <span class="n">Step_1b</span> <span class="n">Step_1c</span> <span class="n">Step_2</span> <span class="n">Step_3</span> <span class="n">Step_4</span> <span class="n">Step_5</span>
+    <span class="n">exception1</span>
+    <span class="n">exception2</span>
+<span class="p">)</span>
 
-externals ( stem )
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-groupings ( v v_WXY valid_LI )
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="n">v_WXY</span> <span class="n">valid_LI</span> <span class="p">)</span>
 
-stringescapes {}
+<span class="kd">stringescapes</span> <span class="p">{}</span>
 
-define v        'aeiouy'
-define v_WXY    v + 'wxY'
+<span class="kd">define</span> <span class="n">v</span>        <span class="s">&#39;aeiouy&#39;</span>
+<span class="kd">define</span> <span class="n">v_WXY</span>    <span class="n">v</span> <span class="o">+</span> <span class="s">&#39;wxY&#39;</span>
 
-define valid_LI 'cdeghkmnrt'
+<span class="kd">define</span> <span class="n">valid_LI</span> <span class="s">&#39;cdeghkmnrt&#39;</span>
 
-define prelude as (
-    unset Y_found
-    do ( ['{'}'] delete)
-    do ( ['y'] &lt;-'Y' set Y_found)
-    do repeat(goto (v ['y']) &lt;-'Y' set Y_found)
-)
+<span class="kd">define</span> <span class="n">prelude</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">unset</span> <span class="n">Y_found</span>
+    <span class="ow">do</span> <span class="p">(</span> <span class="p">[</span><span class="s">&#39;{&#39;}&#39;</span><span class="p">]</span> <span class="ow">delete</span><span class="p">)</span>
+    <span class="ow">do</span> <span class="p">(</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span> <span class="o">&lt;-</span><span class="s">&#39;Y&#39;</span> <span class="ow">set</span> <span class="n">Y_found</span><span class="p">)</span>
+    <span class="ow">do</span> <span class="ow">repeat</span><span class="p">(</span><span class="ow">goto</span> <span class="p">(</span><span class="n">v</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">])</span> <span class="o">&lt;-</span><span class="s">&#39;Y&#39;</span> <span class="ow">set</span> <span class="n">Y_found</span><span class="p">)</span>
+<span class="p">)</span>
 
-define mark_regions as (
-    $p1 = limit
-    $p2 = limit
-    do(
-        among (
-            'gener'
-            'commun'  //  added May 2005
-            'arsen'   //  added Nov 2006 (arsenic/arsenal)
-            // ... extensions possible here ...
-        ) or (gopast v  gopast non-v)
-        setmark p1
-        gopast v  gopast non-v  setmark p2
-    )
-)
+<span class="kd">define</span> <span class="n">mark_regions</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="o">$</span><span class="n">p2</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="ow">do</span><span class="p">(</span>
+        <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;gener&#39;</span>
+            <span class="s">&#39;commun&#39;</span>  <span class="c1">//  added May 2005</span>
+            <span class="s">&#39;arsen&#39;</span>   <span class="c1">//  added Nov 2006 (arsenic/arsenal)</span>
+            <span class="c1">// ... extensions possible here ...</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">gopast</span> <span class="n">v</span>  <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span><span class="p">)</span>
+        <span class="ow">setmark</span> <span class="n">p1</span>
+        <span class="ow">gopast</span> <span class="n">v</span>  <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p2</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-backwardmode (
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-    define shortv as (
-        ( non-v_WXY v non-v )
-        or
-        ( non-v v atlimit )
-    )
+    <span class="kd">define</span> <span class="n">shortv</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">(</span> <span class="ow">non-</span><span class="n">v_WXY</span> <span class="n">v</span> <span class="ow">non-</span><span class="n">v</span> <span class="p">)</span>
+        <span class="ow">or</span>
+        <span class="p">(</span> <span class="ow">non-</span><span class="n">v</span> <span class="n">v</span> <span class="ow">atlimit</span> <span class="p">)</span>
+    <span class="p">)</span>
 
-    define R1 as $p1 &lt;= cursor
-    define R2 as $p2 &lt;= cursor
+    <span class="kd">define</span> <span class="n">R1</span> <span class="k">as</span> <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">R2</span> <span class="k">as</span> <span class="o">$</span><span class="n">p2</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
 
-    define Step_1a as (
-        try (
-            [substring] among (
-                '{'}' '{'}s' '{'}s{'}'
-                       (delete)
-            )
-        )
-        [substring] among (
-            'sses' (&lt;-'ss')
-            'ied' 'ies'
-                   ((hop 2 &lt;-'i') or &lt;-'ie')
-            's'    (next gopast v delete)
-            'us' 'ss'
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_1a</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">try</span> <span class="p">(</span>
+            <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span>
+                <span class="s">&#39;{&#39;}&#39;</span> <span class="s">&#39;{&#39;}s&#39;</span> <span class="s">&#39;{&#39;}s{&#39;}&#39;</span>
+                       <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;sses&#39;</span> <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ss&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ied&#39;</span> <span class="s">&#39;ies&#39;</span>
+                   <span class="p">((</span><span class="ow">hop</span> <span class="m">2</span> <span class="o">&lt;-</span><span class="s">&#39;i&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="o">&lt;-</span><span class="s">&#39;ie&#39;</span><span class="p">)</span>
+            <span class="s">&#39;s&#39;</span>    <span class="p">(</span><span class="ow">next</span> <span class="ow">gopast</span> <span class="n">v</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;us&#39;</span> <span class="s">&#39;ss&#39;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_1b as (
-        [substring] among (
-            'eed' 'eedly'
-                (R1 &lt;-'ee')
-            'ed' 'edly' 'ing' 'ingly'
-                (
-                test gopast v  delete
-                test substring among(
-                    'at' 'bl' 'iz'
-                         (&lt;+ 'e')
-                    'bb' 'dd' 'ff' 'gg' 'mm' 'nn' 'pp' 'rr' 'tt'
-                    // ignoring double c, h, j, k, q, v, w, and x
-                         ([next]  delete)
-                    ''   (atmark p1  test shortv  &lt;+ 'e')
-                )
-            )
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_1b</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;eed&#39;</span> <span class="s">&#39;eedly&#39;</span>
+                <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;ee&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ed&#39;</span> <span class="s">&#39;edly&#39;</span> <span class="s">&#39;ing&#39;</span> <span class="s">&#39;ingly&#39;</span>
+                <span class="p">(</span>
+                <span class="ow">test</span> <span class="ow">gopast</span> <span class="n">v</span>  <span class="ow">delete</span>
+                <span class="ow">test</span> <span class="ow">substring</span> <span class="k">among</span><span class="p">(</span>
+                    <span class="s">&#39;at&#39;</span> <span class="s">&#39;bl&#39;</span> <span class="s">&#39;iz&#39;</span>
+                         <span class="p">(</span><span class="o">&lt;+</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+                    <span class="s">&#39;bb&#39;</span> <span class="s">&#39;dd&#39;</span> <span class="s">&#39;ff&#39;</span> <span class="s">&#39;gg&#39;</span> <span class="s">&#39;mm&#39;</span> <span class="s">&#39;nn&#39;</span> <span class="s">&#39;pp&#39;</span> <span class="s">&#39;rr&#39;</span> <span class="s">&#39;tt&#39;</span>
+                    <span class="c1">// ignoring double c, h, j, k, q, v, w, and x</span>
+                         <span class="p">([</span><span class="ow">next</span><span class="p">]</span>  <span class="ow">delete</span><span class="p">)</span>
+                    <span class="s">&#39;&#39;</span>   <span class="p">(</span><span class="ow">atmark</span> <span class="n">p1</span>  <span class="ow">test</span> <span class="n">shortv</span>  <span class="o">&lt;+</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_1c as (
-        ['y' or 'Y']
-        non-v not atlimit
-        &lt;-'i'
-    )
+    <span class="kd">define</span> <span class="n">Step_1c</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="s">&#39;y&#39;</span> <span class="ow">or</span> <span class="s">&#39;Y&#39;</span><span class="p">]</span>
+        <span class="ow">non-</span><span class="n">v</span> <span class="ow">not</span> <span class="ow">atlimit</span>
+        <span class="o">&lt;-</span><span class="s">&#39;i&#39;</span>
+    <span class="p">)</span>
 
-    define Step_2 as (
-        [substring] R1 among (
-            'tional'  (&lt;-'tion')
-            'enci'    (&lt;-'ence')
-            'anci'    (&lt;-'ance')
-            'abli'    (&lt;-'able')
-            'entli'   (&lt;-'ent')
-            'izer' 'ization'
-                      (&lt;-'ize')
-            'ational' 'ation' 'ator'
-                      (&lt;-'ate')
-            'alism' 'aliti' 'alli'
-                      (&lt;-'al')
-            'fulness' (&lt;-'ful')
-            'ousli' 'ousness'
-                      (&lt;-'ous')
-            'iveness' 'iviti'
-                      (&lt;-'ive')
-            'biliti' 'bli'
-                      (&lt;-'ble')
-            'ogi'     ('l' &lt;-'og')
-            'fulli'   (&lt;-'ful')
-            'lessli'  (&lt;-'less')
-            'li'      (valid_LI delete)
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_2</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;tional&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;tion&#39;</span><span class="p">)</span>
+            <span class="s">&#39;enci&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ence&#39;</span><span class="p">)</span>
+            <span class="s">&#39;anci&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ance&#39;</span><span class="p">)</span>
+            <span class="s">&#39;abli&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;able&#39;</span><span class="p">)</span>
+            <span class="s">&#39;entli&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ent&#39;</span><span class="p">)</span>
+            <span class="s">&#39;izer&#39;</span> <span class="s">&#39;ization&#39;</span>
+                      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ize&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ational&#39;</span> <span class="s">&#39;ation&#39;</span> <span class="s">&#39;ator&#39;</span>
+                      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ate&#39;</span><span class="p">)</span>
+            <span class="s">&#39;alism&#39;</span> <span class="s">&#39;aliti&#39;</span> <span class="s">&#39;alli&#39;</span>
+                      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;al&#39;</span><span class="p">)</span>
+            <span class="s">&#39;fulness&#39;</span> <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ful&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ousli&#39;</span> <span class="s">&#39;ousness&#39;</span>
+                      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ous&#39;</span><span class="p">)</span>
+            <span class="s">&#39;iveness&#39;</span> <span class="s">&#39;iviti&#39;</span>
+                      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ive&#39;</span><span class="p">)</span>
+            <span class="s">&#39;biliti&#39;</span> <span class="s">&#39;bli&#39;</span>
+                      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ble&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ogi&#39;</span>     <span class="p">(</span><span class="s">&#39;l&#39;</span> <span class="o">&lt;-</span><span class="s">&#39;og&#39;</span><span class="p">)</span>
+            <span class="s">&#39;fulli&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ful&#39;</span><span class="p">)</span>
+            <span class="s">&#39;lessli&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;less&#39;</span><span class="p">)</span>
+            <span class="s">&#39;li&#39;</span>      <span class="p">(</span><span class="n">valid_LI</span> <span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_3 as (
-        [substring] R1 among (
-            'tional'  (&lt;- 'tion')
-            'ational' (&lt;- 'ate')
-            'alize'   (&lt;-'al')
-            'icate' 'iciti' 'ical'
-                      (&lt;-'ic')
-            'ful' 'ness'
-                      (delete)
-            'ative'
-                      (R2 delete)  // 'R2' added Dec 2001
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_3</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;tional&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;tion&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ational&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;ate&#39;</span><span class="p">)</span>
+            <span class="s">&#39;alize&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;al&#39;</span><span class="p">)</span>
+            <span class="s">&#39;icate&#39;</span> <span class="s">&#39;iciti&#39;</span> <span class="s">&#39;ical&#39;</span>
+                      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ic&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ful&#39;</span> <span class="s">&#39;ness&#39;</span>
+                      <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;ative&#39;</span>
+                      <span class="p">(</span><span class="n">R2</span> <span class="ow">delete</span><span class="p">)</span>  <span class="c1">// &#39;R2&#39; added Dec 2001</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_4 as (
-        [substring] R2 among (
-            'al' 'ance' 'ence' 'er' 'ic' 'able' 'ible' 'ant' 'ement'
-            'ment' 'ent' 'ism' 'ate' 'iti' 'ous' 'ive' 'ize'
-                      (delete)
-            'ion'     ('s' or 't' delete)
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_4</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R2</span> <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;al&#39;</span> <span class="s">&#39;ance&#39;</span> <span class="s">&#39;ence&#39;</span> <span class="s">&#39;er&#39;</span> <span class="s">&#39;ic&#39;</span> <span class="s">&#39;able&#39;</span> <span class="s">&#39;ible&#39;</span> <span class="s">&#39;ant&#39;</span> <span class="s">&#39;ement&#39;</span>
+            <span class="s">&#39;ment&#39;</span> <span class="s">&#39;ent&#39;</span> <span class="s">&#39;ism&#39;</span> <span class="s">&#39;ate&#39;</span> <span class="s">&#39;iti&#39;</span> <span class="s">&#39;ous&#39;</span> <span class="s">&#39;ive&#39;</span> <span class="s">&#39;ize&#39;</span>
+                      <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;ion&#39;</span>     <span class="p">(</span><span class="s">&#39;s&#39;</span> <span class="ow">or</span> <span class="s">&#39;t&#39;</span> <span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_5 as (
-        [substring] among (
-            'e' (R2 or (R1 not shortv) delete)
-            'l' (R2 'l' delete)
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_5</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;e&#39;</span> <span class="p">(</span><span class="n">R2</span> <span class="ow">or</span> <span class="p">(</span><span class="n">R1</span> <span class="ow">not</span> <span class="n">shortv</span><span class="p">)</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;l&#39;</span> <span class="p">(</span><span class="n">R2</span> <span class="s">&#39;l&#39;</span> <span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define exception2 as (
+    <span class="kd">define</span> <span class="n">exception2</span> <span class="k">as</span> <span class="p">(</span>
 
-        [substring] atlimit among(
-            'inning' 'outing' 'canning' 'herring' 'earring'
-            'proceed' 'exceed' 'succeed'
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="ow">atlimit</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;inning&#39;</span> <span class="s">&#39;outing&#39;</span> <span class="s">&#39;canning&#39;</span> <span class="s">&#39;herring&#39;</span> <span class="s">&#39;earring&#39;</span>
+            <span class="s">&#39;proceed&#39;</span> <span class="s">&#39;exceed&#39;</span> <span class="s">&#39;succeed&#39;</span>
 
-            // ... extensions possible here ...
+            <span class="c1">// ... extensions possible here ...</span>
 
-        )
-    )
-)
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-define exception1 as (
+<span class="kd">define</span> <span class="n">exception1</span> <span class="k">as</span> <span class="p">(</span>
 
-    [substring] atlimit among(
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="ow">atlimit</span> <span class="k">among</span><span class="p">(</span>
 
-        /* special changes: */
+        <span class="cm">/* special changes: */</span>
 
-        'skis'      (&lt;-'ski')
-        'skies'     (&lt;-'sky')
-        'dying'     (&lt;-'die')
-        'lying'     (&lt;-'lie')
-        'tying'     (&lt;-'tie')
+        <span class="s">&#39;skis&#39;</span>      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ski&#39;</span><span class="p">)</span>
+        <span class="s">&#39;skies&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;sky&#39;</span><span class="p">)</span>
+        <span class="s">&#39;dying&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;die&#39;</span><span class="p">)</span>
+        <span class="s">&#39;lying&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;lie&#39;</span><span class="p">)</span>
+        <span class="s">&#39;tying&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;tie&#39;</span><span class="p">)</span>
 
-        /* special -LY cases */
+        <span class="cm">/* special -LY cases */</span>
 
-        'idly'      (&lt;-'idl')
-        'gently'    (&lt;-'gentl')
-        'ugly'      (&lt;-'ugli')
-        'early'     (&lt;-'earli')
-        'only'      (&lt;-'onli')
-        'singly'    (&lt;-'singl')
+        <span class="s">&#39;idly&#39;</span>      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;idl&#39;</span><span class="p">)</span>
+        <span class="s">&#39;gently&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;gentl&#39;</span><span class="p">)</span>
+        <span class="s">&#39;ugly&#39;</span>      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ugli&#39;</span><span class="p">)</span>
+        <span class="s">&#39;early&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;earli&#39;</span><span class="p">)</span>
+        <span class="s">&#39;only&#39;</span>      <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;onli&#39;</span><span class="p">)</span>
+        <span class="s">&#39;singly&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;singl&#39;</span><span class="p">)</span>
 
-        // ... extensions possible here ...
+        <span class="c1">// ... extensions possible here ...</span>
 
-        /* invariant forms: */
+        <span class="cm">/* invariant forms: */</span>
 
-        'sky'
-        'news'
-        'howe'
+        <span class="s">&#39;sky&#39;</span>
+        <span class="s">&#39;news&#39;</span>
+        <span class="s">&#39;howe&#39;</span>
 
-        'atlas' 'cosmos' 'bias' 'andes' // not plural forms
+        <span class="s">&#39;atlas&#39;</span> <span class="s">&#39;cosmos&#39;</span> <span class="s">&#39;bias&#39;</span> <span class="s">&#39;andes&#39;</span> <span class="c1">// not plural forms</span>
 
-        // ... extensions possible here ...
-    )
-)
+        <span class="c1">// ... extensions possible here ...</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-define postlude as (Y_found  repeat(goto (['Y']) &lt;-'y'))
+<span class="kd">define</span> <span class="n">postlude</span> <span class="k">as</span> <span class="p">(</span><span class="n">Y_found</span>  <span class="ow">repeat</span><span class="p">(</span><span class="ow">goto</span> <span class="p">([</span><span class="s">&#39;Y&#39;</span><span class="p">])</span> <span class="o">&lt;-</span><span class="s">&#39;y&#39;</span><span class="p">))</span>
 
-define stem as (
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
 
-    exception1 or
-    not hop 3 or (
-        do prelude
-        do mark_regions
-        backwards (
+    <span class="n">exception1</span> <span class="ow">or</span>
+    <span class="ow">not</span> <span class="ow">hop</span> <span class="m">3</span> <span class="ow">or</span> <span class="p">(</span>
+        <span class="ow">do</span> <span class="n">prelude</span>
+        <span class="ow">do</span> <span class="n">mark_regions</span>
+        <span class="ow">backwards</span> <span class="p">(</span>
 
-            do Step_1a
+            <span class="ow">do</span> <span class="n">Step_1a</span>
 
-            exception2 or (
+            <span class="n">exception2</span> <span class="ow">or</span> <span class="p">(</span>
 
-                do Step_1b
-                do Step_1c
+                <span class="ow">do</span> <span class="n">Step_1b</span>
+                <span class="ow">do</span> <span class="n">Step_1c</span>
 
-                do Step_2
-                do Step_3
-                do Step_4
+                <span class="ow">do</span> <span class="n">Step_2</span>
+                <span class="ow">do</span> <span class="n">Step_3</span>
+                <span class="ow">do</span> <span class="n">Step_4</span>
 
-                do Step_5
-            )
-        )
-        do postlude
-    )
-)
-</DL>
-</PRE>
-</TR>
+                <span class="ow">do</span> <span class="n">Step_5</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="ow">do</span> <span class="n">postlude</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
+</pre></TR>
+
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>

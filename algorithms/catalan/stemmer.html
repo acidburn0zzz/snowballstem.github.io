@@ -1,13 +1,21 @@
-<HTML>
-<HEAD>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>A Catalan stemming algorithm</title>
+  </head>
 
-<TITLE>A Catalan stemming algorithm</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 <H1 ALIGN=CENTER>A Catalan stemming algorithm</H1>
 
 <TR><TD>
-
 <BR>&nbsp;<H2>Links to resources</H2>
 
 <DL><DD><TABLE CELLPADDING=0>
@@ -57,221 +65,215 @@ Israel Olalla
 [For distribution, see the note for the <A HREF="../basque/stemmer.html">Basque stemmer</A>.
 Our thanks to <A HREF="http://www.isoco.com">iSOCO</A>!]
 
-<BR><BR>
+<TR><TD>
+<H2>The algorithm in Snowball</H2>
 
-Here is the script of the stemmer in Snowball,
+<pre><div class="highlight"><pre><span class="kd">routines</span> <span class="p">(</span>
+           <span class="n">cleaning</span> <span class="n">mark_regions</span>
+           <span class="n">R1</span>  <span class="n">R2</span>
+           <span class="n">attached_pronoun</span>
+           <span class="n">standard_suffix</span>
+           <span class="n">verb_suffix</span>
+           <span class="n">residual_suffix</span>
+<span class="p">)</span>
 
-<BR><BR>
-<TR><TD BGCOLOR="lightblue">
-<BR><PRE>
-<DL><DD>
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-routines (
-           cleaning mark_regions
-           R1  R2
-           attached_pronoun
-           standard_suffix
-           verb_suffix
-           residual_suffix
-)
+<span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
 
-externals ( stem )
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="p">)</span>
 
-integers ( p1 p2 )
+<span class="kd">stringescapes</span> <span class="p">{}</span>
 
-groupings ( v )
+<span class="cm">/* special characters (in ISO Latin I) */</span>
 
-stringescapes {}
+<span class="kd">stringdef</span> <span class="n">a&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;E1&#39;</span>  <span class="c1">// a-acute</span>
+<span class="kd">stringdef</span> <span class="n">a`</span>   <span class="mh">hex</span> <span class="s">&#39;E0&#39;</span>  <span class="c1">// a-grave</span>
+<span class="kd">stringdef</span> <span class="n">c,</span>   <span class="mh">hex</span> <span class="s">&#39;E7&#39;</span>  <span class="c1">// c-cedilla</span>
+<span class="kd">stringdef</span> <span class="n">e&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;E9&#39;</span>  <span class="c1">// e-acute</span>
+<span class="kd">stringdef</span> <span class="n">e`</span>   <span class="mh">hex</span> <span class="s">&#39;E8&#39;</span>  <span class="c1">// e-grave</span>
+<span class="kd">stringdef</span> <span class="n">i&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;ED&#39;</span>  <span class="c1">// i-acute</span>
+<span class="kd">stringdef</span> <span class="n">i`</span>   <span class="mh">hex</span> <span class="s">&#39;EC&#39;</span>  <span class="c1">// i-grave</span>
+<span class="kd">stringdef</span> <span class="n">i&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;EF&#39;</span>  <span class="c1">// i-diaeresis</span>
+<span class="kd">stringdef</span> <span class="n">o&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;F3&#39;</span>  <span class="c1">// o-acute</span>
+<span class="kd">stringdef</span> <span class="n">o`</span>   <span class="mh">hex</span> <span class="s">&#39;F2&#39;</span>  <span class="c1">// o-grave</span>
+<span class="kd">stringdef</span> <span class="n">u&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;FA&#39;</span>  <span class="c1">// u-acute</span>
+<span class="kd">stringdef</span> <span class="n">u&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;FC&#39;</span>  <span class="c1">// u-diaeresis</span>
+<span class="kd">stringdef</span> <span class="n">-</span>    <span class="mh">hex</span> <span class="s">&#39;2D&#39;</span>   <span class="c1">// - per aggeminades</span>
+<span class="kd">stringdef</span> <span class="n">.</span>    <span class="mh">hex</span> <span class="s">&#39;B7&#39;</span>   <span class="c1">// - per l aggeminades</span>
 
-/* special characters (in ISO Latin I) */
+<span class="kd">define</span> <span class="n">v</span> <span class="s">&#39;aeiou{a&#39;}{a`}{e&#39;}{e`}{i&#39;}{i&quot;}{o&#39;}{o`}{u&#39;}{u&quot;}&#39;</span>
 
-stringdef a'   hex 'E1'  // a-acute
-stringdef a`   hex 'E0'  // a-grave
-stringdef c,   hex 'E7'  // c-cedilla
-stringdef e'   hex 'E9'  // e-acute
-stringdef e`   hex 'E8'  // e-grave
-stringdef i'   hex 'ED'  // i-acute
-stringdef i`   hex 'EC'  // i-grave
-stringdef i"   hex 'EF'  // i-diaeresis
-stringdef o'   hex 'F3'  // o-acute
-stringdef o`   hex 'F2'  // o-grave
-stringdef u'   hex 'FA'  // u-acute
-stringdef u"   hex 'FC'  // u-diaeresis
-stringdef -    hex '2D'   // - per aggeminades
-stringdef .    hex 'B7'   // - per l aggeminades
+<span class="kd">define</span> <span class="n">mark_regions</span> <span class="k">as</span> <span class="p">(</span>
 
-define v 'aeiou{a'}{a`}{e'}{e`}{i'}{i"}{o'}{o`}{u'}{u"}'
+    <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="o">$</span><span class="n">p2</span> <span class="o">=</span> <span class="ow">limit</span>  <span class="c1">// defaults</span>
 
-define mark_regions as (
+    <span class="ow">do</span> <span class="p">(</span>
+        <span class="ow">gopast</span> <span class="n">v</span> <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span> <span class="ow">setmark</span> <span class="n">p1</span>
+        <span class="ow">gopast</span> <span class="n">v</span> <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span> <span class="ow">setmark</span> <span class="n">p2</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-    $p1 = limit
-    $p2 = limit  // defaults
+<span class="kd">define</span> <span class="n">cleaning</span> <span class="k">as</span> <span class="ow">repeat</span> <span class="p">(</span>
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+        <span class="s">&#39;{a&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{a`}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{e&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{e`}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{i&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{i`}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{o&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;o&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{o`}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;o&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{u&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{u&quot;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{i&quot;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{.}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
+        <span class="s">&#39;&#39;</span>     <span class="p">(</span><span class="ow">next</span><span class="p">)</span>
+    <span class="p">)</span> <span class="c1">//or next</span>
+<span class="p">)</span>
 
-    do (
-        gopast v gopast non-v setmark p1
-        gopast v gopast non-v setmark p2
-    )
-)
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-define cleaning as repeat (
-    [substring] among(
-        '{a'}' (&lt;- 'a')
-        '{a`}' (&lt;- 'a')
-        '{e'}' (&lt;- 'e')
-        '{e`}' (&lt;- 'e')
-        '{i'}' (&lt;- 'i')
-        '{i`}' (&lt;- 'i')
-        '{o'}' (&lt;- 'o')
-        '{o`}' (&lt;- 'o')
-        '{u'}' (&lt;- 'u')
-        '{u"}' (&lt;- 'u')
-        '{i"}' (&lt;- 'i')
-        '{.}' (&lt;- '.')
-        ''     (next)
-    ) //or next
-)
+    <span class="kd">define</span> <span class="n">R1</span> <span class="k">as</span> <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">R2</span> <span class="k">as</span> <span class="o">$</span><span class="n">p2</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
 
-backwardmode (
+    <span class="kd">define</span> <span class="n">attached_pronoun</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span>
+        <span class="s">&#39;{&#39;}s&#39;</span>  <span class="s">&#39;{&#39;}hi&#39;</span> <span class="s">&#39;{&#39;}ho&#39;</span> <span class="s">&#39;{&#39;}l&#39;</span> <span class="s">&#39;{&#39;}ls&#39;</span>
+        <span class="s">&#39;{-}ls&#39;</span> <span class="s">&#39;{-}la&#39;</span> <span class="s">&#39;{-}les&#39;</span> <span class="s">&#39;{-}li&#39;</span>
+        <span class="s">&#39;vos&#39;</span> <span class="s">&#39;se&#39;</span>  <span class="s">&#39;nos&#39;</span> <span class="s">&#39;{-}nos&#39;</span> <span class="s">&#39;{-}us&#39;</span> <span class="s">&#39;us&#39;</span>
+        <span class="s">&#39;{&#39;}n&#39;</span> <span class="s">&#39;{&#39;}ns&#39;</span> <span class="s">&#39;{-}n&#39;</span> <span class="s">&#39;{-}ns&#39;</span>
+        <span class="s">&#39;{&#39;}m&#39;</span> <span class="s">&#39;{-}me&#39;</span> <span class="s">&#39;{-}m&#39;</span>
+        <span class="s">&#39;{-}te&#39;</span> <span class="s">&#39;{&#39;}t&#39;</span>
+        <span class="s">&#39;li&#39;</span> <span class="s">&#39;lo&#39;</span> <span class="s">&#39;los&#39;</span>
+        <span class="s">&#39;me&#39;</span>  <span class="s">&#39;sela&#39;</span> <span class="s">&#39;selo&#39;</span> <span class="s">&#39;selas&#39;</span> <span class="s">&#39;selos&#39;</span> <span class="s">&#39;le&#39;</span>
+        <span class="s">&#39;la&#39;</span> <span class="s">&#39;las&#39;</span> <span class="s">&#39;les&#39;</span> <span class="s">&#39;ens&#39;</span> <span class="s">&#39;ho&#39;</span> <span class="s">&#39;hi&#39;</span>
+        <span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="p">)</span>
 
-    define R1 as $p1 &lt;= cursor
-    define R2 as $p2 &lt;= cursor
+    <span class="kd">define</span> <span class="n">standard_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;ar&#39;</span> <span class="s">&#39;atge&#39;</span> <span class="s">&#39;formes&#39;</span> <span class="s">&#39;icte&#39;</span> <span class="s">&#39;ictes&#39;</span>
+            <span class="s">&#39;ell&#39;</span> <span class="s">&#39;ells&#39;</span> <span class="s">&#39;ella&#39;</span>  <span class="s">&#39;{e&#39;}s&#39;</span> <span class="s">&#39;{e`}s&#39;</span> <span class="s">&#39;esc&#39;</span> <span class="s">&#39;essa&#39;</span> <span class="s">&#39;et&#39;</span> <span class="s">&#39;ets&#39;</span> <span class="s">&#39;eta&#39;</span>
+            <span class="s">&#39;eres&#39;</span> <span class="s">&#39;eries&#39;</span> <span class="s">&#39;ers&#39;</span> <span class="s">&#39;ina&#39;</span> <span class="s">&#39;ines&#39;</span> <span class="s">&#39;able&#39;</span> <span class="s">&#39;ls&#39;</span>
+            <span class="s">&#39;i{o&#39;}&#39;</span> <span class="s">&#39;itat&#39;</span> <span class="s">&#39;itats&#39;</span> <span class="s">&#39;itzar&#39;</span> <span class="s">&#39;iva&#39;</span> <span class="s">&#39;ives&#39;</span> <span class="s">&#39;ivisme&#39;</span> <span class="s">&#39;ius&#39;</span>
+            <span class="s">&#39;fer&#39;</span> <span class="s">&#39;ment&#39;</span> <span class="s">&#39;amen&#39;</span> <span class="s">&#39;ament&#39;</span> <span class="s">&#39;aments&#39;</span> <span class="s">&#39;ments&#39;</span> <span class="s">&#39;ot&#39;</span> <span class="s">&#39;sfera&#39;</span> <span class="s">&#39;al&#39;</span> <span class="s">&#39;als&#39;</span> <span class="s">&#39;era&#39;</span> <span class="s">&#39;ana&#39;</span> <span class="s">&#39;iste&#39;</span>
+            <span class="s">&#39;aire&#39;</span> <span class="s">&#39;eria&#39;</span> <span class="s">&#39;esa&#39;</span> <span class="s">&#39;eses&#39;</span> <span class="s">&#39;esos&#39;</span> <span class="s">&#39;or&#39;</span> <span class="s">&#39;{i&#39;}cia&#39;</span> <span class="s">&#39;{i&#39;}cies&#39;</span> <span class="s">&#39;icis&#39;</span> <span class="s">&#39;ici&#39;</span> <span class="s">&#39;{i&#39;}ci&#39;</span> <span class="s">&#39;{i&#39;}cis&#39;</span>
+            <span class="s">&#39;{a`}ria&#39;</span> <span class="s">&#39;{a`}ries&#39;</span> <span class="s">&#39;alla&#39;</span> <span class="s">&#39;ci{o&#39;}&#39;</span> <span class="s">&#39;cions&#39;</span> <span class="s">&#39;n{c,}a&#39;</span> <span class="s">&#39;nces&#39;</span> <span class="s">&#39;{o&#39;}&#39;</span> <span class="s">&#39;dor&#39;</span> <span class="s">&#39;all&#39;</span>
+            <span class="s">&#39;il&#39;</span> <span class="s">&#39;{i&#39;}stic&#39;</span> <span class="s">&#39;enc&#39;</span> <span class="s">&#39;enca&#39;</span> <span class="s">&#39;{i&#39;}s&#39;</span> <span class="s">&#39;issa&#39;</span> <span class="s">&#39;issos&#39;</span> <span class="s">&#39;{i&#39;}ssem&#39;</span> <span class="s">&#39;{i&#39;}ssiu&#39;</span> <span class="s">&#39;issem&#39;</span> <span class="s">&#39;isseu&#39;</span> <span class="s">&#39;{i&#39;}sseu&#39;</span>
+            <span class="s">&#39;{o&#39;}s&#39;</span> <span class="s">&#39;osa&#39;</span>  <span class="s">&#39;dora&#39;</span> <span class="s">&#39;dores&#39;</span> <span class="s">&#39;dors&#39;</span> <span class="s">&#39;adura&#39;</span> <span class="s">&#39;ble&#39;</span> <span class="s">&#39;bles&#39;</span> <span class="s">&#39;{i&#39;}vol&#39;</span> <span class="s">&#39;{i&#39;}vola&#39;</span> <span class="s">&#39;d{i&#39;}s&#39;</span> <span class="s">&#39;egar&#39;</span> <span class="s">&#39;ejar&#39;</span> <span class="s">&#39;ificar&#39;</span>
+            <span class="s">&#39;itar&#39;</span> <span class="s">&#39;ables&#39;</span> <span class="s">&#39;adors&#39;</span> <span class="s">&#39;idores&#39;</span> <span class="s">&#39;idors&#39;</span>
+            <span class="s">&#39;adora&#39;</span> <span class="s">&#39;aci{o&#39;}&#39;</span> <span class="s">&#39;doras&#39;</span> <span class="s">&#39;dur&#39;</span> <span class="s">&#39;dures&#39;</span> <span class="s">&#39;alleng{u&quot;}es&#39;</span>
+            <span class="s">&#39;ant&#39;</span> <span class="s">&#39;ants&#39;</span> <span class="s">&#39;ancia&#39;</span> <span class="s">&#39;ancies&#39;</span> <span class="s">&#39;at{o`}ria&#39;</span> <span class="s">&#39;at{o`}ries&#39;</span> <span class="s">&#39;tori&#39;</span> <span class="s">&#39;toris&#39;</span>
+            <span class="s">&#39;ats&#39;</span> <span class="s">&#39;ions&#39;</span>  <span class="s">&#39;ota&#39;</span> <span class="s">&#39;isam&#39;</span> <span class="s">&#39;ors&#39;</span> <span class="s">&#39;ora&#39;</span> <span class="s">&#39;ores&#39;</span> <span class="s">&#39;isament&#39;</span>
+            <span class="s">&#39;bilitat&#39;</span> <span class="s">&#39;bilitats&#39;</span> <span class="s">&#39;ivitat&#39;</span> <span class="s">&#39;ivitats&#39;</span> <span class="s">&#39;ari&#39;</span> <span class="s">&#39;aris&#39;</span> <span class="s">&#39;ionisme&#39;</span> <span class="s">&#39;ionista&#39;</span> <span class="s">&#39;ionistes&#39;</span>
+            <span class="s">&#39;ialista&#39;</span> <span class="s">&#39;ialistes&#39;</span> <span class="s">&#39;ialisme&#39;</span> <span class="s">&#39;ialismes&#39;</span> <span class="s">&#39;ud&#39;</span> <span class="s">&#39;uts&#39;</span> <span class="s">&#39;uds&#39;</span> <span class="s">&#39;encia&#39;</span> <span class="s">&#39;encies&#39;</span> <span class="s">&#39;{e`}ncia&#39;</span> <span class="s">&#39;{e`}ncies&#39;</span>
+            <span class="s">&#39;{i&quot;}tat&#39;</span> <span class="s">&#39;{i&quot;}tats&#39;</span> <span class="s">&#39;atiu&#39;</span> <span class="s">&#39;atius&#39;</span> <span class="s">&#39;atives&#39;</span> <span class="s">&#39;ativa&#39;</span> <span class="s">&#39;ativitat&#39;</span> <span class="s">&#39;ativitats&#39;</span> <span class="s">&#39;ible&#39;</span> <span class="s">&#39;ibles&#39;</span>
+            <span class="s">&#39;assa&#39;</span> <span class="s">&#39;asses&#39;</span> <span class="s">&#39;assos&#39;</span>
+             <span class="s">&#39;ent&#39;</span> <span class="s">&#39;ents&#39;</span>
+             <span class="s">&#39;{i&#39;}ssim&#39;</span> <span class="s">&#39;{i&#39;}ssima&#39;</span> <span class="s">&#39;{i&#39;}ssims&#39;</span> <span class="s">&#39;{i&#39;}ssimes&#39;</span> <span class="s">&#39;{i`}ssem&#39;</span> <span class="s">&#39;{i`}sseu&#39;</span> <span class="s">&#39;{i`}ssin&#39;</span>
+             <span class="s">&#39;ims&#39;</span> <span class="s">&#39;ima&#39;</span> <span class="s">&#39;imes&#39;</span>
+             <span class="s">&#39;isme&#39;</span> <span class="s">&#39;ista&#39;</span> <span class="s">&#39;ismes&#39;</span> <span class="s">&#39;istes&#39;</span>
+             <span class="s">&#39;inia&#39;</span> <span class="s">&#39;inies&#39;</span> <span class="s">&#39;{i&#39;}inia&#39;</span> <span class="s">&#39;{i&#39;}nies&#39;</span> <span class="s">&#39;ita&#39;</span> <span class="s">&#39;ites&#39;</span> <span class="s">&#39;triu&#39;</span> <span class="s">&#39;trius&#39;</span>
+             <span class="s">&#39;oses&#39;</span> <span class="s">&#39;osos&#39;</span> <span class="s">&#39;ient&#39;</span> <span class="s">&#39;otes&#39;</span> <span class="s">&#39;ots&#39;</span>
+            <span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;acions&#39;</span> <span class="s">&#39;ada&#39;</span> <span class="s">&#39;ades&#39;</span>
+            <span class="p">(</span><span class="n">R2</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;log{i&#39;}a&#39;</span> <span class="s">&#39;log{i&#39;}es&#39;&#39;logia&#39;</span> <span class="s">&#39;logies&#39;</span> <span class="s">&#39;logi&#39;</span> <span class="s">&#39;logis&#39;</span> <span class="s">&#39;l{o&#39;}gica&#39;</span> <span class="s">&#39;l{o&#39;}gics&#39;</span> <span class="s">&#39;l{o&#39;}giques&#39;</span>
+            <span class="p">(</span><span class="n">R2</span> <span class="o">&lt;-</span> <span class="s">&#39;log&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ic&#39;</span> <span class="s">&#39;ica&#39;</span> <span class="s">&#39;ics&#39;</span> <span class="s">&#39;iques&#39;</span>
+            <span class="p">(</span><span class="n">R2</span> <span class="o">&lt;-</span> <span class="s">&#39;ic&#39;</span><span class="p">)</span>
+            <span class="s">&#39;qu{i&#39;}ssim&#39;</span> <span class="s">&#39;qu{i&#39;}ssims&#39;</span> <span class="s">&#39;qu{i&#39;}ssimes&#39;</span> <span class="s">&#39;qu{i&#39;}ssima&#39;</span>
+            <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span> <span class="s">&#39;c&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define attached_pronoun as (
-    [substring] among (
-        '{'}s'  '{'}hi' '{'}ho' '{'}l' '{'}ls'
-        '{-}ls' '{-}la' '{-}les' '{-}li'
-        'vos' 'se'  'nos' '{-}nos' '{-}us' 'us'
-        '{'}n' '{'}ns' '{-}n' '{-}ns'
-        '{'}m' '{-}me' '{-}m'
-        '{-}te' '{'}t'
-        'li' 'lo' 'los'
-        'me'  'sela' 'selo' 'selas' 'selos' 'le'
-        'la' 'las' 'les' 'ens' 'ho' 'hi'
-        (R1 delete)
-    )
-    )
+    <span class="kd">define</span> <span class="n">verb_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;ador&#39;</span> <span class="s">&#39;adora&#39;</span>  <span class="s">&#39;adors&#39;</span> <span class="s">&#39;adores&#39;</span> <span class="s">&#39;re&#39;</span> <span class="s">&#39;ie&#39;</span>
+             <span class="s">&#39;ent&#39;</span> <span class="s">&#39;ents&#39;</span> <span class="s">&#39;udes&#39;</span> <span class="s">&#39;ar{a`}&#39;</span> <span class="s">&#39;eren&#39;</span>
+            <span class="s">&#39;ar{a&#39;}&#39;</span> <span class="s">&#39;ar{i&#39;}an&#39;</span> <span class="s">&#39;ar{i&#39;}as&#39;</span> <span class="s">&#39;ar{a&#39;}n&#39;</span> <span class="s">&#39;ar{a&#39;}s&#39;</span> <span class="s">&#39;ar{i&#39;}ais&#39;</span>
+            <span class="s">&#39;aria&#39;</span> <span class="s">&#39;arian&#39;</span> <span class="s">&#39;arien&#39;</span> <span class="s">&#39;aries&#39;</span> <span class="s">&#39;ar{a`}s&#39;</span>
+            <span class="s">&#39;ar{i&#39;}a&#39;</span> <span class="s">&#39;ar{e&#39;}is&#39;</span> <span class="s">&#39;ar{i&#39;}amos&#39;</span> <span class="s">&#39;aremos&#39;</span> <span class="s">&#39;ara&#39;</span>
+            <span class="s">&#39;ar{e&#39;}&#39;</span> <span class="s">&#39;ar{e&#39;}s&#39;</span>
+            <span class="s">&#39;er{i&#39;}an&#39;</span> <span class="s">&#39;er{i&#39;}as&#39;</span> <span class="s">&#39;er{a&#39;}n&#39;</span> <span class="s">&#39;er{a&#39;}s&#39;</span> <span class="s">&#39;er{i&#39;}ais&#39;</span>
+            <span class="s">&#39;er{i&#39;}a&#39;</span> <span class="s">&#39;er{e&#39;}is&#39;</span> <span class="s">&#39;er{i&#39;}amos&#39;</span> <span class="s">&#39;eremos&#39;</span> <span class="s">&#39;er{a&#39;}&#39;</span>
+            <span class="s">&#39;er{e&#39;}&#39;</span> <span class="s">&#39;er&#39;</span> <span class="s">&#39;erau&#39;</span> <span class="s">&#39;erass&#39;</span>
+            <span class="s">&#39;ir{i&#39;}an&#39;</span> <span class="s">&#39;ir{i&#39;}as&#39;</span> <span class="s">&#39;ir{a&#39;}n&#39;</span> <span class="s">&#39;ir{a&#39;}s&#39;</span> <span class="s">&#39;ir{i&#39;}ais&#39;</span>
+            <span class="s">&#39;ir{i&#39;}a&#39;</span> <span class="s">&#39;ir{e&#39;}is&#39;</span> <span class="s">&#39;ir{i&#39;}amos&#39;</span> <span class="s">&#39;iremos&#39;</span> <span class="s">&#39;ir{a&#39;}&#39;</span>
+            <span class="s">&#39;ir{e&#39;}&#39;</span> <span class="s">&#39;{i&#39;}rem&#39;</span> <span class="s">&#39;{i&#39;}reu&#39;</span> <span class="s">&#39;{i&#39;}eu&#39;</span>
+            <span class="s">&#39;ia&#39;</span> <span class="s">&#39;ies&#39;</span> <span class="s">&#39;{i&#39;}em&#39;</span> <span class="s">&#39;{i`}eu&#39;</span> <span class="s">&#39;ien&#39;</span>
+            <span class="s">&#39;at&#39;</span> <span class="s">&#39;ut&#39;</span> <span class="s">&#39;uda&#39;</span> <span class="s">&#39;ava&#39;</span> <span class="s">&#39;aves&#39;</span> <span class="s">&#39;avem&#39;</span> <span class="s">&#39;{a&#39;}vem&#39;</span> <span class="s">&#39;{a`}vem&#39;</span> <span class="s">&#39;{a`}veu&#39;</span> <span class="s">&#39;{a&#39;}veu&#39;</span> <span class="s">&#39;aven&#39;</span> <span class="s">&#39;au&#39;</span> <span class="s">&#39;ats&#39;</span>
+            <span class="s">&#39;asseu&#39;</span> <span class="s">&#39;esseu&#39;</span> <span class="s">&#39;eresseu&#39;</span> <span class="s">&#39;{a`}sseu&#39;</span> <span class="s">&#39;{a`}ssem&#39;</span> <span class="s">&#39;{a`}ssim&#39;</span> <span class="s">&#39;{a`}ssiu&#39;</span>
+            <span class="s">&#39;essen&#39;</span> <span class="s">&#39;esses&#39;</span> <span class="s">&#39;assen&#39;</span> <span class="s">&#39;asses&#39;</span> <span class="s">&#39;assim&#39;</span> <span class="s">&#39;assiu&#39;</span>
+            <span class="s">&#39;{e&#39;}ssen&#39;</span> <span class="s">&#39;{e&#39;}sseu&#39;</span>  <span class="s">&#39;{e&#39;}ssim&#39;</span> <span class="s">&#39;{e&#39;}ssiu&#39;</span> <span class="s">&#39;{e&#39;}ssem&#39;</span>
+            <span class="s">&#39;{i&#39;}&#39;</span> <span class="s">&#39;ares&#39;</span> <span class="s">&#39;{a`}rem&#39;</span> <span class="s">&#39;{a`}reu&#39;</span> <span class="s">&#39;{a`}ren&#39;</span>
+            <span class="s">&#39;ar{i&#39;}em&#39;</span> <span class="s">&#39;ar{i&#39;}eu&#39;</span>
+            <span class="s">&#39;areu&#39;</span> <span class="s">&#39;aren&#39;</span> <span class="s">&#39;ant&#39;</span> <span class="s">&#39;{i&quot;}m&#39;</span> <span class="s">&#39;{i&quot;}u&#39;</span>
+            <span class="s">&#39;{e&#39;}s&#39;</span> <span class="s">&#39;{i&quot;}en&#39;</span> <span class="s">&#39;en&#39;</span> <span class="s">&#39;es&#39;</span> <span class="s">&#39;em&#39;</span> <span class="s">&#39;am&#39;</span> <span class="s">&#39;ams&#39;</span> <span class="s">&#39;{i&quot;}a&#39;</span> <span class="s">&#39;{i&quot;}es&#39;</span>
+            <span class="s">&#39;dre&#39;</span> <span class="s">&#39;eix&#39;</span> <span class="s">&#39;eixer&#39;</span> <span class="s">&#39;tzar&#39;</span> <span class="s">&#39;eixes&#39;</span> <span class="s">&#39;ides&#39;</span> <span class="s">&#39;{i&quot;}des&#39;</span> <span class="s">&#39;it&#39;</span> <span class="s">&#39;{i&quot;}t&#39;</span> <span class="s">&#39;{i&quot;}da&#39;</span>
+            <span class="s">&#39;aba&#39;</span> <span class="s">&#39;ada&#39;</span> <span class="s">&#39;ades&#39;</span> <span class="s">&#39;ida&#39;</span> <span class="s">&#39;{i&#39;}a&#39;</span> <span class="s">&#39;iera&#39;</span> <span class="s">&#39;ad&#39;</span> <span class="s">&#39;ed&#39;</span> <span class="s">&#39;its&#39;</span>
+            <span class="s">&#39;id&#39;</span> <span class="s">&#39;ids&#39;</span>  <span class="s">&#39;ase&#39;</span> <span class="s">&#39;iese&#39;</span> <span class="s">&#39;aste&#39;</span> <span class="s">&#39;iste&#39;</span> <span class="s">&#39;an&#39;</span> <span class="s">&#39;aban&#39;</span> <span class="s">&#39;{i&#39;}an&#39;</span>
+            <span class="s">&#39;aran&#39;</span> <span class="s">&#39;ieran&#39;</span> <span class="s">&#39;asen&#39;</span> <span class="s">&#39;iesen&#39;</span> <span class="s">&#39;aron&#39;</span> <span class="s">&#39;ieron&#39;</span> <span class="s">&#39;ado&#39;</span>
+            <span class="s">&#39;ido&#39;</span> <span class="s">&#39;iendo&#39;</span> <span class="s">&#39;i{o&#39;}&#39;</span> <span class="s">&#39;ar&#39;</span> <span class="s">&#39;ir&#39;</span> <span class="s">&#39;as&#39;</span>
+            <span class="s">&#39;ieu&#39;</span> <span class="s">&#39;ii&#39;</span> <span class="s">&#39;io&#39;</span> <span class="s">&#39;i{a`}&#39;</span>
+            <span class="s">&#39;ess&#39;</span> <span class="s">&#39;essin&#39;</span> <span class="s">&#39;essis&#39;</span>  <span class="s">&#39;ass&#39;</span> <span class="s">&#39;assin&#39;</span> <span class="s">&#39;assis&#39;</span> <span class="s">&#39;essim&#39;</span> <span class="s">&#39;{e`}ssim&#39;</span> <span class="s">&#39;{e`}ssiu&#39;</span>
+            <span class="s">&#39;abas&#39;</span> <span class="s">&#39;adas&#39;</span> <span class="s">&#39;idas&#39;</span> <span class="s">&#39;{i&#39;}as&#39;</span> <span class="s">&#39;aras&#39;</span> <span class="s">&#39;ieras&#39;</span> <span class="s">&#39;ases&#39;</span>
+            <span class="s">&#39;ieses&#39;</span> <span class="s">&#39;{i&#39;}s&#39;</span> <span class="s">&#39;{a&#39;}is&#39;</span> <span class="s">&#39;abais&#39;</span> <span class="s">&#39;{i&#39;}ais&#39;</span> <span class="s">&#39;arais&#39;</span>
+            <span class="s">&#39;ierais&#39;</span>  <span class="s">&#39;aseis&#39;</span> <span class="s">&#39;ieseis&#39;</span> <span class="s">&#39;asteis&#39;</span> <span class="s">&#39;isteis&#39;</span> <span class="s">&#39;ados&#39;</span>
+            <span class="s">&#39;idos&#39;</span> <span class="s">&#39;amos&#39;</span> <span class="s">&#39;{a&#39;}bamos&#39;</span> <span class="s">&#39;{i&#39;}amos&#39;</span> <span class="s">&#39;imos&#39;</span> <span class="s">&#39;ques&#39;</span>
+            <span class="s">&#39;{a&#39;}ramos&#39;</span> <span class="s">&#39;i{e&#39;}ramos&#39;</span> <span class="s">&#39;i{e&#39;}semos&#39;</span> <span class="s">&#39;{a&#39;}semos&#39;</span>
+            <span class="s">&#39;ira&#39;</span> <span class="s">&#39;iran&#39;</span> <span class="s">&#39;irem&#39;</span> <span class="s">&#39;iren&#39;</span> <span class="s">&#39;ires&#39;</span> <span class="s">&#39;ireu&#39;</span> <span class="s">&#39;iria&#39;</span> <span class="s">&#39;irien&#39;</span>
+            <span class="s">&#39;iries&#39;</span> <span class="s">&#39;ir{a`}&#39;</span> <span class="s">&#39;ir{a`}s&#39;</span> <span class="s">&#39;ir{e`}&#39;</span> <span class="s">&#39;ir{i`}em&#39;</span> <span class="s">&#39;ir{i`}eu&#39;</span>
+            <span class="s">&#39;isquen&#39;</span> <span class="s">&#39;iguem&#39;</span> <span class="s">&#39;igueu&#39;</span> <span class="s">&#39;esqui&#39;</span> <span class="s">&#39;esquin&#39;</span> <span class="s">&#39;esquis&#39;</span> <span class="s">&#39;eixi&#39;</span> <span class="s">&#39;eixin&#39;</span> <span class="s">&#39;eixis&#39;</span>
+            <span class="s">&#39;eixen&#39;</span> <span class="s">&#39;eixo&#39;</span> <span class="s">&#39;isin&#39;</span> <span class="s">&#39;isis&#39;</span>  <span class="s">&#39;esques&#39;</span> <span class="s">&#39;sis&#39;</span> <span class="s">&#39;sin&#39;</span>
+            <span class="s">&#39;int&#39;</span> <span class="s">&#39;ir{i&#39;}em&#39;</span> <span class="s">&#39;ir{i&#39;}eu&#39;</span> <span class="s">&#39;isc&#39;</span> <span class="s">&#39;atges&#39;</span> <span class="s">&#39;esca&#39;</span> <span class="s">&#39;esquen&#39;</span>
+            <span class="s">&#39;issen&#39;</span> <span class="s">&#39;isses&#39;</span> <span class="s">&#39;issin&#39;</span> <span class="s">&#39;issis&#39;</span> <span class="s">&#39;isca&#39;</span> <span class="s">&#39;issiu&#39;</span> <span class="s">&#39;issim&#39;</span>
+            <span class="s">&#39;{i&quot;}sc&#39;</span> <span class="s">&#39;{i&quot;}sca&#39;</span> <span class="s">&#39;{i&quot;}ssin&#39;</span> <span class="s">&#39;{i&#39;}ssiu&#39;</span> <span class="s">&#39;{i&#39;}ssim&#39;</span> <span class="s">&#39;{i&quot;}ssis&#39;</span> <span class="s">&#39;{i&quot;}guem&#39;</span> <span class="s">&#39;{i&quot;}gueu&#39;</span>
+            <span class="s">&#39;{i&quot;}ra&#39;</span> <span class="s">&#39;{i&quot;}ren&#39;</span> <span class="s">&#39;{i&quot;}res&#39;</span>
+            <span class="s">&#39;{i&quot;}squen&#39;</span> <span class="s">&#39;{i&quot;}sques&#39;</span> <span class="s">&#39;{i&quot;}ssen&#39;</span> <span class="s">&#39;{i&quot;}sses&#39;</span> <span class="s">&#39;{i&quot;}xo&#39;</span> <span class="s">&#39;{i&quot;}xen&#39;</span> <span class="s">&#39;{i&quot;}xes&#39;</span> <span class="s">&#39;{i&quot;}x&#39;</span>
+            <span class="s">&#39;ixo&#39;</span> <span class="s">&#39;ixen&#39;</span> <span class="s">&#39;ixes&#39;</span> <span class="s">&#39;ix&#39;</span> <span class="s">&#39;ixa&#39;</span> <span class="s">&#39;inin&#39;</span> <span class="s">&#39;inis&#39;</span> <span class="s">&#39;ini&#39;</span> <span class="s">&#39;ineu&#39;</span> <span class="s">&#39;itza&#39;</span> <span class="s">&#39;itzi&#39;</span> <span class="s">&#39;itzeu&#39;</span> <span class="s">&#39;itzis&#39;</span>
+            <span class="s">&#39;itzo&#39;</span> <span class="s">&#39;itz&#39;</span> <span class="s">&#39;itz{a`}&#39;</span> <span class="s">&#39;arem&#39;</span> <span class="s">&#39;in&#39;</span> <span class="s">&#39;{a`}s&#39;</span> <span class="s">&#39;i{i&quot;}&#39;</span> <span class="s">&#39;i{i&quot;}n&#39;</span> <span class="s">&#39;i{i&quot;}s&#39;</span>
+                <span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;ando&#39;</span>
+                <span class="p">(</span><span class="n">R2</span> <span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define standard_suffix as (
-        [substring] among(
-            'ar' 'atge' 'formes' 'icte' 'ictes'
-            'ell' 'ells' 'ella'  '{e'}s' '{e`}s' 'esc' 'essa' 'et' 'ets' 'eta'
-            'eres' 'eries' 'ers' 'ina' 'ines' 'able' 'ls'
-            'i{o'}' 'itat' 'itats' 'itzar' 'iva' 'ives' 'ivisme' 'ius'
-            'fer' 'ment' 'amen' 'ament' 'aments' 'ments' 'ot' 'sfera' 'al' 'als' 'era' 'ana' 'iste'
-            'aire' 'eria' 'esa' 'eses' 'esos' 'or' '{i'}cia' '{i'}cies' 'icis' 'ici' '{i'}ci' '{i'}cis'
-            '{a`}ria' '{a`}ries' 'alla' 'ci{o'}' 'cions' 'n{c,}a' 'nces' '{o'}' 'dor' 'all'
-            'il' '{i'}stic' 'enc' 'enca' '{i'}s' 'issa' 'issos' '{i'}ssem' '{i'}ssiu' 'issem' 'isseu' '{i'}sseu'
-            '{o'}s' 'osa'  'dora' 'dores' 'dors' 'adura' 'ble' 'bles' '{i'}vol' '{i'}vola' 'd{i'}s' 'egar' 'ejar' 'ificar'
-            'itar' 'ables' 'adors' 'idores' 'idors'
-            'adora' 'aci{o'}' 'doras' 'dur' 'dures' 'alleng{u"}es'
-            'ant' 'ants' 'ancia' 'ancies' 'at{o`}ria' 'at{o`}ries' 'tori' 'toris'
-            'ats' 'ions'  'ota' 'isam' 'ors' 'ora' 'ores' 'isament'
-            'bilitat' 'bilitats' 'ivitat' 'ivitats' 'ari' 'aris' 'ionisme' 'ionista' 'ionistes'
-            'ialista' 'ialistes' 'ialisme' 'ialismes' 'ud' 'uts' 'uds' 'encia' 'encies' '{e`}ncia' '{e`}ncies'
-            '{i"}tat' '{i"}tats' 'atiu' 'atius' 'atives' 'ativa' 'ativitat' 'ativitats' 'ible' 'ibles'
-            'assa' 'asses' 'assos'
-             'ent' 'ents'
-             '{i'}ssim' '{i'}ssima' '{i'}ssims' '{i'}ssimes' '{i`}ssem' '{i`}sseu' '{i`}ssin'
-             'ims' 'ima' 'imes'
-             'isme' 'ista' 'ismes' 'istes'
-             'inia' 'inies' '{i'}inia' '{i'}nies' 'ita' 'ites' 'triu' 'trius'
-             'oses' 'osos' 'ient' 'otes' 'ots'
-            (R1 delete)
-            'acions' 'ada' 'ades'
-            (R2 delete)
-            'log{i'}a' 'log{i'}es''logia' 'logies' 'logi' 'logis' 'l{o'}gica' 'l{o'}gics' 'l{o'}giques'
-            (R2 &lt;- 'log')
-            'ic' 'ica' 'ics' 'iques'
-            (R2 &lt;- 'ic')
-            'qu{i'}ssim' 'qu{i'}ssims' 'qu{i'}ssimes' 'qu{i'}ssima'
-            (R1 &lt;- 'c')
-        )
-    )
+    <span class="kd">define</span> <span class="n">residual_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;os&#39;</span> <span class="s">&#39;a&#39;</span> <span class="s">&#39;o&#39;</span> <span class="s">&#39;{a&#39;}&#39;</span> <span class="s">&#39;{a`}&#39;</span> <span class="s">&#39;{i&#39;}&#39;</span> <span class="s">&#39;{o&#39;}&#39;</span> <span class="s">&#39;e&#39;</span> <span class="s">&#39;{e&#39;}&#39;</span> <span class="s">&#39;eu&#39;</span> <span class="s">&#39;iu&#39;</span>
+            <span class="s">&#39;is&#39;</span> <span class="s">&#39;i&#39;</span> <span class="s">&#39;ir&#39;</span>  <span class="s">&#39;s&#39;</span> <span class="s">&#39;{i`}&#39;</span> <span class="s">&#39;itz&#39;</span> <span class="s">&#39;{i&quot;}&#39;</span> <span class="s">&#39;{i&quot;}n&#39;</span> <span class="s">&#39;{i&quot;}s&#39;</span> <span class="s">&#39;it&#39;</span>
+            <span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;iqu&#39;</span>
+            <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span> <span class="s">&#39;ic&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-    define verb_suffix as (
-        [substring] among(
-            'ador' 'adora'  'adors' 'adores' 're' 'ie'
-             'ent' 'ents' 'udes' 'ar{a`}' 'eren'
-            'ar{a'}' 'ar{i'}an' 'ar{i'}as' 'ar{a'}n' 'ar{a'}s' 'ar{i'}ais'
-            'aria' 'arian' 'arien' 'aries' 'ar{a`}s'
-            'ar{i'}a' 'ar{e'}is' 'ar{i'}amos' 'aremos' 'ara'
-            'ar{e'}' 'ar{e'}s'
-            'er{i'}an' 'er{i'}as' 'er{a'}n' 'er{a'}s' 'er{i'}ais'
-            'er{i'}a' 'er{e'}is' 'er{i'}amos' 'eremos' 'er{a'}'
-            'er{e'}' 'er' 'erau' 'erass'
-            'ir{i'}an' 'ir{i'}as' 'ir{a'}n' 'ir{a'}s' 'ir{i'}ais'
-            'ir{i'}a' 'ir{e'}is' 'ir{i'}amos' 'iremos' 'ir{a'}'
-            'ir{e'}' '{i'}rem' '{i'}reu' '{i'}eu'
-            'ia' 'ies' '{i'}em' '{i`}eu' 'ien'
-            'at' 'ut' 'uda' 'ava' 'aves' 'avem' '{a'}vem' '{a`}vem' '{a`}veu' '{a'}veu' 'aven' 'au' 'ats'
-            'asseu' 'esseu' 'eresseu' '{a`}sseu' '{a`}ssem' '{a`}ssim' '{a`}ssiu'
-            'essen' 'esses' 'assen' 'asses' 'assim' 'assiu'
-            '{e'}ssen' '{e'}sseu'  '{e'}ssim' '{e'}ssiu' '{e'}ssem'
-            '{i'}' 'ares' '{a`}rem' '{a`}reu' '{a`}ren'
-            'ar{i'}em' 'ar{i'}eu'
-            'areu' 'aren' 'ant' '{i"}m' '{i"}u'
-            '{e'}s' '{i"}en' 'en' 'es' 'em' 'am' 'ams' '{i"}a' '{i"}es'
-            'dre' 'eix' 'eixer' 'tzar' 'eixes' 'ides' '{i"}des' 'it' '{i"}t' '{i"}da'
-            'aba' 'ada' 'ades' 'ida' '{i'}a' 'iera' 'ad' 'ed' 'its'
-            'id' 'ids'  'ase' 'iese' 'aste' 'iste' 'an' 'aban' '{i'}an'
-            'aran' 'ieran' 'asen' 'iesen' 'aron' 'ieron' 'ado'
-            'ido' 'iendo' 'i{o'}' 'ar' 'ir' 'as'
-            'ieu' 'ii' 'io' 'i{a`}'
-            'ess' 'essin' 'essis'  'ass' 'assin' 'assis' 'essim' '{e`}ssim' '{e`}ssiu'
-            'abas' 'adas' 'idas' '{i'}as' 'aras' 'ieras' 'ases'
-            'ieses' '{i'}s' '{a'}is' 'abais' '{i'}ais' 'arais'
-            'ierais'  'aseis' 'ieseis' 'asteis' 'isteis' 'ados'
-            'idos' 'amos' '{a'}bamos' '{i'}amos' 'imos' 'ques'
-            '{a'}ramos' 'i{e'}ramos' 'i{e'}semos' '{a'}semos'
-            'ira' 'iran' 'irem' 'iren' 'ires' 'ireu' 'iria' 'irien'
-            'iries' 'ir{a`}' 'ir{a`}s' 'ir{e`}' 'ir{i`}em' 'ir{i`}eu'
-            'isquen' 'iguem' 'igueu' 'esqui' 'esquin' 'esquis' 'eixi' 'eixin' 'eixis'
-            'eixen' 'eixo' 'isin' 'isis'  'esques' 'sis' 'sin'
-            'int' 'ir{i'}em' 'ir{i'}eu' 'isc' 'atges' 'esca' 'esquen'
-            'issen' 'isses' 'issin' 'issis' 'isca' 'issiu' 'issim'
-            '{i"}sc' '{i"}sca' '{i"}ssin' '{i'}ssiu' '{i'}ssim' '{i"}ssis' '{i"}guem' '{i"}gueu'
-            '{i"}ra' '{i"}ren' '{i"}res'
-            '{i"}squen' '{i"}sques' '{i"}ssen' '{i"}sses' '{i"}xo' '{i"}xen' '{i"}xes' '{i"}x'
-            'ixo' 'ixen' 'ixes' 'ix' 'ixa' 'inin' 'inis' 'ini' 'ineu' 'itza' 'itzi' 'itzeu' 'itzis'
-            'itzo' 'itz' 'itz{a`}' 'arem' 'in' '{a`}s' 'i{i"}' 'i{i"}n' 'i{i"}s'
-                (R1 delete)
-            'ando'
-                (R2 delete)
-        )
-    )
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">do</span> <span class="n">mark_regions</span>
+    <span class="ow">backwards</span> <span class="p">(</span>
+    <span class="ow">do</span> <span class="n">attached_pronoun</span>
+    <span class="ow">do</span> <span class="p">(</span> <span class="n">standard_suffix</span> <span class="ow">or</span>
+             <span class="n">verb_suffix</span>
+           <span class="p">)</span>
+        <span class="ow">do</span> <span class="n">residual_suffix</span>
+    <span class="p">)</span>
+    <span class="ow">do</span> <span class="n">cleaning</span>
+<span class="p">)</span>
+<span class="cm">/*</span>
+<span class="cm">     First works 2010/07/19</span>
+<span class="cm">     First Grammatical Reviews: http://ca.wikipedia.org/wiki/Gram%C3%A0tica_catalana</span>
+<span class="cm">     Suffix list: http://wapedia.mobi/ca/Llista_de_sufixos</span>
+<span class="cm">     Irregular Verbs: http://ca.wikipedia.org/wiki/Flexi%C3%B3_verbal_del_catal%C3%A0</span>
+<span class="cm">*/</span>
+</pre></div>
 
-    define residual_suffix as (
-        [substring] among(
-            'os' 'a' 'o' '{a'}' '{a`}' '{i'}' '{o'}' 'e' '{e'}' 'eu' 'iu'
-            'is' 'i' 'ir'  's' '{i`}' 'itz' '{i"}' '{i"}n' '{i"}s' 'it'
-            (R1 delete)
-            'iqu'
-            (R1 &lt;- 'ic')
-        )
-    )
-)
-
-define stem as (
-    do mark_regions
-    backwards (
-    do attached_pronoun
-    do ( standard_suffix or
-             verb_suffix
-           )
-        do residual_suffix
-    )
-    do cleaning
-)
-/*
-     First works 2010/07/19
-     First Grammatical Reviews: http://ca.wikipedia.org/wiki/Gram%C3%A0tica_catalana
-     Suffix list: http://wapedia.mobi/ca/Llista_de_sufixos
-     Irregular Verbs: http://ca.wikipedia.org/wiki/Flexi%C3%B3_verbal_del_catal%C3%A0
-*/
-</DL>
-</PRE>
-</TR>
+</pre></TR>
 
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>

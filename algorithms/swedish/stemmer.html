@@ -1,8 +1,17 @@
-<HTML>
-<HEAD>
-<META http-equiv="content-type" content="text/html; charset=UTF-8">
-<TITLE>Swedish stemming algorithm</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>Swedish stemming algorithm</title>
+  </head>
+
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 <H1 ALIGN=CENTER>Swedish stemming algorithm</H1>
 
@@ -24,7 +33,6 @@
 <DL><DD><TABLE CELLPADDING=0>
 <TR><TD><A HREF="stem_MS_DOS_Latin_I.sbl">    The stemmer in Snowball &#x2014; MS DOS Latin I encodings</A>
 </TABLE></DL>
-
 
 <DL><DD><TABLE CELLPADDING=0>
 <TR><TD><A HREF="../../texts/scandinavian.html">
@@ -311,86 +319,85 @@ Step 3:
 
 </TR>
 
-<TR><TD BGCOLOR="lightblue">
+<TR><TD>
+<H2>The same algorithm in Snowball</H2>
 
-<BR>&nbsp;<H2>The same algorithm in Snowball</H2>
+<pre><div class="highlight"><pre><span class="kd">routines</span> <span class="p">(</span>
+           <span class="n">mark_regions</span>
+           <span class="n">main_suffix</span>
+           <span class="n">consonant_pair</span>
+           <span class="n">other_suffix</span>
+<span class="p">)</span>
 
-<BR><PRE>
-<DL><DD>
-routines (
-           mark_regions
-           main_suffix
-           consonant_pair
-           other_suffix
-)
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-externals ( stem )
+<span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">x</span> <span class="p">)</span>
 
-integers ( p1 x )
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="n">s_ending</span> <span class="p">)</span>
 
-groupings ( v s_ending )
+<span class="kd">stringescapes</span> <span class="p">{}</span>
 
-stringescapes {}
+<span class="cm">/* special characters (in ISO Latin I) */</span>
 
-/* special characters (in ISO Latin I) */
+<span class="kd">stringdef</span> <span class="n">a&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;E4&#39;</span>
+<span class="kd">stringdef</span> <span class="n">ao</span>   <span class="mh">hex</span> <span class="s">&#39;E5&#39;</span>
+<span class="kd">stringdef</span> <span class="n">o&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;F6&#39;</span>
 
-stringdef a"   hex 'E4'
-stringdef ao   hex 'E5'
-stringdef o"   hex 'F6'
+<span class="kd">define</span> <span class="n">v</span> <span class="s">&#39;aeiouy{a&quot;}{ao}{o&quot;}&#39;</span>
 
-define v 'aeiouy{a"}{ao}{o"}'
+<span class="kd">define</span> <span class="n">s_ending</span>  <span class="s">&#39;bcdfghjklmnoprtvy&#39;</span>
 
-define s_ending  'bcdfghjklmnoprtvy'
+<span class="kd">define</span> <span class="n">mark_regions</span> <span class="k">as</span> <span class="p">(</span>
 
-define mark_regions as (
+    <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="ow">test</span> <span class="p">(</span> <span class="ow">hop</span> <span class="m">3</span> <span class="ow">setmark</span> <span class="n">x</span> <span class="p">)</span>
+    <span class="ow">goto</span> <span class="n">v</span> <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p1</span>
+    <span class="ow">try</span> <span class="p">(</span> <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;</span> <span class="n">x</span>  <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="n">x</span> <span class="p">)</span>
+<span class="p">)</span>
 
-    $p1 = limit
-    test ( hop 3 setmark x )
-    goto v gopast non-v  setmark p1
-    try ( $p1 &lt; x  $p1 = x )
-)
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-backwardmode (
+    <span class="kd">define</span> <span class="n">main_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">setlimit</span> <span class="ow">tomark</span> <span class="n">p1</span> <span class="k">for</span> <span class="p">([</span><span class="ow">substring</span><span class="p">])</span>
+        <span class="k">among</span><span class="p">(</span>
 
-    define main_suffix as (
-        setlimit tomark p1 for ([substring])
-        among(
+            <span class="s">&#39;a&#39;</span> <span class="s">&#39;arna&#39;</span> <span class="s">&#39;erna&#39;</span> <span class="s">&#39;heterna&#39;</span> <span class="s">&#39;orna&#39;</span> <span class="s">&#39;ad&#39;</span> <span class="s">&#39;e&#39;</span> <span class="s">&#39;ade&#39;</span> <span class="s">&#39;ande&#39;</span> <span class="s">&#39;arne&#39;</span>
+            <span class="s">&#39;are&#39;</span> <span class="s">&#39;aste&#39;</span> <span class="s">&#39;en&#39;</span> <span class="s">&#39;anden&#39;</span> <span class="s">&#39;aren&#39;</span> <span class="s">&#39;heten&#39;</span> <span class="s">&#39;ern&#39;</span> <span class="s">&#39;ar&#39;</span> <span class="s">&#39;er&#39;</span> <span class="s">&#39;heter&#39;</span>
+            <span class="s">&#39;or&#39;</span> <span class="s">&#39;as&#39;</span> <span class="s">&#39;arnas&#39;</span> <span class="s">&#39;ernas&#39;</span> <span class="s">&#39;ornas&#39;</span> <span class="s">&#39;es&#39;</span> <span class="s">&#39;ades&#39;</span> <span class="s">&#39;andes&#39;</span> <span class="s">&#39;ens&#39;</span> <span class="s">&#39;arens&#39;</span>
+            <span class="s">&#39;hetens&#39;</span> <span class="s">&#39;erns&#39;</span> <span class="s">&#39;at&#39;</span> <span class="s">&#39;andet&#39;</span> <span class="s">&#39;het&#39;</span> <span class="s">&#39;ast&#39;</span>
+                <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;s&#39;</span>
+                <span class="p">(</span><span class="n">s_ending</span> <span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-            'a' 'arna' 'erna' 'heterna' 'orna' 'ad' 'e' 'ade' 'ande' 'arne'
-            'are' 'aste' 'en' 'anden' 'aren' 'heten' 'ern' 'ar' 'er' 'heter'
-            'or' 'as' 'arnas' 'ernas' 'ornas' 'es' 'ades' 'andes' 'ens' 'arens'
-            'hetens' 'erns' 'at' 'andet' 'het' 'ast'
-                (delete)
-            's'
-                (s_ending delete)
-        )
-    )
+    <span class="kd">define</span> <span class="n">consonant_pair</span> <span class="k">as</span> <span class="ow">setlimit</span> <span class="ow">tomark</span> <span class="n">p1</span> <span class="k">for</span> <span class="p">(</span>
+        <span class="k">among</span><span class="p">(</span><span class="s">&#39;dd&#39;</span> <span class="s">&#39;gd&#39;</span> <span class="s">&#39;nn&#39;</span> <span class="s">&#39;dt&#39;</span> <span class="s">&#39;gt&#39;</span> <span class="s">&#39;kt&#39;</span> <span class="s">&#39;tt&#39;</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="p">([</span><span class="ow">next</span><span class="p">]</span> <span class="ow">delete</span><span class="p">)</span>
+    <span class="p">)</span>
 
-    define consonant_pair as setlimit tomark p1 for (
-        among('dd' 'gd' 'nn' 'dt' 'gt' 'kt' 'tt')
-        and ([next] delete)
-    )
+    <span class="kd">define</span> <span class="n">other_suffix</span> <span class="k">as</span> <span class="ow">setlimit</span> <span class="ow">tomark</span> <span class="n">p1</span> <span class="k">for</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;lig&#39;</span> <span class="s">&#39;ig&#39;</span> <span class="s">&#39;els&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;l{o&quot;}st&#39;</span>        <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;l{o&quot;}s&#39;</span><span class="p">)</span>
+            <span class="s">&#39;fullt&#39;</span>          <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;full&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-    define other_suffix as setlimit tomark p1 for (
-        [substring] among(
-            'lig' 'ig' 'els' (delete)
-            'l{o"}st'        (&lt;-'l{o"}s')
-            'fullt'          (&lt;-'full')
-        )
-    )
-)
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
 
-define stem as (
+    <span class="ow">do</span> <span class="n">mark_regions</span>
+    <span class="ow">backwards</span> <span class="p">(</span>
+        <span class="ow">do</span> <span class="n">main_suffix</span>
+        <span class="ow">do</span> <span class="n">consonant_pair</span>
+        <span class="ow">do</span> <span class="n">other_suffix</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
 
-    do mark_regions
-    backwards (
-        do main_suffix
-        do consonant_pair
-        do other_suffix
-    )
-)
-</DL>
-</PRE>
+</pre></TR>
+
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>

@@ -1,8 +1,17 @@
-<HTML>
-<HEAD>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>Hungarian stemming algorithm</title>
+  </head>
 
-<TITLE>Hungarian stemming algorithm</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 <H1 ALIGN=CENTER>The Hungarian stemming algorithm</H1>
 <BR><BR>
@@ -29,11 +38,7 @@ isla, Amsterdam</A> page for the Hungarian stemmer
 </TABLE></DL>
 
 
-
-
-<BR><BR>
-
-
+</TR>
 
 <TR><TD BGCOLOR="lightpink">
 
@@ -423,260 +428,257 @@ Step 9: Remove plural suffixes
     <DD>delete if in <I>R</I>1
 </DL>
 </DL>
-<BR><BR>
-
 
 </TR>
 
-<TR><TD BGCOLOR="lightblue">
-<BR>&nbsp;<H2>The full algorithm in Snowball</H2>
+<TR><TD>
+<H2>The full algorithm in Snowball</H2>
 
-<BR><PRE>
-<DL><DD>
-/*
-Hungarian Stemmer
-Removes noun inflections
-*/
+<pre><div class="highlight"><pre><span class="cm">/*</span>
+<span class="cm">Hungarian Stemmer</span>
+<span class="cm">Removes noun inflections</span>
+<span class="cm">*/</span>
 
-routines (
-    mark_regions
-    R1
-    v_ending
-    case
-    case_special
-    case_other
-    plural
-    owned
-    sing_owner
-    plur_owner
-    instrum
-    factive
-    undouble
-    double
-)
+<span class="kd">routines</span> <span class="p">(</span>
+    <span class="n">mark_regions</span>
+    <span class="n">R1</span>
+    <span class="n">v_ending</span>
+    <span class="n">case</span>
+    <span class="n">case_special</span>
+    <span class="n">case_other</span>
+    <span class="n">plural</span>
+    <span class="n">owned</span>
+    <span class="n">sing_owner</span>
+    <span class="n">plur_owner</span>
+    <span class="n">instrum</span>
+    <span class="n">factive</span>
+    <span class="n">undouble</span>
+    <span class="n">double</span>
+<span class="p">)</span>
 
-externals ( stem )
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-integers ( p1 )
-groupings ( v )
+<span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="p">)</span>
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="p">)</span>
 
-stringescapes {}
+<span class="kd">stringescapes</span> <span class="p">{}</span>
 
-/* special characters (in ISO Latin I) */
+<span class="cm">/* special characters (in ISO Latin I) */</span>
 
-stringdef a'  hex 'E1'  //a-acute
-stringdef e'  hex 'E9'  //e-acute
-stringdef i'  hex 'ED'  //i-acute
-stringdef o'  hex 'F3'  //o-acute
-stringdef o"  hex 'F6'  //o-umlaut
-stringdef oq  hex 'F5'  //o-double acute
-stringdef u'  hex 'FA'  //u-acute
-stringdef u"  hex 'FC'  //u-umlaut
-stringdef uq  hex 'FB'  //u-double acute
+<span class="kd">stringdef</span> <span class="n">a&#39;</span>  <span class="mh">hex</span> <span class="s">&#39;E1&#39;</span>  <span class="c1">//a-acute</span>
+<span class="kd">stringdef</span> <span class="n">e&#39;</span>  <span class="mh">hex</span> <span class="s">&#39;E9&#39;</span>  <span class="c1">//e-acute</span>
+<span class="kd">stringdef</span> <span class="n">i&#39;</span>  <span class="mh">hex</span> <span class="s">&#39;ED&#39;</span>  <span class="c1">//i-acute</span>
+<span class="kd">stringdef</span> <span class="n">o&#39;</span>  <span class="mh">hex</span> <span class="s">&#39;F3&#39;</span>  <span class="c1">//o-acute</span>
+<span class="kd">stringdef</span> <span class="n">o&quot;</span>  <span class="mh">hex</span> <span class="s">&#39;F6&#39;</span>  <span class="c1">//o-umlaut</span>
+<span class="kd">stringdef</span> <span class="n">oq</span>  <span class="mh">hex</span> <span class="s">&#39;F5&#39;</span>  <span class="c1">//o-double acute</span>
+<span class="kd">stringdef</span> <span class="n">u&#39;</span>  <span class="mh">hex</span> <span class="s">&#39;FA&#39;</span>  <span class="c1">//u-acute</span>
+<span class="kd">stringdef</span> <span class="n">u&quot;</span>  <span class="mh">hex</span> <span class="s">&#39;FC&#39;</span>  <span class="c1">//u-umlaut</span>
+<span class="kd">stringdef</span> <span class="n">uq</span>  <span class="mh">hex</span> <span class="s">&#39;FB&#39;</span>  <span class="c1">//u-double acute</span>
 
-define v 'aeiou{a'}{e'}{i'}{o'}{o"}{oq}{u'}{u"}{uq}'
+<span class="kd">define</span> <span class="n">v</span> <span class="s">&#39;aeiou{a&#39;}{e&#39;}{i&#39;}{o&#39;}{o&quot;}{oq}{u&#39;}{u&quot;}{uq}&#39;</span>
 
-define mark_regions as (
+<span class="kd">define</span> <span class="n">mark_regions</span> <span class="k">as</span> <span class="p">(</span>
 
-    $p1 = limit
+    <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>
 
-    (v goto non-v
-     among('cs' 'gy' 'ly' 'ny' 'sz' 'ty' 'zs' 'dzs') or next
-     setmark p1)
-    or
+    <span class="p">(</span><span class="n">v</span> <span class="ow">goto</span> <span class="ow">non-</span><span class="n">v</span>
+     <span class="k">among</span><span class="p">(</span><span class="s">&#39;cs&#39;</span> <span class="s">&#39;gy&#39;</span> <span class="s">&#39;ly&#39;</span> <span class="s">&#39;ny&#39;</span> <span class="s">&#39;sz&#39;</span> <span class="s">&#39;ty&#39;</span> <span class="s">&#39;zs&#39;</span> <span class="s">&#39;dzs&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">next</span>
+     <span class="ow">setmark</span> <span class="n">p1</span><span class="p">)</span>
+    <span class="ow">or</span>
 
-    (non-v gopast v setmark p1)
-)
+    <span class="p">(</span><span class="ow">non-</span><span class="n">v</span> <span class="ow">gopast</span> <span class="n">v</span> <span class="ow">setmark</span> <span class="n">p1</span><span class="p">)</span>
+<span class="p">)</span>
 
-backwardmode (
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-    define R1 as $p1 &lt;= cursor
+    <span class="kd">define</span> <span class="n">R1</span> <span class="k">as</span> <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
 
-    define v_ending as (
-        [substring] R1 among(
-            '{a'}' (&lt;- 'a')
-            '{e'}' (&lt;- 'e')
-        )
-    )
+    <span class="kd">define</span> <span class="n">v_ending</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;{a&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define double as (
-        test among('bb' 'cc' 'ccs' 'dd' 'ff' 'gg' 'ggy' 'jj' 'kk' 'll' 'lly' 'mm'
-        'nn' 'nny' 'pp' 'rr' 'ss' 'ssz' 'tt' 'tty' 'vv' 'zz' 'zzs')
-    )
+    <span class="kd">define</span> <span class="n">double</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">test</span> <span class="k">among</span><span class="p">(</span><span class="s">&#39;bb&#39;</span> <span class="s">&#39;cc&#39;</span> <span class="s">&#39;ccs&#39;</span> <span class="s">&#39;dd&#39;</span> <span class="s">&#39;ff&#39;</span> <span class="s">&#39;gg&#39;</span> <span class="s">&#39;ggy&#39;</span> <span class="s">&#39;jj&#39;</span> <span class="s">&#39;kk&#39;</span> <span class="s">&#39;ll&#39;</span> <span class="s">&#39;lly&#39;</span> <span class="s">&#39;mm&#39;</span>
+        <span class="s">&#39;nn&#39;</span> <span class="s">&#39;nny&#39;</span> <span class="s">&#39;pp&#39;</span> <span class="s">&#39;rr&#39;</span> <span class="s">&#39;ss&#39;</span> <span class="s">&#39;ssz&#39;</span> <span class="s">&#39;tt&#39;</span> <span class="s">&#39;tty&#39;</span> <span class="s">&#39;vv&#39;</span> <span class="s">&#39;zz&#39;</span> <span class="s">&#39;zzs&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
 
-    define undouble as (
-        next [hop 1] delete
-    )
+    <span class="kd">define</span> <span class="n">undouble</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">next</span> <span class="p">[</span><span class="ow">hop</span> <span class="m">1</span><span class="p">]</span> <span class="ow">delete</span>
+    <span class="p">)</span>
 
-    define instrum as(
-        [substring] R1 among(
-            'al' (double)
-            'el' (double)
-        )
-        delete
-        undouble
-    )
+    <span class="kd">define</span> <span class="n">instrum</span> <span class="k">as</span><span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;al&#39;</span> <span class="p">(</span><span class="n">double</span><span class="p">)</span>
+            <span class="s">&#39;el&#39;</span> <span class="p">(</span><span class="n">double</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="ow">delete</span>
+        <span class="n">undouble</span>
+    <span class="p">)</span>
 
 
-    define case as (
-        [substring] R1 among(
-            'ban' 'ben'
-            'ba' 'be'
-            'ra' 're'
-            'nak' 'nek'
-            'val' 'vel'
-            't{o'}l' 't{oq}l'
-            'r{o'}l' 'r{oq}l'
-            'b{o'}l' 'b{oq}l'
-            'hoz' 'hez' 'h{o"}z'
-            'n{a'}l' 'n{e'}l'
-            'ig'
-            'at' 'et' 'ot' '{o"}t'
-            '{e'}rt'
-            'k{e'}pp' 'k{e'}ppen'
-            'kor'
-            'ul' '{u"}l'
-            'v{a'}' 'v{e'}'
-            'onk{e'}nt' 'enk{e'}nt' 'ank{e'}nt'
-            'k{e'}nt'
-            'en' 'on' 'an' '{o"}n'
-            'n'
-            't'
-        )
-        delete
-        v_ending
-    )
+    <span class="kd">define</span> <span class="n">case</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;ban&#39;</span> <span class="s">&#39;ben&#39;</span>
+            <span class="s">&#39;ba&#39;</span> <span class="s">&#39;be&#39;</span>
+            <span class="s">&#39;ra&#39;</span> <span class="s">&#39;re&#39;</span>
+            <span class="s">&#39;nak&#39;</span> <span class="s">&#39;nek&#39;</span>
+            <span class="s">&#39;val&#39;</span> <span class="s">&#39;vel&#39;</span>
+            <span class="s">&#39;t{o&#39;}l&#39;</span> <span class="s">&#39;t{oq}l&#39;</span>
+            <span class="s">&#39;r{o&#39;}l&#39;</span> <span class="s">&#39;r{oq}l&#39;</span>
+            <span class="s">&#39;b{o&#39;}l&#39;</span> <span class="s">&#39;b{oq}l&#39;</span>
+            <span class="s">&#39;hoz&#39;</span> <span class="s">&#39;hez&#39;</span> <span class="s">&#39;h{o&quot;}z&#39;</span>
+            <span class="s">&#39;n{a&#39;}l&#39;</span> <span class="s">&#39;n{e&#39;}l&#39;</span>
+            <span class="s">&#39;ig&#39;</span>
+            <span class="s">&#39;at&#39;</span> <span class="s">&#39;et&#39;</span> <span class="s">&#39;ot&#39;</span> <span class="s">&#39;{o&quot;}t&#39;</span>
+            <span class="s">&#39;{e&#39;}rt&#39;</span>
+            <span class="s">&#39;k{e&#39;}pp&#39;</span> <span class="s">&#39;k{e&#39;}ppen&#39;</span>
+            <span class="s">&#39;kor&#39;</span>
+            <span class="s">&#39;ul&#39;</span> <span class="s">&#39;{u&quot;}l&#39;</span>
+            <span class="s">&#39;v{a&#39;}&#39;</span> <span class="s">&#39;v{e&#39;}&#39;</span>
+            <span class="s">&#39;onk{e&#39;}nt&#39;</span> <span class="s">&#39;enk{e&#39;}nt&#39;</span> <span class="s">&#39;ank{e&#39;}nt&#39;</span>
+            <span class="s">&#39;k{e&#39;}nt&#39;</span>
+            <span class="s">&#39;en&#39;</span> <span class="s">&#39;on&#39;</span> <span class="s">&#39;an&#39;</span> <span class="s">&#39;{o&quot;}n&#39;</span>
+            <span class="s">&#39;n&#39;</span>
+            <span class="s">&#39;t&#39;</span>
+        <span class="p">)</span>
+        <span class="ow">delete</span>
+        <span class="n">v_ending</span>
+    <span class="p">)</span>
 
-    define case_special as(
-        [substring] R1 among(
-            '{e'}n' (&lt;- 'e')
-            '{a'}n' (&lt;- 'a')
-            '{a'}nk{e'}nt' (&lt;- 'a')
-        )
-    )
+    <span class="kd">define</span> <span class="n">case_special</span> <span class="k">as</span><span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;{e&#39;}n&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}n&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}nk{e&#39;}nt&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define case_other as(
-        [substring] R1 among(
-            'astul' 'est{u"}l' (delete)
-            'stul' 'st{u"}l' (delete)
-            '{a'}stul' (&lt;- 'a')
-            '{e'}st{u"}l' (&lt;- 'e')
-        )
-    )
+    <span class="kd">define</span> <span class="n">case_other</span> <span class="k">as</span><span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;astul&#39;</span> <span class="s">&#39;est{u&quot;}l&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;stul&#39;</span> <span class="s">&#39;st{u&quot;}l&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}stul&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}st{u&quot;}l&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define factive as(
-        [substring] R1 among(
-            '{a'}' (double)
-            '{e'}' (double)
-        )
-        delete
-        undouble
-    )
+    <span class="kd">define</span> <span class="n">factive</span> <span class="k">as</span><span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;{a&#39;}&#39;</span> <span class="p">(</span><span class="n">double</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}&#39;</span> <span class="p">(</span><span class="n">double</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="ow">delete</span>
+        <span class="n">undouble</span>
+    <span class="p">)</span>
 
-    define plural as (
-        [substring] R1 among(
-            '{a'}k' (&lt;- 'a')
-            '{e'}k' (&lt;- 'e')
-            '{o"}k' (delete)
-            'ak' (delete)
-            'ok' (delete)
-            'ek' (delete)
-            'k' (delete)
-        )
-    )
+    <span class="kd">define</span> <span class="n">plural</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;{a&#39;}k&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}k&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{o&quot;}k&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;ak&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;ok&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;ek&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;k&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define owned as (
-        [substring] R1 among (
-            'ok{e'}' '{o"}k{e'}' 'ak{e'}' 'ek{e'}' (delete)
-            '{e'}k{e'}' (&lt;- 'e')
-            '{a'}k{e'}' (&lt;- 'a')
-            'k{e'}' (delete)
-            '{e'}{e'}i' (&lt;- 'e')
-            '{a'}{e'}i' (&lt;- 'a')
-            '{e'}i'  (delete)
-            '{e'}{e'}' (&lt;- 'e')
-            '{e'}' (delete)
-        )
-    )
+    <span class="kd">define</span> <span class="n">owned</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;ok{e&#39;}&#39;</span> <span class="s">&#39;{o&quot;}k{e&#39;}&#39;</span> <span class="s">&#39;ak{e&#39;}&#39;</span> <span class="s">&#39;ek{e&#39;}&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}k{e&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}k{e&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;k{e&#39;}&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}{e&#39;}i&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}{e&#39;}i&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}i&#39;</span>  <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}{e&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define sing_owner as (
-        [substring] R1 among(
-            '{u"}nk' 'unk' (delete)
-            '{a'}nk' (&lt;- 'a')
-            '{e'}nk' (&lt;- 'e')
-            'nk' (delete)
-            '{a'}juk' (&lt;- 'a')
-            '{e'}j{u"}k' (&lt;- 'e')
-            'juk' 'j{u"}k' (delete)
-            'uk' '{u"}k' (delete)
-            'em' 'om' 'am' (delete)
-            '{a'}m' (&lt;- 'a')
-            '{e'}m' (&lt;- 'e')
-            'm' (delete)
-            'od' 'ed' 'ad' '{o"}d' (delete)
-            '{a'}d' (&lt;- 'a')
-            '{e'}d' (&lt;- 'e')
-            'd' (delete)
-            'ja' 'je' (delete)
-            'a' 'e' 'o' (delete)
-            '{a'}' (&lt;- 'a')
-            '{e'}' (&lt;- 'e')
-        )
-    )
+    <span class="kd">define</span> <span class="n">sing_owner</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;{u&quot;}nk&#39;</span> <span class="s">&#39;unk&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}nk&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}nk&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;nk&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}juk&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}j{u&quot;}k&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;juk&#39;</span> <span class="s">&#39;j{u&quot;}k&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;uk&#39;</span> <span class="s">&#39;{u&quot;}k&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;em&#39;</span> <span class="s">&#39;om&#39;</span> <span class="s">&#39;am&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}m&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}m&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;m&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;od&#39;</span> <span class="s">&#39;ed&#39;</span> <span class="s">&#39;ad&#39;</span> <span class="s">&#39;{o&quot;}d&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}d&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}d&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;d&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;ja&#39;</span> <span class="s">&#39;je&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;a&#39;</span> <span class="s">&#39;e&#39;</span> <span class="s">&#39;o&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define plur_owner as (
-        [substring] R1 among(
-            'jaim' 'jeim' (delete)
-            '{a'}im' (&lt;- 'a')
-            '{e'}im' (&lt;- 'e')
-            'aim' 'eim' (delete)
-            'im' (delete)
-            'jaid' 'jeid' (delete)
-            '{a'}id' (&lt;- 'a')
-            '{e'}id' (&lt;- 'e')
-            'aid' 'eid' (delete)
-            'id' (delete)
-            'jai' 'jei' (delete)
-            '{a'}i' (&lt;- 'a')
-            '{e'}i' (&lt;- 'e')
-            'ai' 'ei' (delete)
-            'i' (delete)
-            'jaink' 'jeink' (delete)
-            'eink' 'aink' (delete)
-            '{a'}ink' (&lt;- 'a')
-            '{e'}ink' (&lt;- 'e')
-            'ink'
-            'jaitok' 'jeitek' (delete)
-            'aitok' 'eitek' (delete)
-            '{a'}itok' (&lt;- 'a')
-            '{e'}itek' (&lt;- 'e')
-            'itek' (delete)
-            'jeik' 'jaik' (delete)
-            'aik' 'eik' (delete)
-            '{a'}ik' (&lt;- 'a')
-            '{e'}ik' (&lt;- 'e')
-            'ik' (delete)
-        )
-    )
-)
+    <span class="kd">define</span> <span class="n">plur_owner</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;jaim&#39;</span> <span class="s">&#39;jeim&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}im&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}im&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;aim&#39;</span> <span class="s">&#39;eim&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;im&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;jaid&#39;</span> <span class="s">&#39;jeid&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}id&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}id&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;aid&#39;</span> <span class="s">&#39;eid&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;id&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;jai&#39;</span> <span class="s">&#39;jei&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}i&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}i&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ai&#39;</span> <span class="s">&#39;ei&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;i&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;jaink&#39;</span> <span class="s">&#39;jeink&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;eink&#39;</span> <span class="s">&#39;aink&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}ink&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}ink&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ink&#39;</span>
+            <span class="s">&#39;jaitok&#39;</span> <span class="s">&#39;jeitek&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;aitok&#39;</span> <span class="s">&#39;eitek&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}itok&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}itek&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;itek&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;jeik&#39;</span> <span class="s">&#39;jaik&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;aik&#39;</span> <span class="s">&#39;eik&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;{a&#39;}ik&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}ik&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ik&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-define stem as (
-    do mark_regions
-    backwards (
-      do instrum
-        do case
-        do case_special
-        do case_other
-        do factive
-        do owned
-        do sing_owner
-        do plur_owner
-        do plural
-    )
-)
-</DL>
-</PRE>
-</TR>
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">do</span> <span class="n">mark_regions</span>
+    <span class="ow">backwards</span> <span class="p">(</span>
+      <span class="ow">do</span> <span class="n">instrum</span>
+        <span class="ow">do</span> <span class="n">case</span>
+        <span class="ow">do</span> <span class="n">case_special</span>
+        <span class="ow">do</span> <span class="n">case_other</span>
+        <span class="ow">do</span> <span class="n">factive</span>
+        <span class="ow">do</span> <span class="n">owned</span>
+        <span class="ow">do</span> <span class="n">sing_owner</span>
+        <span class="ow">do</span> <span class="n">plur_owner</span>
+        <span class="ow">do</span> <span class="n">plural</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
+</pre></TR>
+
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>

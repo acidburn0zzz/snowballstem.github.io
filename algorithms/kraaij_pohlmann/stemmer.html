@@ -1,8 +1,17 @@
-<HTML>
-<HEAD>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>The Kraaij-Pohlmann stemming algorithm</title>
+  </head>
 
-<TITLE>The Kraaij-Pohlmann stemming algorithm</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 <H1 ALIGN=CENTER>The Kraaij-Pohlmann stemming algorithm</H1>
 
@@ -72,263 +81,256 @@ the stemmed form.
 <BR><BR>
 Here then is the Snowball equivalent of the Kraaij-Pohlmann algorithm.
 <BR><BR>
-<TR><TD BGCOLOR="lightblue">
+<TR><TD>
 
-<DL><DD>
-<BR><PRE>
-strings ( ch )
-integers ( x p1 p2 )
-booleans ( Y_found stemmed GE_removed )
+<pre><div class="highlight"><pre><span class="kd">strings</span> <span class="p">(</span> <span class="n">ch</span> <span class="p">)</span>
+<span class="kd">integers</span> <span class="p">(</span> <span class="n">x</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
+<span class="kd">booleans</span> <span class="p">(</span> <span class="n">Y_found</span> <span class="n">stemmed</span> <span class="n">GE_removed</span> <span class="p">)</span>
 
-routines (
+<span class="kd">routines</span> <span class="p">(</span>
 
-   R1 R2
-   C V VX
-   lengthen_V
-   Step_1 Step_2 Step_3 Step_4 Step_7
-   Step_6 Step_1c
-   Lose_prefix
-   Lose_infix
-   measure
-)
+   <span class="n">R1</span> <span class="n">R2</span>
+   <span class="n">C</span> <span class="n">V</span> <span class="n">VX</span>
+   <span class="n">lengthen_V</span>
+   <span class="n">Step_1</span> <span class="n">Step_2</span> <span class="n">Step_3</span> <span class="n">Step_4</span> <span class="n">Step_7</span>
+   <span class="n">Step_6</span> <span class="n">Step_1c</span>
+   <span class="n">Lose_prefix</span>
+   <span class="n">Lose_infix</span>
+   <span class="n">measure</span>
+<span class="p">)</span>
 
-externals ( stem )
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-groupings ( v v_WX AOU AIOU )
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="n">v_WX</span> <span class="n">AOU</span> <span class="n">AIOU</span> <span class="p">)</span>
 
-stringescapes {}
+<span class="kd">stringescapes</span> <span class="p">{}</span>
 
-stringdef '   hex '27'  // yuk
+<span class="kd">stringdef</span> <span class="n">&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;27&#39;</span>  <span class="c1">// yuk</span>
 
-define v        'aeiouy'
-define v_WX     v + 'wx'
-define AOU      'aou'
-define AIOU     'aiou'
+<span class="kd">define</span> <span class="n">v</span>        <span class="s">&#39;aeiouy&#39;</span>
+<span class="kd">define</span> <span class="n">v_WX</span>     <span class="n">v</span> <span class="o">+</span> <span class="s">&#39;wx&#39;</span>
+<span class="kd">define</span> <span class="n">AOU</span>      <span class="s">&#39;aou&#39;</span>
+<span class="kd">define</span> <span class="n">AIOU</span>     <span class="s">&#39;aiou&#39;</span>
 
-backwardmode (
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-    define R1 as (setmark x $x &gt;= p1)
-    define R2 as (setmark x $x &gt;= p2)
+    <span class="kd">define</span> <span class="n">R1</span> <span class="k">as</span> <span class="p">(</span><span class="ow">setmark</span> <span class="n">x</span> <span class="o">$</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">p1</span><span class="p">)</span>
+    <span class="kd">define</span> <span class="n">R2</span> <span class="k">as</span> <span class="p">(</span><span class="ow">setmark</span> <span class="n">x</span> <span class="o">$</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">p2</span><span class="p">)</span>
 
-    define V  as test (v or 'ij')
-    define VX as test (next v or 'ij')
-    define C  as test (not 'ij' non-v)
+    <span class="kd">define</span> <span class="n">V</span>  <span class="k">as</span> <span class="ow">test</span> <span class="p">(</span><span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;ij&#39;</span><span class="p">)</span>
+    <span class="kd">define</span> <span class="n">VX</span> <span class="k">as</span> <span class="ow">test</span> <span class="p">(</span><span class="ow">next</span> <span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;ij&#39;</span><span class="p">)</span>
+    <span class="kd">define</span> <span class="n">C</span>  <span class="k">as</span> <span class="ow">test</span> <span class="p">(</span><span class="ow">not</span> <span class="s">&#39;ij&#39;</span> <span class="ow">non-</span><span class="n">v</span><span class="p">)</span>
 
-    define lengthen_V as do (
-        non-v_WX [ (AOU] test (non-v or atlimit)) or
-                   ('e'] test (non-v or atlimit
-                               not AIOU
-                               not (next AIOU non-v)))
-        -&gt;ch insert ch
-    )
+    <span class="kd">define</span> <span class="n">lengthen_V</span> <span class="k">as</span> <span class="ow">do</span> <span class="p">(</span>
+        <span class="ow">non-</span><span class="n">v_WX</span> <span class="p">[</span> <span class="p">(</span><span class="n">AOU</span><span class="p">]</span> <span class="ow">test</span> <span class="p">(</span><span class="ow">non-</span><span class="n">v</span> <span class="ow">or</span> <span class="ow">atlimit</span><span class="p">))</span> <span class="ow">or</span>
+                   <span class="p">(</span><span class="s">&#39;e&#39;</span><span class="p">]</span> <span class="ow">test</span> <span class="p">(</span><span class="ow">non-</span><span class="n">v</span> <span class="ow">or</span> <span class="ow">atlimit</span>
+                               <span class="ow">not</span> <span class="n">AIOU</span>
+                               <span class="ow">not</span> <span class="p">(</span><span class="ow">next</span> <span class="n">AIOU</span> <span class="ow">non-</span><span class="n">v</span><span class="p">)))</span>
+        <span class="o">-&gt;</span><span class="n">ch</span> <span class="ow">insert</span> <span class="n">ch</span>
+    <span class="p">)</span>
 
-    define Step_1 as
-    (
-        [among ( (])
+    <span class="kd">define</span> <span class="n">Step_1</span> <span class="k">as</span>
+    <span class="p">(</span>
+        <span class="p">[</span><span class="k">among</span> <span class="p">(</span> <span class="p">(])</span>
 
-            '{'}s' (delete)
-            's'    (R1 not ('t' R1) C delete)
-            'ies'  (R1 &lt;-'ie')
-            'es'
-                   (('ar' R1 C ] delete lengthen_V) or
-                    ('er' R1 C ] delete) or
-                    (R1 C &lt;-'e'))
+            <span class="s">&#39;{&#39;}s&#39;</span> <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;s&#39;</span>    <span class="p">(</span><span class="n">R1</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;t&#39;</span> <span class="n">R1</span><span class="p">)</span> <span class="n">C</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;ies&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;ie&#39;</span><span class="p">)</span>
+            <span class="s">&#39;es&#39;</span>
+                   <span class="p">((</span><span class="s">&#39;ar&#39;</span> <span class="n">R1</span> <span class="n">C</span> <span class="p">]</span> <span class="ow">delete</span> <span class="n">lengthen_V</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;er&#39;</span> <span class="n">R1</span> <span class="n">C</span> <span class="p">]</span> <span class="ow">delete</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="o">&lt;-</span><span class="s">&#39;e&#39;</span><span class="p">))</span>
 
-            'aus'  (R1 V &lt;-'au')
-            'en'   (('hed' R1 ] &lt;-'heid') or
-                    ('nd' delete) or
-                    ('d' R1 C ] delete) or
-                    ('i' or 'j' V delete) or
-                    (R1 C delete lengthen_V))
-            'nde'  (&lt;-'nd')
-        )
-    )
+            <span class="s">&#39;aus&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="n">V</span> <span class="o">&lt;-</span><span class="s">&#39;au&#39;</span><span class="p">)</span>
+            <span class="s">&#39;en&#39;</span>   <span class="p">((</span><span class="s">&#39;hed&#39;</span> <span class="n">R1</span> <span class="p">]</span> <span class="o">&lt;-</span><span class="s">&#39;heid&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;nd&#39;</span> <span class="ow">delete</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;d&#39;</span> <span class="n">R1</span> <span class="n">C</span> <span class="p">]</span> <span class="ow">delete</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;i&#39;</span> <span class="ow">or</span> <span class="s">&#39;j&#39;</span> <span class="n">V</span> <span class="ow">delete</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="ow">delete</span> <span class="n">lengthen_V</span><span class="p">))</span>
+            <span class="s">&#39;nde&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;nd&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_2 as
-    (
-        [among ( (])
-            'je'   (('{'}t' ] delete) or
-                    ('et'   ] R1 C delete) or
-                    ('rnt'  ] &lt;-'rn') or
-                    ('t'    ] R1 VX delete) or
-                    ('ink'  ] &lt;-'ing') or
-                    ('mp'   ] &lt;-'m') or
-                    ('{'}'  ] R1 delete) or
-                    (] R1 C delete))
-            'ge'   (R1 &lt;-'g')
-            'lijke'(R1 &lt;-'lijk')
-            'ische'(R1 &lt;-'isch')
-            'de'   (R1 C delete)
-            'te'   (R1 &lt;-'t')
-            'se'   (R1 &lt;-'s')
-            're'   (R1 &lt;-'r')
-            'le'   (R1 delete attach 'l' lengthen_V)
-            'ene'  (R1 C delete attach 'en' lengthen_V)
-            'ieve' (R1 C &lt;-'ief')
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_2</span> <span class="k">as</span>
+    <span class="p">(</span>
+        <span class="p">[</span><span class="k">among</span> <span class="p">(</span> <span class="p">(])</span>
+            <span class="s">&#39;je&#39;</span>   <span class="p">((</span><span class="s">&#39;{&#39;}t&#39;</span> <span class="p">]</span> <span class="ow">delete</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;et&#39;</span>   <span class="p">]</span> <span class="n">R1</span> <span class="n">C</span> <span class="ow">delete</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;rnt&#39;</span>  <span class="p">]</span> <span class="o">&lt;-</span><span class="s">&#39;rn&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;t&#39;</span>    <span class="p">]</span> <span class="n">R1</span> <span class="n">VX</span> <span class="ow">delete</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;ink&#39;</span>  <span class="p">]</span> <span class="o">&lt;-</span><span class="s">&#39;ing&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;mp&#39;</span>   <span class="p">]</span> <span class="o">&lt;-</span><span class="s">&#39;m&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="s">&#39;{&#39;}&#39;</span>  <span class="p">]</span> <span class="n">R1</span> <span class="ow">delete</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="p">(]</span> <span class="n">R1</span> <span class="n">C</span> <span class="ow">delete</span><span class="p">))</span>
+            <span class="s">&#39;ge&#39;</span>   <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+            <span class="s">&#39;lijke&#39;</span><span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;lijk&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ische&#39;</span><span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;isch&#39;</span><span class="p">)</span>
+            <span class="s">&#39;de&#39;</span>   <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;te&#39;</span>   <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
+            <span class="s">&#39;se&#39;</span>   <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+            <span class="s">&#39;re&#39;</span>   <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="s">&#39;le&#39;</span>   <span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span> <span class="ow">attach</span> <span class="s">&#39;l&#39;</span> <span class="n">lengthen_V</span><span class="p">)</span>
+            <span class="s">&#39;ene&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="ow">delete</span> <span class="ow">attach</span> <span class="s">&#39;en&#39;</span> <span class="n">lengthen_V</span><span class="p">)</span>
+            <span class="s">&#39;ieve&#39;</span> <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="o">&lt;-</span><span class="s">&#39;ief&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_3 as
-    (
-        [among ( (])
-            'atie'  (R1 &lt;-'eer')
-            'iteit' (R1 delete lengthen_V)
-            'heid'
-            'sel'
-            'ster'  (R1 delete)
-            'rder'  (&lt;-'r')
-            'ing'
-            'isme'
-            'erij'  (R1 delete lengthen_V)
-            'arij'  (R1 C &lt;-'aar')
-            'fie'   (R2 delete attach 'f' lengthen_V)
-            'gie'   (R2 delete attach 'g' lengthen_V)
-            'tst'   (R1 C &lt;-'t')
-            'dst'   (R1 C &lt;-'d')
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_3</span> <span class="k">as</span>
+    <span class="p">(</span>
+        <span class="p">[</span><span class="k">among</span> <span class="p">(</span> <span class="p">(])</span>
+            <span class="s">&#39;atie&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;eer&#39;</span><span class="p">)</span>
+            <span class="s">&#39;iteit&#39;</span> <span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span> <span class="n">lengthen_V</span><span class="p">)</span>
+            <span class="s">&#39;heid&#39;</span>
+            <span class="s">&#39;sel&#39;</span>
+            <span class="s">&#39;ster&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;rder&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ing&#39;</span>
+            <span class="s">&#39;isme&#39;</span>
+            <span class="s">&#39;erij&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span> <span class="n">lengthen_V</span><span class="p">)</span>
+            <span class="s">&#39;arij&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="o">&lt;-</span><span class="s">&#39;aar&#39;</span><span class="p">)</span>
+            <span class="s">&#39;fie&#39;</span>   <span class="p">(</span><span class="n">R2</span> <span class="ow">delete</span> <span class="ow">attach</span> <span class="s">&#39;f&#39;</span> <span class="n">lengthen_V</span><span class="p">)</span>
+            <span class="s">&#39;gie&#39;</span>   <span class="p">(</span><span class="n">R2</span> <span class="ow">delete</span> <span class="ow">attach</span> <span class="s">&#39;g&#39;</span> <span class="n">lengthen_V</span><span class="p">)</span>
+            <span class="s">&#39;tst&#39;</span>   <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="o">&lt;-</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
+            <span class="s">&#39;dst&#39;</span>   <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="o">&lt;-</span><span class="s">&#39;d&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_4 as
-    (
-        (   [among ( (])
-                'ioneel'  (R1 &lt;-'ie')
-                'atief'   (R1 &lt;-'eer')
-                'baar'    (R1 delete)
-                'naar'    (R1 V &lt;-'n')
-                'laar'    (R1 V &lt;-'l')
-                'raar'    (R1 V &lt;-'r')
-                'tant'    (R1 &lt;-'teer')
-                'lijker'
-                'lijkst'  (R1 &lt;-'lijk')
-                'achtig'
-                'achtiger'
-                'achtigst'(R1 delete)
-                'eriger'
-                'erigst'
-                'erig'
-                'end'     (R1 C delete lengthen_V)
-            )
-        )
-        or
-        (   [among ( (])
-                'iger'
-                'igst'
-                'ig'      (R1 C delete lengthen_V)
-            )
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_4</span> <span class="k">as</span>
+    <span class="p">(</span>
+        <span class="p">(</span>   <span class="p">[</span><span class="k">among</span> <span class="p">(</span> <span class="p">(])</span>
+                <span class="s">&#39;ioneel&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;ie&#39;</span><span class="p">)</span>
+                <span class="s">&#39;atief&#39;</span>   <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;eer&#39;</span><span class="p">)</span>
+                <span class="s">&#39;baar&#39;</span>    <span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span><span class="p">)</span>
+                <span class="s">&#39;naar&#39;</span>    <span class="p">(</span><span class="n">R1</span> <span class="n">V</span> <span class="o">&lt;-</span><span class="s">&#39;n&#39;</span><span class="p">)</span>
+                <span class="s">&#39;laar&#39;</span>    <span class="p">(</span><span class="n">R1</span> <span class="n">V</span> <span class="o">&lt;-</span><span class="s">&#39;l&#39;</span><span class="p">)</span>
+                <span class="s">&#39;raar&#39;</span>    <span class="p">(</span><span class="n">R1</span> <span class="n">V</span> <span class="o">&lt;-</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+                <span class="s">&#39;tant&#39;</span>    <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;teer&#39;</span><span class="p">)</span>
+                <span class="s">&#39;lijker&#39;</span>
+                <span class="s">&#39;lijkst&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;lijk&#39;</span><span class="p">)</span>
+                <span class="s">&#39;achtig&#39;</span>
+                <span class="s">&#39;achtiger&#39;</span>
+                <span class="s">&#39;achtigst&#39;</span><span class="p">(</span><span class="n">R1</span> <span class="ow">delete</span><span class="p">)</span>
+                <span class="s">&#39;eriger&#39;</span>
+                <span class="s">&#39;erigst&#39;</span>
+                <span class="s">&#39;erig&#39;</span>
+                <span class="s">&#39;end&#39;</span>     <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="ow">delete</span> <span class="n">lengthen_V</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="ow">or</span>
+        <span class="p">(</span>   <span class="p">[</span><span class="k">among</span> <span class="p">(</span> <span class="p">(])</span>
+                <span class="s">&#39;iger&#39;</span>
+                <span class="s">&#39;igst&#39;</span>
+                <span class="s">&#39;ig&#39;</span>      <span class="p">(</span><span class="n">R1</span> <span class="n">C</span> <span class="ow">delete</span> <span class="n">lengthen_V</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_7 as
-    (
-        [among ( (])
-            'kt'   (&lt;-'k')
-            'ft'   (&lt;-'f')
-            'pt'   (&lt;-'p')
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_7</span> <span class="k">as</span>
+    <span class="p">(</span>
+        <span class="p">[</span><span class="k">among</span> <span class="p">(</span> <span class="p">(])</span>
+            <span class="s">&#39;kt&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ft&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;f&#39;</span><span class="p">)</span>
+            <span class="s">&#39;pt&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_6 as
-    (
-        [among ( (])
-            'bb'   (&lt;-'b')
-            'cc'   (&lt;-'c')
-            'dd'   (&lt;-'d')
-            'ff'   (&lt;-'f')
-            'gg'   (&lt;-'g')
-            'hh'   (&lt;-'h')
-            'jj'   (&lt;-'j')
-            'kk'   (&lt;-'k')
-            'll'   (&lt;-'l')
-            'mm'   (&lt;-'m')
-            'nn'   (&lt;-'n')
-            'pp'   (&lt;-'p')
-            'qq'   (&lt;-'q')
-            'rr'   (&lt;-'r')
-            'ss'   (&lt;-'s')
-            'tt'   (&lt;-'t')
-            'vv'   (&lt;-'v')
-            'ww'   (&lt;-'w')
-            'xx'   (&lt;-'x')
-            'zz'   (&lt;-'z')
-            'v'    (&lt;-'f')
-            'z'    (&lt;-'s')
-        )
-    )
+    <span class="kd">define</span> <span class="n">Step_6</span> <span class="k">as</span>
+    <span class="p">(</span>
+        <span class="p">[</span><span class="k">among</span> <span class="p">(</span> <span class="p">(])</span>
+            <span class="s">&#39;bb&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+            <span class="s">&#39;cc&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
+            <span class="s">&#39;dd&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;d&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ff&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;f&#39;</span><span class="p">)</span>
+            <span class="s">&#39;gg&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+            <span class="s">&#39;hh&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;h&#39;</span><span class="p">)</span>
+            <span class="s">&#39;jj&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;j&#39;</span><span class="p">)</span>
+            <span class="s">&#39;kk&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ll&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;l&#39;</span><span class="p">)</span>
+            <span class="s">&#39;mm&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+            <span class="s">&#39;nn&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;n&#39;</span><span class="p">)</span>
+            <span class="s">&#39;pp&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+            <span class="s">&#39;qq&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;q&#39;</span><span class="p">)</span>
+            <span class="s">&#39;rr&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ss&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+            <span class="s">&#39;tt&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
+            <span class="s">&#39;vv&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ww&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="s">&#39;xx&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+            <span class="s">&#39;zz&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;z&#39;</span><span class="p">)</span>
+            <span class="s">&#39;v&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;f&#39;</span><span class="p">)</span>
+            <span class="s">&#39;z&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define Step_1c as
-    (
-        [among ( (] R1 C)
-            'd' (not ('n' R1) delete)
-            't' (not ('h' R1) delete)
-        )
-    )
-)
+    <span class="kd">define</span> <span class="n">Step_1c</span> <span class="k">as</span>
+    <span class="p">(</span>
+        <span class="p">[</span><span class="k">among</span> <span class="p">(</span> <span class="p">(]</span> <span class="n">R1</span> <span class="n">C</span><span class="p">)</span>
+            <span class="s">&#39;d&#39;</span> <span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="s">&#39;n&#39;</span> <span class="n">R1</span><span class="p">)</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;t&#39;</span> <span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="s">&#39;h&#39;</span> <span class="n">R1</span><span class="p">)</span> <span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-define Lose_prefix as (
-    ['ge'] test hop 3 (goto v goto non-v)
-    set GE_removed
-    delete
-)
+<span class="kd">define</span> <span class="n">Lose_prefix</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="p">[</span><span class="s">&#39;ge&#39;</span><span class="p">]</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">3</span> <span class="p">(</span><span class="ow">goto</span> <span class="n">v</span> <span class="ow">goto</span> <span class="ow">non-</span><span class="n">v</span><span class="p">)</span>
+    <span class="ow">set</span> <span class="n">GE_removed</span>
+    <span class="ow">delete</span>
+<span class="p">)</span>
 
-define Lose_infix as (
-    next
-    gopast (['ge']) test hop 3 (goto v goto non-v)
-    set GE_removed
-    delete
-)
+<span class="kd">define</span> <span class="n">Lose_infix</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">next</span>
+    <span class="ow">gopast</span> <span class="p">([</span><span class="s">&#39;ge&#39;</span><span class="p">])</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">3</span> <span class="p">(</span><span class="ow">goto</span> <span class="n">v</span> <span class="ow">goto</span> <span class="ow">non-</span><span class="n">v</span><span class="p">)</span>
+    <span class="ow">set</span> <span class="n">GE_removed</span>
+    <span class="ow">delete</span>
+<span class="p">)</span>
 
-define measure as (
-    do (
-        tolimit
-        setmark p1
-        setmark p2
-    )
-    do(
-        repeat non-v  atleast 1 ('ij' or v)  non-v  setmark p1
-        repeat non-v  atleast 1 ('ij' or v)  non-v  setmark p2
-    )
+<span class="kd">define</span> <span class="n">measure</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">do</span> <span class="p">(</span>
+        <span class="ow">tolimit</span>
+        <span class="ow">setmark</span> <span class="n">p1</span>
+        <span class="ow">setmark</span> <span class="n">p2</span>
+    <span class="p">)</span>
+    <span class="ow">do</span><span class="p">(</span>
+        <span class="ow">repeat</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">atleast</span> <span class="m">1</span> <span class="p">(</span><span class="s">&#39;ij&#39;</span> <span class="ow">or</span> <span class="n">v</span><span class="p">)</span>  <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p1</span>
+        <span class="ow">repeat</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">atleast</span> <span class="m">1</span> <span class="p">(</span><span class="s">&#39;ij&#39;</span> <span class="ow">or</span> <span class="n">v</span><span class="p">)</span>  <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p2</span>
+    <span class="p">)</span>
 
-)
-define stem as (
+<span class="p">)</span>
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
 
-    unset Y_found
-    unset stemmed
-    do ( ['y'] &lt;-'Y' set Y_found )
-    do repeat(goto (v  ['y'])&lt;-'Y' set Y_found )
+    <span class="ow">unset</span> <span class="n">Y_found</span>
+    <span class="ow">unset</span> <span class="n">stemmed</span>
+    <span class="ow">do</span> <span class="p">(</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span> <span class="o">&lt;-</span><span class="s">&#39;Y&#39;</span> <span class="ow">set</span> <span class="n">Y_found</span> <span class="p">)</span>
+    <span class="ow">do</span> <span class="ow">repeat</span><span class="p">(</span><span class="ow">goto</span> <span class="p">(</span><span class="n">v</span>  <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">&lt;-</span><span class="s">&#39;Y&#39;</span> <span class="ow">set</span> <span class="n">Y_found</span> <span class="p">)</span>
 
-    measure
+    <span class="n">measure</span>
 
-    backwards (
-            do (Step_1 set stemmed )
-            do (Step_2 set stemmed )
-            do (Step_3 set stemmed )
-            do (Step_4 set stemmed )
-    )
-    unset GE_removed
-    do (Lose_prefix and measure)
-    backwards (
-            do (GE_removed Step_1c)
-        )
-    unset GE_removed
-    do (Lose_infix and measure)
-    backwards (
-            do (GE_removed Step_1c)
-        )
-    backwards (
-            do (Step_7 set stemmed )
-            do (stemmed or GE_removed Step_6)
-        )
-    do(Y_found  repeat(goto (['Y']) &lt;-'y'))
-)
+    <span class="ow">backwards</span> <span class="p">(</span>
+            <span class="ow">do</span> <span class="p">(</span><span class="n">Step_1</span> <span class="ow">set</span> <span class="n">stemmed</span> <span class="p">)</span>
+            <span class="ow">do</span> <span class="p">(</span><span class="n">Step_2</span> <span class="ow">set</span> <span class="n">stemmed</span> <span class="p">)</span>
+            <span class="ow">do</span> <span class="p">(</span><span class="n">Step_3</span> <span class="ow">set</span> <span class="n">stemmed</span> <span class="p">)</span>
+            <span class="ow">do</span> <span class="p">(</span><span class="n">Step_4</span> <span class="ow">set</span> <span class="n">stemmed</span> <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="ow">unset</span> <span class="n">GE_removed</span>
+    <span class="ow">do</span> <span class="p">(</span><span class="n">Lose_prefix</span> <span class="ow">and</span> <span class="n">measure</span><span class="p">)</span>
+    <span class="ow">backwards</span> <span class="p">(</span>
+            <span class="ow">do</span> <span class="p">(</span><span class="n">GE_removed</span> <span class="n">Step_1c</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="ow">unset</span> <span class="n">GE_removed</span>
+    <span class="ow">do</span> <span class="p">(</span><span class="n">Lose_infix</span> <span class="ow">and</span> <span class="n">measure</span><span class="p">)</span>
+    <span class="ow">backwards</span> <span class="p">(</span>
+            <span class="ow">do</span> <span class="p">(</span><span class="n">GE_removed</span> <span class="n">Step_1c</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="ow">backwards</span> <span class="p">(</span>
+            <span class="ow">do</span> <span class="p">(</span><span class="n">Step_7</span> <span class="ow">set</span> <span class="n">stemmed</span> <span class="p">)</span>
+            <span class="ow">do</span> <span class="p">(</span><span class="n">stemmed</span> <span class="ow">or</span> <span class="n">GE_removed</span> <span class="n">Step_6</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="ow">do</span><span class="p">(</span><span class="n">Y_found</span>  <span class="ow">repeat</span><span class="p">(</span><span class="ow">goto</span> <span class="p">([</span><span class="s">&#39;Y&#39;</span><span class="p">])</span> <span class="o">&lt;-</span><span class="s">&#39;y&#39;</span><span class="p">))</span>
+<span class="p">)</span>
+</pre></div>
 
-
-
-
-</PRE>
-</DL>
-
-</TR>
+</pre></TR>
 
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>

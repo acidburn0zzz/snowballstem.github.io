@@ -1,8 +1,17 @@
-<HTML>
-<HEAD>
-<META http-equiv="content-type" content="text/html; charset=UTF-8">
-<TITLE>Dutch stemming algorithm</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>Dutch stemming algorithm</title>
+  </head>
+
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 <H1 ALIGN=CENTER>Dutch stemming algorithm</H1>
 
@@ -320,181 +329,179 @@ Finally,
     Turn <B><I>I</I></B> and <B><I>Y</I></B> back into lower case.
 </DL>
 
-
 </TR>
 
-<TR><TD BGCOLOR="lightblue">
+<TR><TD>
+<H2>The same algorithm in Snowball</H2>
 
-<BR>&nbsp;<H2>The same algorithm in Snowball</H2>
+<pre><div class="highlight"><pre><span class="kd">routines</span> <span class="p">(</span>
+           <span class="n">prelude</span> <span class="n">postlude</span>
+           <span class="n">e_ending</span>
+           <span class="n">en_ending</span>
+           <span class="n">mark_regions</span>
+           <span class="n">R1</span> <span class="n">R2</span>
+           <span class="n">undouble</span>
+           <span class="n">standard_suffix</span>
+<span class="p">)</span>
 
-<BR><PRE>
-<DL><DD>
-routines (
-           prelude postlude
-           e_ending
-           en_ending
-           mark_regions
-           R1 R2
-           undouble
-           standard_suffix
-)
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-externals ( stem )
+<span class="kd">booleans</span> <span class="p">(</span> <span class="n">e_found</span> <span class="p">)</span>
 
-booleans ( e_found )
+<span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
 
-integers ( p1 p2 )
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="n">v_I</span> <span class="n">v_j</span> <span class="p">)</span>
 
-groupings ( v v_I v_j )
+<span class="kd">stringescapes</span> <span class="p">{}</span>
 
-stringescapes {}
+<span class="cm">/* special characters (in ISO Latin I) */</span>
 
-/* special characters (in ISO Latin I) */
+<span class="kd">stringdef</span> <span class="n">a&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;E4&#39;</span>
+<span class="kd">stringdef</span> <span class="n">e&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;EB&#39;</span>
+<span class="kd">stringdef</span> <span class="n">i&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;EF&#39;</span>
+<span class="kd">stringdef</span> <span class="n">o&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;F6&#39;</span>
+<span class="kd">stringdef</span> <span class="n">u&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;FC&#39;</span>
 
-stringdef a"   hex 'E4'
-stringdef e"   hex 'EB'
-stringdef i"   hex 'EF'
-stringdef o"   hex 'F6'
-stringdef u"   hex 'FC'
+<span class="kd">stringdef</span> <span class="n">a&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;E1&#39;</span>
+<span class="kd">stringdef</span> <span class="n">e&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;E9&#39;</span>
+<span class="kd">stringdef</span> <span class="n">i&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;ED&#39;</span>
+<span class="kd">stringdef</span> <span class="n">o&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;F3&#39;</span>
+<span class="kd">stringdef</span> <span class="n">u&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;FA&#39;</span>
 
-stringdef a'   hex 'E1'
-stringdef e'   hex 'E9'
-stringdef i'   hex 'ED'
-stringdef o'   hex 'F3'
-stringdef u'   hex 'FA'
+<span class="kd">stringdef</span> <span class="n">e`</span>   <span class="mh">hex</span> <span class="s">&#39;E8&#39;</span>
 
-stringdef e`   hex 'E8'
+<span class="kd">define</span> <span class="n">v</span>       <span class="s">&#39;aeiouy{e`}&#39;</span>
+<span class="kd">define</span> <span class="n">v_I</span>     <span class="n">v</span> <span class="o">+</span> <span class="s">&#39;I&#39;</span>
+<span class="kd">define</span> <span class="n">v_j</span>     <span class="n">v</span> <span class="o">+</span> <span class="s">&#39;j&#39;</span>
 
-define v       'aeiouy{e`}'
-define v_I     v + 'I'
-define v_j     v + 'j'
+<span class="kd">define</span> <span class="n">prelude</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">test</span> <span class="ow">repeat</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;{a&quot;}&#39;</span> <span class="s">&#39;{a&#39;}&#39;</span>
+                <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&quot;}&#39;</span> <span class="s">&#39;{e&#39;}&#39;</span>
+                <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{i&quot;}&#39;</span> <span class="s">&#39;{i&#39;}&#39;</span>
+                <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{o&quot;}&#39;</span> <span class="s">&#39;{o&#39;}&#39;</span>
+                <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;o&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{u&quot;}&#39;</span> <span class="s">&#39;{u&#39;}&#39;</span>
+                <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+            <span class="s">&#39;&#39;</span>  <span class="p">(</span><span class="ow">next</span><span class="p">)</span>
+        <span class="p">)</span> <span class="c1">//or next</span>
+    <span class="p">)</span>
+    <span class="ow">try</span><span class="p">([</span><span class="s">&#39;y&#39;</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="s">&#39;Y&#39;</span><span class="p">)</span>
+    <span class="ow">repeat</span> <span class="ow">goto</span> <span class="p">(</span>
+        <span class="n">v</span> <span class="p">[(</span><span class="s">&#39;i&#39;</span><span class="p">]</span> <span class="n">v</span> <span class="o">&lt;-</span> <span class="s">&#39;I&#39;</span><span class="p">)</span> <span class="ow">or</span>
+           <span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">]</span>   <span class="o">&lt;-</span> <span class="s">&#39;Y&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-define prelude as (
-    test repeat (
-        [substring] among(
-            '{a"}' '{a'}'
-                (&lt;- 'a')
-            '{e"}' '{e'}'
-                (&lt;- 'e')
-            '{i"}' '{i'}'
-                (&lt;- 'i')
-            '{o"}' '{o'}'
-                (&lt;- 'o')
-            '{u"}' '{u'}'
-                (&lt;- 'u')
-            ''  (next)
-        ) //or next
-    )
-    try(['y'] &lt;- 'Y')
-    repeat goto (
-        v [('i'] v &lt;- 'I') or
-           ('y']   &lt;- 'Y')
-    )
-)
+<span class="kd">define</span> <span class="n">mark_regions</span> <span class="k">as</span> <span class="p">(</span>
 
-define mark_regions as (
+    <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="o">$</span><span class="n">p2</span> <span class="o">=</span> <span class="ow">limit</span>
 
-    $p1 = limit
-    $p2 = limit
+    <span class="ow">gopast</span> <span class="n">v</span>  <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p1</span>
+    <span class="ow">try</span><span class="p">(</span><span class="o">$</span><span class="n">p1</span> <span class="o">&lt;</span> <span class="m">3</span>  <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>  <span class="c1">// at least 3</span>
+    <span class="ow">gopast</span> <span class="n">v</span>  <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p2</span>
 
-    gopast v  gopast non-v  setmark p1
-    try($p1 &lt; 3  $p1 = 3)  // at least 3
-    gopast v  gopast non-v  setmark p2
+<span class="p">)</span>
 
-)
+<span class="kd">define</span> <span class="n">postlude</span> <span class="k">as</span> <span class="ow">repeat</span> <span class="p">(</span>
 
-define postlude as repeat (
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+        <span class="s">&#39;Y&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;y&#39;</span><span class="p">)</span>
+        <span class="s">&#39;I&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+        <span class="s">&#39;&#39;</span>   <span class="p">(</span><span class="ow">next</span><span class="p">)</span>
+    <span class="p">)</span> <span class="c1">//or next</span>
 
-    [substring] among(
-        'Y'  (&lt;- 'y')
-        'I'  (&lt;- 'i')
-        ''   (next)
-    ) //or next
+<span class="p">)</span>
 
-)
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-backwardmode (
+    <span class="kd">define</span> <span class="n">R1</span> <span class="k">as</span> <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">R2</span> <span class="k">as</span> <span class="o">$</span><span class="n">p2</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
 
-    define R1 as $p1 &lt;= cursor
-    define R2 as $p2 &lt;= cursor
+    <span class="kd">define</span> <span class="n">undouble</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">test</span> <span class="k">among</span><span class="p">(</span><span class="s">&#39;kk&#39;</span> <span class="s">&#39;dd&#39;</span> <span class="s">&#39;tt&#39;</span><span class="p">)</span> <span class="p">[</span><span class="ow">next</span><span class="p">]</span> <span class="ow">delete</span>
+    <span class="p">)</span>
 
-    define undouble as (
-        test among('kk' 'dd' 'tt') [next] delete
-    )
+    <span class="kd">define</span> <span class="n">e_ending</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">unset</span> <span class="n">e_found</span>
+        <span class="p">[</span><span class="s">&#39;e&#39;</span><span class="p">]</span> <span class="n">R1</span> <span class="ow">test</span> <span class="ow">non-</span><span class="n">v</span> <span class="ow">delete</span>
+        <span class="ow">set</span> <span class="n">e_found</span>
+        <span class="n">undouble</span>
+    <span class="p">)</span>
 
-    define e_ending as (
-        unset e_found
-        ['e'] R1 test non-v delete
-        set e_found
-        undouble
-    )
+    <span class="kd">define</span> <span class="n">en_ending</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="n">R1</span> <span class="ow">non-</span><span class="n">v</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s">&#39;gem&#39;</span> <span class="ow">delete</span>
+        <span class="n">undouble</span>
+    <span class="p">)</span>
 
-    define en_ending as (
-        R1 non-v and not 'gem' delete
-        undouble
-    )
+    <span class="kd">define</span> <span class="n">standard_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">do</span> <span class="p">(</span>
+            <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+                <span class="s">&#39;heden&#39;</span>
+                <span class="p">(</span>   <span class="n">R1</span> <span class="o">&lt;-</span> <span class="s">&#39;heid&#39;</span>
+                <span class="p">)</span>
+                <span class="s">&#39;en&#39;</span> <span class="s">&#39;ene&#39;</span>
+                <span class="p">(</span>   <span class="n">en_ending</span>
+                <span class="p">)</span>
+                <span class="s">&#39;s&#39;</span> <span class="s">&#39;se&#39;</span>
+                <span class="p">(</span>   <span class="n">R1</span> <span class="ow">non-</span><span class="n">v_j</span> <span class="ow">delete</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="ow">do</span> <span class="n">e_ending</span>
 
-    define standard_suffix as (
-        do (
-            [substring] among(
-                'heden'
-                (   R1 &lt;- 'heid'
-                )
-                'en' 'ene'
-                (   en_ending
-                )
-                's' 'se'
-                (   R1 non-v_j delete
-                )
-            )
-        )
-        do e_ending
+        <span class="ow">do</span> <span class="p">(</span> <span class="p">[</span><span class="s">&#39;heid&#39;</span><span class="p">]</span> <span class="n">R2</span> <span class="ow">not</span> <span class="s">&#39;c&#39;</span> <span class="ow">delete</span>
+             <span class="p">[</span><span class="s">&#39;en&#39;</span><span class="p">]</span> <span class="n">en_ending</span>
+           <span class="p">)</span>
 
-        do ( ['heid'] R2 not 'c' delete
-             ['en'] en_ending
-           )
+        <span class="ow">do</span> <span class="p">(</span>
+            <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+                <span class="s">&#39;end&#39;</span> <span class="s">&#39;ing&#39;</span>
+                <span class="p">(</span>   <span class="n">R2</span> <span class="ow">delete</span>
+                    <span class="p">([</span><span class="s">&#39;ig&#39;</span><span class="p">]</span> <span class="n">R2</span> <span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="ow">delete</span><span class="p">)</span> <span class="ow">or</span> <span class="n">undouble</span>
+                <span class="p">)</span>
+                <span class="s">&#39;ig&#39;</span>
+                <span class="p">(</span>   <span class="n">R2</span> <span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="ow">delete</span>
+                <span class="p">)</span>
+                <span class="s">&#39;lijk&#39;</span>
+                <span class="p">(</span>   <span class="n">R2</span> <span class="ow">delete</span> <span class="n">e_ending</span>
+                <span class="p">)</span>
+                <span class="s">&#39;baar&#39;</span>
+                <span class="p">(</span>   <span class="n">R2</span> <span class="ow">delete</span>
+                <span class="p">)</span>
+                <span class="s">&#39;bar&#39;</span>
+                <span class="p">(</span>   <span class="n">R2</span> <span class="n">e_found</span> <span class="ow">delete</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="ow">do</span> <span class="p">(</span>
+            <span class="ow">non-</span><span class="n">v_I</span>
+            <span class="ow">test</span> <span class="p">(</span>
+                <span class="k">among</span> <span class="p">(</span><span class="s">&#39;aa&#39;</span> <span class="s">&#39;ee&#39;</span> <span class="s">&#39;oo&#39;</span> <span class="s">&#39;uu&#39;</span><span class="p">)</span>
+                <span class="ow">non-</span><span class="n">v</span>
+            <span class="p">)</span>
+            <span class="p">[</span><span class="ow">next</span><span class="p">]</span> <span class="ow">delete</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-        do (
-            [substring] among(
-                'end' 'ing'
-                (   R2 delete
-                    (['ig'] R2 not 'e' delete) or undouble
-                )
-                'ig'
-                (   R2 not 'e' delete
-                )
-                'lijk'
-                (   R2 delete e_ending
-                )
-                'baar'
-                (   R2 delete
-                )
-                'bar'
-                (   R2 e_found delete
-                )
-            )
-        )
-        do (
-            non-v_I
-            test (
-                among ('aa' 'ee' 'oo' 'uu')
-                non-v
-            )
-            [next] delete
-        )
-    )
-)
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
 
-define stem as (
+        <span class="ow">do</span> <span class="n">prelude</span>
+        <span class="ow">do</span> <span class="n">mark_regions</span>
+        <span class="ow">backwards</span>
+            <span class="ow">do</span> <span class="n">standard_suffix</span>
+        <span class="ow">do</span> <span class="n">postlude</span>
+<span class="p">)</span>
+</pre></div>
 
-        do prelude
-        do mark_regions
-        backwards
-            do standard_suffix
-        do postlude
-)
-</DL>
-</PRE>
+</pre></TR>
+
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>

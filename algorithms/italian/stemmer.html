@@ -1,8 +1,17 @@
-<HTML>
-<HEAD>
-<META http-equiv="content-type" content="text/html; charset=UTF-8">
-<TITLE>Italian stemming algorithm</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>Italian stemming algorithm</title>
+  </head>
+
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 <H1 ALIGN=CENTER>Italian stemming algorithm</H1>
 
@@ -353,212 +362,208 @@ Finally,
     turn <B><I>I</I></B> and <B><I>U</I></B> back into lower case
 </DL>
 
-
 </TR>
 
-<TR><TD BGCOLOR="lightblue">
+<TR><TD>
+<H2>The same algorithm in Snowball</H2>
 
-<BR>&nbsp;<H2>The same algorithm in Snowball</H2>
+<pre><div class="highlight"><pre><span class="kd">routines</span> <span class="p">(</span>
+           <span class="n">prelude</span> <span class="n">postlude</span> <span class="n">mark_regions</span>
+           <span class="n">RV</span> <span class="n">R1</span> <span class="n">R2</span>
+           <span class="n">attached_pronoun</span>
+           <span class="n">standard_suffix</span>
+           <span class="n">verb_suffix</span>
+           <span class="n">vowel_suffix</span>
+<span class="p">)</span>
 
-<BR><PRE>
-<DL><DD>
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-routines (
-           prelude postlude mark_regions
-           RV R1 R2
-           attached_pronoun
-           standard_suffix
-           verb_suffix
-           vowel_suffix
-)
+<span class="kd">integers</span> <span class="p">(</span> <span class="n">pV</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
 
-externals ( stem )
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="n">AEIO</span> <span class="n">CG</span> <span class="p">)</span>
 
-integers ( pV p1 p2 )
+<span class="kd">stringescapes</span> <span class="p">{}</span>
 
-groupings ( v AEIO CG )
+<span class="cm">/* special characters (in ISO Latin I) */</span>
 
-stringescapes {}
+<span class="kd">stringdef</span> <span class="n">a&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;E1&#39;</span>
+<span class="kd">stringdef</span> <span class="n">a`</span>   <span class="mh">hex</span> <span class="s">&#39;E0&#39;</span>
+<span class="kd">stringdef</span> <span class="n">e&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;E9&#39;</span>
+<span class="kd">stringdef</span> <span class="n">e`</span>   <span class="mh">hex</span> <span class="s">&#39;E8&#39;</span>
+<span class="kd">stringdef</span> <span class="n">i&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;ED&#39;</span>
+<span class="kd">stringdef</span> <span class="n">i`</span>   <span class="mh">hex</span> <span class="s">&#39;EC&#39;</span>
+<span class="kd">stringdef</span> <span class="n">o&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;F3&#39;</span>
+<span class="kd">stringdef</span> <span class="n">o`</span>   <span class="mh">hex</span> <span class="s">&#39;F2&#39;</span>
+<span class="kd">stringdef</span> <span class="n">u&#39;</span>   <span class="mh">hex</span> <span class="s">&#39;FA&#39;</span>
+<span class="kd">stringdef</span> <span class="n">u`</span>   <span class="mh">hex</span> <span class="s">&#39;F9&#39;</span>
 
-/* special characters (in ISO Latin I) */
+<span class="kd">define</span> <span class="n">v</span> <span class="s">&#39;aeiou{a`}{e`}{i`}{o`}{u`}&#39;</span>
 
-stringdef a'   hex 'E1'
-stringdef a`   hex 'E0'
-stringdef e'   hex 'E9'
-stringdef e`   hex 'E8'
-stringdef i'   hex 'ED'
-stringdef i`   hex 'EC'
-stringdef o'   hex 'F3'
-stringdef o`   hex 'F2'
-stringdef u'   hex 'FA'
-stringdef u`   hex 'F9'
+<span class="kd">define</span> <span class="n">prelude</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">test</span> <span class="ow">repeat</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;{a&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;{a`}&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{e&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;{e`}&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{i&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;{i`}&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{o&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;{o`}&#39;</span><span class="p">)</span>
+            <span class="s">&#39;{u&#39;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;{u`}&#39;</span><span class="p">)</span>
+            <span class="s">&#39;qu&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;qU&#39;</span><span class="p">)</span>
+            <span class="s">&#39;&#39;</span>     <span class="p">(</span><span class="ow">next</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="ow">repeat</span> <span class="ow">goto</span> <span class="p">(</span>
+        <span class="n">v</span> <span class="p">[</span> <span class="p">(</span><span class="s">&#39;u&#39;</span> <span class="p">]</span> <span class="n">v</span> <span class="o">&lt;-</span> <span class="s">&#39;U&#39;</span><span class="p">)</span> <span class="ow">or</span>
+            <span class="p">(</span><span class="s">&#39;i&#39;</span> <span class="p">]</span> <span class="n">v</span> <span class="o">&lt;-</span> <span class="s">&#39;I&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-define v 'aeiou{a`}{e`}{i`}{o`}{u`}'
+<span class="kd">define</span> <span class="n">mark_regions</span> <span class="k">as</span> <span class="p">(</span>
 
-define prelude as (
-    test repeat (
-        [substring] among(
-            '{a'}' (&lt;- '{a`}')
-            '{e'}' (&lt;- '{e`}')
-            '{i'}' (&lt;- '{i`}')
-            '{o'}' (&lt;- '{o`}')
-            '{u'}' (&lt;- '{u`}')
-            'qu'   (&lt;- 'qU')
-            ''     (next)
-        )
-    )
-    repeat goto (
-        v [ ('u' ] v &lt;- 'U') or
-            ('i' ] v &lt;- 'I')
-    )
-)
+    <span class="o">$</span><span class="n">pV</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="o">$</span><span class="n">p2</span> <span class="o">=</span> <span class="ow">limit</span> <span class="c1">// defaults</span>
 
-define mark_regions as (
+    <span class="ow">do</span> <span class="p">(</span>
+        <span class="p">(</span> <span class="n">v</span> <span class="p">(</span><span class="ow">non-</span><span class="n">v</span> <span class="ow">gopast</span> <span class="n">v</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">v</span> <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span><span class="p">)</span> <span class="p">)</span>
+        <span class="ow">or</span>
+        <span class="p">(</span> <span class="ow">non-</span><span class="n">v</span> <span class="p">(</span><span class="ow">non-</span><span class="n">v</span> <span class="ow">gopast</span> <span class="n">v</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">v</span> <span class="ow">next</span><span class="p">)</span> <span class="p">)</span>
+        <span class="ow">setmark</span> <span class="n">pV</span>
+    <span class="p">)</span>
+    <span class="ow">do</span> <span class="p">(</span>
+        <span class="ow">gopast</span> <span class="n">v</span> <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span> <span class="ow">setmark</span> <span class="n">p1</span>
+        <span class="ow">gopast</span> <span class="n">v</span> <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span> <span class="ow">setmark</span> <span class="n">p2</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-    $pV = limit
-    $p1 = limit
-    $p2 = limit // defaults
+<span class="kd">define</span> <span class="n">postlude</span> <span class="k">as</span> <span class="ow">repeat</span> <span class="p">(</span>
 
-    do (
-        ( v (non-v gopast v) or (v gopast non-v) )
-        or
-        ( non-v (non-v gopast v) or (v next) )
-        setmark pV
-    )
-    do (
-        gopast v gopast non-v setmark p1
-        gopast v gopast non-v setmark p2
-    )
-)
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+        <span class="s">&#39;I&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+        <span class="s">&#39;U&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+        <span class="s">&#39;&#39;</span>   <span class="p">(</span><span class="ow">next</span><span class="p">)</span>
+    <span class="p">)</span>
 
-define postlude as repeat (
+<span class="p">)</span>
 
-    [substring] among(
-        'I'  (&lt;- 'i')
-        'U'  (&lt;- 'u')
-        ''   (next)
-    )
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-)
+    <span class="kd">define</span> <span class="n">RV</span> <span class="k">as</span> <span class="o">$</span><span class="n">pV</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">R1</span> <span class="k">as</span> <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">R2</span> <span class="k">as</span> <span class="o">$</span><span class="n">p2</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
 
-backwardmode (
+    <span class="kd">define</span> <span class="n">attached_pronoun</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;ci&#39;</span> <span class="s">&#39;gli&#39;</span> <span class="s">&#39;la&#39;</span> <span class="s">&#39;le&#39;</span> <span class="s">&#39;li&#39;</span> <span class="s">&#39;lo&#39;</span>
+            <span class="s">&#39;mi&#39;</span> <span class="s">&#39;ne&#39;</span> <span class="s">&#39;si&#39;</span>  <span class="s">&#39;ti&#39;</span> <span class="s">&#39;vi&#39;</span>
+            <span class="c1">// the compound forms are:</span>
+            <span class="s">&#39;sene&#39;</span> <span class="s">&#39;gliela&#39;</span> <span class="s">&#39;gliele&#39;</span> <span class="s">&#39;glieli&#39;</span> <span class="s">&#39;glielo&#39;</span> <span class="s">&#39;gliene&#39;</span>
+            <span class="s">&#39;mela&#39;</span> <span class="s">&#39;mele&#39;</span> <span class="s">&#39;meli&#39;</span> <span class="s">&#39;melo&#39;</span> <span class="s">&#39;mene&#39;</span>
+            <span class="s">&#39;tela&#39;</span> <span class="s">&#39;tele&#39;</span> <span class="s">&#39;teli&#39;</span> <span class="s">&#39;telo&#39;</span> <span class="s">&#39;tene&#39;</span>
+            <span class="s">&#39;cela&#39;</span> <span class="s">&#39;cele&#39;</span> <span class="s">&#39;celi&#39;</span> <span class="s">&#39;celo&#39;</span> <span class="s">&#39;cene&#39;</span>
+            <span class="s">&#39;vela&#39;</span> <span class="s">&#39;vele&#39;</span> <span class="s">&#39;veli&#39;</span> <span class="s">&#39;velo&#39;</span> <span class="s">&#39;vene&#39;</span>
+        <span class="p">)</span>
+        <span class="k">among</span><span class="p">(</span> <span class="p">(</span><span class="n">RV</span><span class="p">)</span>
+            <span class="s">&#39;ando&#39;</span> <span class="s">&#39;endo&#39;</span>   <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;ar&#39;</span> <span class="s">&#39;er&#39;</span> <span class="s">&#39;ir&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define RV as $pV &lt;= cursor
-    define R1 as $p1 &lt;= cursor
-    define R2 as $p2 &lt;= cursor
+    <span class="kd">define</span> <span class="n">standard_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
 
-    define attached_pronoun as (
-        [substring] among(
-            'ci' 'gli' 'la' 'le' 'li' 'lo'
-            'mi' 'ne' 'si'  'ti' 'vi'
-            // the compound forms are:
-            'sene' 'gliela' 'gliele' 'glieli' 'glielo' 'gliene'
-            'mela' 'mele' 'meli' 'melo' 'mene'
-            'tela' 'tele' 'teli' 'telo' 'tene'
-            'cela' 'cele' 'celi' 'celo' 'cene'
-            'vela' 'vele' 'veli' 'velo' 'vene'
-        )
-        among( (RV)
-            'ando' 'endo'   (delete)
-            'ar' 'er' 'ir'  (&lt;- 'e')
-        )
-    )
+            <span class="s">&#39;anza&#39;</span> <span class="s">&#39;anze&#39;</span> <span class="s">&#39;ico&#39;</span> <span class="s">&#39;ici&#39;</span> <span class="s">&#39;ica&#39;</span> <span class="s">&#39;ice&#39;</span> <span class="s">&#39;iche&#39;</span> <span class="s">&#39;ichi&#39;</span> <span class="s">&#39;ismo&#39;</span>
+            <span class="s">&#39;ismi&#39;</span> <span class="s">&#39;abile&#39;</span> <span class="s">&#39;abili&#39;</span> <span class="s">&#39;ibile&#39;</span> <span class="s">&#39;ibili&#39;</span> <span class="s">&#39;ista&#39;</span> <span class="s">&#39;iste&#39;</span> <span class="s">&#39;isti&#39;</span>
+            <span class="s">&#39;ist{a`}&#39;</span> <span class="s">&#39;ist{e`}&#39;</span> <span class="s">&#39;ist{i`}&#39;</span> <span class="s">&#39;oso&#39;</span> <span class="s">&#39;osi&#39;</span> <span class="s">&#39;osa&#39;</span> <span class="s">&#39;ose&#39;</span> <span class="s">&#39;mente&#39;</span>
+            <span class="s">&#39;atrice&#39;</span> <span class="s">&#39;atrici&#39;</span>
+            <span class="s">&#39;ante&#39;</span> <span class="s">&#39;anti&#39;</span> <span class="c1">// Note 1</span>
+               <span class="p">(</span> <span class="n">R2</span> <span class="ow">delete</span> <span class="p">)</span>
+            <span class="s">&#39;azione&#39;</span> <span class="s">&#39;azioni&#39;</span> <span class="s">&#39;atore&#39;</span> <span class="s">&#39;atori&#39;</span>
+               <span class="p">(</span> <span class="n">R2</span> <span class="ow">delete</span>
+                 <span class="ow">try</span> <span class="p">(</span> <span class="p">[</span><span class="s">&#39;ic&#39;</span><span class="p">]</span> <span class="n">R2</span> <span class="ow">delete</span> <span class="p">)</span>
+               <span class="p">)</span>
+            <span class="s">&#39;logia&#39;</span> <span class="s">&#39;logie&#39;</span>
+               <span class="p">(</span> <span class="n">R2</span> <span class="o">&lt;-</span> <span class="s">&#39;log&#39;</span> <span class="p">)</span>
+            <span class="s">&#39;uzione&#39;</span> <span class="s">&#39;uzioni&#39;</span> <span class="s">&#39;usione&#39;</span> <span class="s">&#39;usioni&#39;</span>
+               <span class="p">(</span> <span class="n">R2</span> <span class="o">&lt;-</span> <span class="s">&#39;u&#39;</span> <span class="p">)</span>
+            <span class="s">&#39;enza&#39;</span> <span class="s">&#39;enze&#39;</span>
+               <span class="p">(</span> <span class="n">R2</span> <span class="o">&lt;-</span> <span class="s">&#39;ente&#39;</span> <span class="p">)</span>
+            <span class="s">&#39;amento&#39;</span> <span class="s">&#39;amenti&#39;</span> <span class="s">&#39;imento&#39;</span> <span class="s">&#39;imenti&#39;</span>
+               <span class="p">(</span> <span class="n">RV</span> <span class="ow">delete</span> <span class="p">)</span>
+            <span class="s">&#39;amente&#39;</span> <span class="p">(</span>
+                <span class="n">R1</span> <span class="ow">delete</span>
+                <span class="ow">try</span> <span class="p">(</span>
+                    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R2</span> <span class="ow">delete</span> <span class="k">among</span><span class="p">(</span>
+                        <span class="s">&#39;iv&#39;</span> <span class="p">(</span> <span class="p">[</span><span class="s">&#39;at&#39;</span><span class="p">]</span> <span class="n">R2</span> <span class="ow">delete</span> <span class="p">)</span>
+                        <span class="s">&#39;os&#39;</span> <span class="s">&#39;ic&#39;</span> <span class="s">&#39;abil&#39;</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="s">&#39;it{a`}&#39;</span> <span class="p">(</span>
+                <span class="n">R2</span> <span class="ow">delete</span>
+                <span class="ow">try</span> <span class="p">(</span>
+                    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+                        <span class="s">&#39;abil&#39;</span> <span class="s">&#39;ic&#39;</span> <span class="s">&#39;iv&#39;</span> <span class="p">(</span><span class="n">R2</span> <span class="ow">delete</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="s">&#39;ivo&#39;</span> <span class="s">&#39;ivi&#39;</span> <span class="s">&#39;iva&#39;</span> <span class="s">&#39;ive&#39;</span> <span class="p">(</span>
+                <span class="n">R2</span> <span class="ow">delete</span>
+                <span class="ow">try</span> <span class="p">(</span> <span class="p">[</span><span class="s">&#39;at&#39;</span><span class="p">]</span> <span class="n">R2</span> <span class="ow">delete</span> <span class="p">[</span><span class="s">&#39;ic&#39;</span><span class="p">]</span> <span class="n">R2</span> <span class="ow">delete</span> <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define standard_suffix as (
-        [substring] among(
+    <span class="kd">define</span> <span class="n">verb_suffix</span> <span class="k">as</span> <span class="ow">setlimit</span> <span class="ow">tomark</span> <span class="n">pV</span> <span class="k">for</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;ammo&#39;</span> <span class="s">&#39;ando&#39;</span> <span class="s">&#39;ano&#39;</span> <span class="s">&#39;are&#39;</span> <span class="s">&#39;arono&#39;</span> <span class="s">&#39;asse&#39;</span> <span class="s">&#39;assero&#39;</span> <span class="s">&#39;assi&#39;</span>
+            <span class="s">&#39;assimo&#39;</span> <span class="s">&#39;ata&#39;</span> <span class="s">&#39;ate&#39;</span> <span class="s">&#39;ati&#39;</span> <span class="s">&#39;ato&#39;</span> <span class="s">&#39;ava&#39;</span> <span class="s">&#39;avamo&#39;</span> <span class="s">&#39;avano&#39;</span> <span class="s">&#39;avate&#39;</span>
+            <span class="s">&#39;avi&#39;</span> <span class="s">&#39;avo&#39;</span> <span class="s">&#39;emmo&#39;</span> <span class="s">&#39;enda&#39;</span> <span class="s">&#39;ende&#39;</span> <span class="s">&#39;endi&#39;</span> <span class="s">&#39;endo&#39;</span> <span class="s">&#39;er{a`}&#39;</span> <span class="s">&#39;erai&#39;</span>
+            <span class="s">&#39;eranno&#39;</span> <span class="s">&#39;ere&#39;</span> <span class="s">&#39;erebbe&#39;</span> <span class="s">&#39;erebbero&#39;</span> <span class="s">&#39;erei&#39;</span> <span class="s">&#39;eremmo&#39;</span> <span class="s">&#39;eremo&#39;</span>
+            <span class="s">&#39;ereste&#39;</span> <span class="s">&#39;eresti&#39;</span> <span class="s">&#39;erete&#39;</span> <span class="s">&#39;er{o`}&#39;</span> <span class="s">&#39;erono&#39;</span> <span class="s">&#39;essero&#39;</span> <span class="s">&#39;ete&#39;</span>
+            <span class="s">&#39;eva&#39;</span> <span class="s">&#39;evamo&#39;</span> <span class="s">&#39;evano&#39;</span> <span class="s">&#39;evate&#39;</span> <span class="s">&#39;evi&#39;</span> <span class="s">&#39;evo&#39;</span> <span class="s">&#39;Yamo&#39;</span> <span class="s">&#39;iamo&#39;</span> <span class="s">&#39;immo&#39;</span>
+            <span class="s">&#39;ir{a`}&#39;</span> <span class="s">&#39;irai&#39;</span> <span class="s">&#39;iranno&#39;</span> <span class="s">&#39;ire&#39;</span> <span class="s">&#39;irebbe&#39;</span> <span class="s">&#39;irebbero&#39;</span> <span class="s">&#39;irei&#39;</span>
+            <span class="s">&#39;iremmo&#39;</span> <span class="s">&#39;iremo&#39;</span> <span class="s">&#39;ireste&#39;</span> <span class="s">&#39;iresti&#39;</span> <span class="s">&#39;irete&#39;</span> <span class="s">&#39;ir{o`}&#39;</span> <span class="s">&#39;irono&#39;</span>
+            <span class="s">&#39;isca&#39;</span> <span class="s">&#39;iscano&#39;</span> <span class="s">&#39;isce&#39;</span> <span class="s">&#39;isci&#39;</span> <span class="s">&#39;isco&#39;</span> <span class="s">&#39;iscono&#39;</span> <span class="s">&#39;issero&#39;</span> <span class="s">&#39;ita&#39;</span>
+            <span class="s">&#39;ite&#39;</span> <span class="s">&#39;iti&#39;</span> <span class="s">&#39;ito&#39;</span> <span class="s">&#39;iva&#39;</span> <span class="s">&#39;ivamo&#39;</span> <span class="s">&#39;ivano&#39;</span> <span class="s">&#39;ivate&#39;</span> <span class="s">&#39;ivi&#39;</span> <span class="s">&#39;ivo&#39;</span>
+            <span class="s">&#39;ono&#39;</span> <span class="s">&#39;uta&#39;</span> <span class="s">&#39;ute&#39;</span> <span class="s">&#39;uti&#39;</span> <span class="s">&#39;uto&#39;</span>
 
-            'anza' 'anze' 'ico' 'ici' 'ica' 'ice' 'iche' 'ichi' 'ismo'
-            'ismi' 'abile' 'abili' 'ibile' 'ibili' 'ista' 'iste' 'isti'
-            'ist{a`}' 'ist{e`}' 'ist{i`}' 'oso' 'osi' 'osa' 'ose' 'mente'
-            'atrice' 'atrici'
-            'ante' 'anti' // Note 1
-               ( R2 delete )
-            'azione' 'azioni' 'atore' 'atori'
-               ( R2 delete
-                 try ( ['ic'] R2 delete )
-               )
-            'logia' 'logie'
-               ( R2 &lt;- 'log' )
-            'uzione' 'uzioni' 'usione' 'usioni'
-               ( R2 &lt;- 'u' )
-            'enza' 'enze'
-               ( R2 &lt;- 'ente' )
-            'amento' 'amenti' 'imento' 'imenti'
-               ( RV delete )
-            'amente' (
-                R1 delete
-                try (
-                    [substring] R2 delete among(
-                        'iv' ( ['at'] R2 delete )
-                        'os' 'ic' 'abil'
-                    )
-                )
-            )
-            'it{a`}' (
-                R2 delete
-                try (
-                    [substring] among(
-                        'abil' 'ic' 'iv' (R2 delete)
-                    )
-                )
-            )
-            'ivo' 'ivi' 'iva' 'ive' (
-                R2 delete
-                try ( ['at'] R2 delete ['ic'] R2 delete )
-            )
-        )
-    )
+            <span class="s">&#39;ar&#39;</span> <span class="s">&#39;ir&#39;</span> <span class="c1">// but &#39;er&#39; is problematical</span>
+                <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define verb_suffix as setlimit tomark pV for (
-        [substring] among(
-            'ammo' 'ando' 'ano' 'are' 'arono' 'asse' 'assero' 'assi'
-            'assimo' 'ata' 'ate' 'ati' 'ato' 'ava' 'avamo' 'avano' 'avate'
-            'avi' 'avo' 'emmo' 'enda' 'ende' 'endi' 'endo' 'er{a`}' 'erai'
-            'eranno' 'ere' 'erebbe' 'erebbero' 'erei' 'eremmo' 'eremo'
-            'ereste' 'eresti' 'erete' 'er{o`}' 'erono' 'essero' 'ete'
-            'eva' 'evamo' 'evano' 'evate' 'evi' 'evo' 'Yamo' 'iamo' 'immo'
-            'ir{a`}' 'irai' 'iranno' 'ire' 'irebbe' 'irebbero' 'irei'
-            'iremmo' 'iremo' 'ireste' 'iresti' 'irete' 'ir{o`}' 'irono'
-            'isca' 'iscano' 'isce' 'isci' 'isco' 'iscono' 'issero' 'ita'
-            'ite' 'iti' 'ito' 'iva' 'ivamo' 'ivano' 'ivate' 'ivi' 'ivo'
-            'ono' 'uta' 'ute' 'uti' 'uto'
+    <span class="kd">define</span> <span class="n">AEIO</span> <span class="s">&#39;aeio{a`}{e`}{i`}{o`}&#39;</span>
+    <span class="kd">define</span> <span class="n">CG</span> <span class="s">&#39;cg&#39;</span>
 
-            'ar' 'ir' // but 'er' is problematical
-                (delete)
-        )
-    )
+    <span class="kd">define</span> <span class="n">vowel_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">try</span> <span class="p">(</span>
+            <span class="p">[</span><span class="n">AEIO</span><span class="p">]</span> <span class="n">RV</span> <span class="ow">delete</span>
+            <span class="p">[</span><span class="s">&#39;i&#39;</span><span class="p">]</span> <span class="n">RV</span> <span class="ow">delete</span>
+        <span class="p">)</span>
+        <span class="ow">try</span> <span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;h&#39;</span><span class="p">]</span> <span class="n">CG</span> <span class="n">RV</span> <span class="ow">delete</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-    define AEIO 'aeio{a`}{e`}{i`}{o`}'
-    define CG 'cg'
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">do</span> <span class="n">prelude</span>
+    <span class="ow">do</span> <span class="n">mark_regions</span>
+    <span class="ow">backwards</span> <span class="p">(</span>
+        <span class="ow">do</span> <span class="n">attached_pronoun</span>
+        <span class="ow">do</span> <span class="p">(</span><span class="n">standard_suffix</span> <span class="ow">or</span> <span class="n">verb_suffix</span><span class="p">)</span>
+        <span class="ow">do</span> <span class="n">vowel_suffix</span>
+    <span class="p">)</span>
+    <span class="ow">do</span> <span class="n">postlude</span>
+<span class="p">)</span>
 
-    define vowel_suffix as (
-        try (
-            [AEIO] RV delete
-            ['i'] RV delete
-        )
-        try (
-            ['h'] CG RV delete
-        )
-    )
-)
+<span class="cm">/*</span>
+<span class="cm">    Note 1: additions of 15 Jun 2005</span>
+<span class="cm">*/</span>
+</pre></div>
 
-define stem as (
-    do prelude
-    do mark_regions
-    backwards (
-        do attached_pronoun
-        do (standard_suffix or verb_suffix)
-        do vowel_suffix
-    )
-    do postlude
-)
+</pre></TR>
 
-/*
-    Note 1: additions of 15 Jun 2005
-*/
-
-</DL>
-</PRE>
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>

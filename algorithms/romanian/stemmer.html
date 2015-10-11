@@ -1,8 +1,17 @@
-<HTML>
-<HEAD>
-<META http-equiv="content-type" content="text/html; charset=UTF-8">
-<TITLE>Romanian stemming algorithm</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>Romanian stemming algorithm</title>
+  </head>
+
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 <H1 ALIGN=CENTER>Romanian stemming algorithm</H1>
 
@@ -410,254 +419,250 @@ And finally:
 <DL><DD>
     Turn <B><I>I</I></B>, <B><I>U</I></B> back into <B><I>i</I></B>, <B><I>u</I></B>.
 </DL>
-<BR><BR>
 
 </TR>
 
-<TR><TD BGCOLOR="lightblue">
+<TR><TD>
+<H2>The same algorithm in Snowball (Unicode version)</H2>
 
-<BR>&nbsp;<H2>The same algorithm in Snowball (Unicode version)</H2>
+<pre><div class="highlight"><pre><span class="kd">routines</span> <span class="p">(</span>
+           <span class="n">prelude</span> <span class="n">postlude</span> <span class="n">mark_regions</span>
+           <span class="n">RV</span> <span class="n">R1</span> <span class="n">R2</span>
+           <span class="n">step_0</span>
+           <span class="n">standard_suffix</span> <span class="n">combo_suffix</span>
+           <span class="n">verb_suffix</span>
+           <span class="n">vowel_suffix</span>
+<span class="p">)</span>
 
-<BR><PRE>
-<DL><DD>
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-routines (
-           prelude postlude mark_regions
-           RV R1 R2
-           step_0
-           standard_suffix combo_suffix
-           verb_suffix
-           vowel_suffix
-)
+<span class="kd">integers</span> <span class="p">(</span> <span class="n">pV</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
 
-externals ( stem )
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="p">)</span>
 
-integers ( pV p1 p2 )
+<span class="kd">booleans</span>  <span class="p">(</span> <span class="n">standard_suffix_removed</span> <span class="p">)</span>
 
-groupings ( v )
+<span class="kd">stringescapes</span> <span class="p">{}</span>
 
-booleans  ( standard_suffix_removed )
+<span class="cm">/* special characters */</span>
 
-stringescapes {}
+<span class="kd">stringdef</span> <span class="n">a^</span>   <span class="mh">hex</span> <span class="s">&#39;0E2&#39;</span>  <span class="c1">// a circumflex</span>
+<span class="kd">stringdef</span> <span class="n">i^</span>   <span class="mh">hex</span> <span class="s">&#39;0EE&#39;</span>  <span class="c1">// i circumflex</span>
+<span class="kd">stringdef</span> <span class="n">a+</span>   <span class="mh">hex</span> <span class="s">&#39;103&#39;</span>  <span class="c1">// a breve</span>
+<span class="kd">stringdef</span> <span class="n">s,</span>   <span class="mh">hex</span> <span class="s">&#39;15F&#39;</span>  <span class="c1">// s cedilla</span>
+<span class="kd">stringdef</span> <span class="n">t,</span>   <span class="mh">hex</span> <span class="s">&#39;163&#39;</span>  <span class="c1">// t cedilla</span>
 
-/* special characters */
+<span class="kd">define</span> <span class="n">v</span> <span class="s">&#39;aeiou{a^}{i^}{a+}&#39;</span>
 
-stringdef a^   hex '0E2'  // a circumflex
-stringdef i^   hex '0EE'  // i circumflex
-stringdef a+   hex '103'  // a breve
-stringdef s,   hex '15F'  // s cedilla
-stringdef t,   hex '163'  // t cedilla
+<span class="kd">define</span> <span class="n">prelude</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">repeat</span> <span class="ow">goto</span> <span class="p">(</span>
+        <span class="n">v</span> <span class="p">[</span> <span class="p">(</span><span class="s">&#39;u&#39;</span> <span class="p">]</span> <span class="n">v</span> <span class="o">&lt;-</span> <span class="s">&#39;U&#39;</span><span class="p">)</span> <span class="ow">or</span>
+            <span class="p">(</span><span class="s">&#39;i&#39;</span> <span class="p">]</span> <span class="n">v</span> <span class="o">&lt;-</span> <span class="s">&#39;I&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-define v 'aeiou{a^}{i^}{a+}'
+<span class="kd">define</span> <span class="n">mark_regions</span> <span class="k">as</span> <span class="p">(</span>
 
-define prelude as (
-    repeat goto (
-        v [ ('u' ] v &lt;- 'U') or
-            ('i' ] v &lt;- 'I')
-    )
-)
+    <span class="o">$</span><span class="n">pV</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="o">$</span><span class="n">p2</span> <span class="o">=</span> <span class="ow">limit</span> <span class="c1">// defaults</span>
 
-define mark_regions as (
+    <span class="ow">do</span> <span class="p">(</span>
+        <span class="p">(</span> <span class="n">v</span> <span class="p">(</span><span class="ow">non-</span><span class="n">v</span> <span class="ow">gopast</span> <span class="n">v</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">v</span> <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span><span class="p">)</span> <span class="p">)</span>
+        <span class="ow">or</span>
+        <span class="p">(</span> <span class="ow">non-</span><span class="n">v</span> <span class="p">(</span><span class="ow">non-</span><span class="n">v</span> <span class="ow">gopast</span> <span class="n">v</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">v</span> <span class="ow">next</span><span class="p">)</span> <span class="p">)</span>
+        <span class="ow">setmark</span> <span class="n">pV</span>
+    <span class="p">)</span>
+    <span class="ow">do</span> <span class="p">(</span>
+        <span class="ow">gopast</span> <span class="n">v</span> <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span> <span class="ow">setmark</span> <span class="n">p1</span>
+        <span class="ow">gopast</span> <span class="n">v</span> <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span> <span class="ow">setmark</span> <span class="n">p2</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-    $pV = limit
-    $p1 = limit
-    $p2 = limit // defaults
+<span class="kd">define</span> <span class="n">postlude</span> <span class="k">as</span> <span class="ow">repeat</span> <span class="p">(</span>
 
-    do (
-        ( v (non-v gopast v) or (v gopast non-v) )
-        or
-        ( non-v (non-v gopast v) or (v next) )
-        setmark pV
-    )
-    do (
-        gopast v gopast non-v setmark p1
-        gopast v gopast non-v setmark p2
-    )
-)
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+        <span class="s">&#39;I&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+        <span class="s">&#39;U&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+        <span class="s">&#39;&#39;</span>   <span class="p">(</span><span class="ow">next</span><span class="p">)</span>
+    <span class="p">)</span>
 
-define postlude as repeat (
+<span class="p">)</span>
 
-    [substring] among(
-        'I'  (&lt;- 'i')
-        'U'  (&lt;- 'u')
-        ''   (next)
-    )
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-)
+    <span class="kd">define</span> <span class="n">RV</span> <span class="k">as</span> <span class="o">$</span><span class="n">pV</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">R1</span> <span class="k">as</span> <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">R2</span> <span class="k">as</span> <span class="o">$</span><span class="n">p2</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
 
-backwardmode (
+    <span class="kd">define</span> <span class="n">step_0</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+            <span class="s">&#39;ul&#39;</span> <span class="s">&#39;ului&#39;</span>
+                <span class="p">(</span> <span class="ow">delete</span> <span class="p">)</span>
+            <span class="s">&#39;aua&#39;</span>
+                <span class="p">(</span> <span class="o">&lt;-</span><span class="s">&#39;a&#39;</span> <span class="p">)</span>
+            <span class="s">&#39;ea&#39;</span> <span class="s">&#39;ele&#39;</span> <span class="s">&#39;elor&#39;</span>
+                <span class="p">(</span> <span class="o">&lt;-</span><span class="s">&#39;e&#39;</span> <span class="p">)</span>
+            <span class="s">&#39;ii&#39;</span> <span class="s">&#39;iua&#39;</span> <span class="s">&#39;iei&#39;</span> <span class="s">&#39;iile&#39;</span> <span class="s">&#39;iilor&#39;</span> <span class="s">&#39;ilor&#39;</span>
+                <span class="p">(</span> <span class="o">&lt;-</span><span class="s">&#39;i&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ile&#39;</span>
+                <span class="p">(</span> <span class="ow">not</span> <span class="s">&#39;ab&#39;</span> <span class="o">&lt;-</span> <span class="s">&#39;i&#39;</span> <span class="p">)</span>
+            <span class="s">&#39;atei&#39;</span>
+                <span class="p">(</span> <span class="o">&lt;-</span> <span class="s">&#39;at&#39;</span> <span class="p">)</span>
+            <span class="s">&#39;a{t,}ie&#39;</span> <span class="s">&#39;a{t,}ia&#39;</span>
+                <span class="p">(</span> <span class="o">&lt;-</span> <span class="s">&#39;a{t,}i&#39;</span> <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define RV as $pV &lt;= cursor
-    define R1 as $p1 &lt;= cursor
-    define R2 as $p2 &lt;= cursor
+    <span class="kd">define</span> <span class="n">combo_suffix</span> <span class="k">as</span> <span class="ow">test</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="p">(</span>
+            <span class="k">among</span><span class="p">(</span>
+            <span class="cm">/* &#39;IST&#39;. alternative: include the following</span>
+<span class="cm">                &#39;alism&#39; &#39;alisme&#39;</span>
+<span class="cm">                &#39;alist&#39; &#39;alista&#39; &#39;aliste&#39; &#39;alisti&#39; &#39;alist{a+}&#39; &#39;ali{s,}ti&#39; (</span>
+<span class="cm">                    &lt;- &#39;al&#39;</span>
+<span class="cm">                )</span>
+<span class="cm">            */</span>
+                <span class="s">&#39;abilitate&#39;</span> <span class="s">&#39;abilitati&#39;</span> <span class="s">&#39;abilit{a+}i&#39;</span> <span class="s">&#39;abilit{a+}{t,}i&#39;</span> <span class="p">(</span>
+                    <span class="o">&lt;-</span> <span class="s">&#39;abil&#39;</span>
+                <span class="p">)</span>
+                <span class="s">&#39;ibilitate&#39;</span> <span class="p">(</span>
+                    <span class="o">&lt;-</span> <span class="s">&#39;ibil&#39;</span>
+                <span class="p">)</span>
+                <span class="s">&#39;ivitate&#39;</span> <span class="s">&#39;ivitati&#39;</span> <span class="s">&#39;ivit{a+}i&#39;</span> <span class="s">&#39;ivit{a+}{t,}i&#39;</span> <span class="p">(</span>
+                    <span class="o">&lt;-</span> <span class="s">&#39;iv&#39;</span>
+                <span class="p">)</span>
+                <span class="s">&#39;icitate&#39;</span> <span class="s">&#39;icitati&#39;</span> <span class="s">&#39;icit{a+}i&#39;</span> <span class="s">&#39;icit{a+}{t,}i&#39;</span>
+                <span class="s">&#39;icator&#39;</span> <span class="s">&#39;icatori&#39;</span>
+                <span class="s">&#39;iciv&#39;</span> <span class="s">&#39;iciva&#39;</span> <span class="s">&#39;icive&#39;</span> <span class="s">&#39;icivi&#39;</span> <span class="s">&#39;iciv{a+}&#39;</span>
+                <span class="s">&#39;ical&#39;</span> <span class="s">&#39;icala&#39;</span> <span class="s">&#39;icale&#39;</span> <span class="s">&#39;icali&#39;</span> <span class="s">&#39;ical{a+}&#39;</span> <span class="p">(</span>
+                    <span class="o">&lt;-</span> <span class="s">&#39;ic&#39;</span>
+                <span class="p">)</span>
+                <span class="s">&#39;ativ&#39;</span> <span class="s">&#39;ativa&#39;</span> <span class="s">&#39;ative&#39;</span> <span class="s">&#39;ativi&#39;</span> <span class="s">&#39;ativ{a+}&#39;</span> <span class="s">&#39;a{t,}iune&#39;</span>
+                <span class="s">&#39;atoare&#39;</span> <span class="s">&#39;ator&#39;</span> <span class="s">&#39;atori&#39;</span>
+                <span class="s">&#39;{a+}toare&#39;</span> <span class="s">&#39;{a+}tor&#39;</span> <span class="s">&#39;{a+}tori&#39;</span> <span class="p">(</span>
+                    <span class="o">&lt;-</span> <span class="s">&#39;at&#39;</span>
+                <span class="p">)</span>
+                <span class="s">&#39;itiv&#39;</span> <span class="s">&#39;itiva&#39;</span> <span class="s">&#39;itive&#39;</span> <span class="s">&#39;itivi&#39;</span> <span class="s">&#39;itiv{a+}&#39;</span> <span class="s">&#39;i{t,}iune&#39;</span>
+                <span class="s">&#39;itoare&#39;</span> <span class="s">&#39;itor&#39;</span> <span class="s">&#39;itori&#39;</span> <span class="p">(</span>
+                    <span class="o">&lt;-</span> <span class="s">&#39;it&#39;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="ow">set</span> <span class="n">standard_suffix_removed</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define step_0 as (
-        [substring] R1 among(
-            'ul' 'ului'
-                ( delete )
-            'aua'
-                ( &lt;-'a' )
-            'ea' 'ele' 'elor'
-                ( &lt;-'e' )
-            'ii' 'iua' 'iei' 'iile' 'iilor' 'ilor'
-                ( &lt;-'i')
-            'ile'
-                ( not 'ab' &lt;- 'i' )
-            'atei'
-                ( &lt;- 'at' )
-            'a{t,}ie' 'a{t,}ia'
-                ( &lt;- 'a{t,}i' )
-        )
-    )
+    <span class="kd">define</span> <span class="n">standard_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">unset</span> <span class="n">standard_suffix_removed</span>
+        <span class="ow">repeat</span> <span class="n">combo_suffix</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R2</span> <span class="p">(</span>
+            <span class="k">among</span><span class="p">(</span>
 
-    define combo_suffix as test (
-        [substring] R1 (
-            among(
-            /* 'IST'. alternative: include the following
-                'alism' 'alisme'
-                'alist' 'alista' 'aliste' 'alisti' 'alist{a+}' 'ali{s,}ti' (
-                    &lt;- 'al'
-                )
-            */
-                'abilitate' 'abilitati' 'abilit{a+}i' 'abilit{a+}{t,}i' (
-                    &lt;- 'abil'
-                )
-                'ibilitate' (
-                    &lt;- 'ibil'
-                )
-                'ivitate' 'ivitati' 'ivit{a+}i' 'ivit{a+}{t,}i' (
-                    &lt;- 'iv'
-                )
-                'icitate' 'icitati' 'icit{a+}i' 'icit{a+}{t,}i'
-                'icator' 'icatori'
-                'iciv' 'iciva' 'icive' 'icivi' 'iciv{a+}'
-                'ical' 'icala' 'icale' 'icali' 'ical{a+}' (
-                    &lt;- 'ic'
-                )
-                'ativ' 'ativa' 'ative' 'ativi' 'ativ{a+}' 'a{t,}iune'
-                'atoare' 'ator' 'atori'
-                '{a+}toare' '{a+}tor' '{a+}tori' (
-                    &lt;- 'at'
-                )
-                'itiv' 'itiva' 'itive' 'itivi' 'itiv{a+}' 'i{t,}iune'
-                'itoare' 'itor' 'itori' (
-                    &lt;- 'it'
-                )
-            )
-            set standard_suffix_removed
-        )
-    )
+                <span class="c1">// past participle is treated here, rather than</span>
+                <span class="c1">// as a verb ending:</span>
+                <span class="s">&#39;at&#39;</span> <span class="s">&#39;ata&#39;</span> <span class="s">&#39;at{a+}&#39;</span> <span class="s">&#39;ati&#39;</span> <span class="s">&#39;ate&#39;</span>
+                <span class="s">&#39;ut&#39;</span> <span class="s">&#39;uta&#39;</span> <span class="s">&#39;ut{a+}&#39;</span> <span class="s">&#39;uti&#39;</span> <span class="s">&#39;ute&#39;</span>
+                <span class="s">&#39;it&#39;</span> <span class="s">&#39;ita&#39;</span> <span class="s">&#39;it{a+}&#39;</span> <span class="s">&#39;iti&#39;</span> <span class="s">&#39;ite&#39;</span>
 
-    define standard_suffix as (
-        unset standard_suffix_removed
-        repeat combo_suffix
-        [substring] R2 (
-            among(
+                <span class="s">&#39;ic&#39;</span> <span class="s">&#39;ica&#39;</span> <span class="s">&#39;ice&#39;</span> <span class="s">&#39;ici&#39;</span> <span class="s">&#39;ic{a+}&#39;</span>
+                <span class="s">&#39;abil&#39;</span> <span class="s">&#39;abila&#39;</span> <span class="s">&#39;abile&#39;</span> <span class="s">&#39;abili&#39;</span> <span class="s">&#39;abil{a+}&#39;</span>
+                <span class="s">&#39;ibil&#39;</span> <span class="s">&#39;ibila&#39;</span> <span class="s">&#39;ibile&#39;</span> <span class="s">&#39;ibili&#39;</span> <span class="s">&#39;ibil{a+}&#39;</span>
+                <span class="s">&#39;oasa&#39;</span> <span class="s">&#39;oas{a+}&#39;</span> <span class="s">&#39;oase&#39;</span> <span class="s">&#39;os&#39;</span> <span class="s">&#39;osi&#39;</span> <span class="s">&#39;o{s,}i&#39;</span>
+                <span class="s">&#39;ant&#39;</span> <span class="s">&#39;anta&#39;</span> <span class="s">&#39;ante&#39;</span> <span class="s">&#39;anti&#39;</span> <span class="s">&#39;ant{a+}&#39;</span>
+                <span class="s">&#39;ator&#39;</span> <span class="s">&#39;atori&#39;</span>
+                <span class="s">&#39;itate&#39;</span> <span class="s">&#39;itati&#39;</span> <span class="s">&#39;it{a+}i&#39;</span> <span class="s">&#39;it{a+}{t,}i&#39;</span>
+                <span class="s">&#39;iv&#39;</span> <span class="s">&#39;iva&#39;</span> <span class="s">&#39;ive&#39;</span> <span class="s">&#39;ivi&#39;</span> <span class="s">&#39;iv{a+}&#39;</span> <span class="p">(</span>
+                    <span class="ow">delete</span>
+                <span class="p">)</span>
+                <span class="s">&#39;iune&#39;</span> <span class="s">&#39;iuni&#39;</span> <span class="p">(</span>
+                    <span class="s">&#39;{t,}&#39;</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="s">&#39;t&#39;</span>
+                <span class="p">)</span>
+                <span class="s">&#39;ism&#39;</span> <span class="s">&#39;isme&#39;</span>
+                <span class="s">&#39;ist&#39;</span> <span class="s">&#39;ista&#39;</span> <span class="s">&#39;iste&#39;</span> <span class="s">&#39;isti&#39;</span> <span class="s">&#39;ist{a+}&#39;</span> <span class="s">&#39;i{s,}ti&#39;</span> <span class="p">(</span>
+                    <span class="o">&lt;-</span> <span class="s">&#39;ist&#39;</span>
+                    <span class="cm">/* &#39;IST&#39;. alternative: remove with &lt;- &#39;&#39; */</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="ow">set</span> <span class="n">standard_suffix_removed</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-                // past participle is treated here, rather than
-                // as a verb ending:
-                'at' 'ata' 'at{a+}' 'ati' 'ate'
-                'ut' 'uta' 'ut{a+}' 'uti' 'ute'
-                'it' 'ita' 'it{a+}' 'iti' 'ite'
+    <span class="kd">define</span> <span class="n">verb_suffix</span> <span class="k">as</span> <span class="ow">setlimit</span> <span class="ow">tomark</span> <span class="n">pV</span> <span class="k">for</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+            <span class="c1">// &#39;long&#39; infinitive:</span>
+            <span class="s">&#39;are&#39;</span> <span class="s">&#39;ere&#39;</span> <span class="s">&#39;ire&#39;</span> <span class="s">&#39;{a^}re&#39;</span>
 
-                'ic' 'ica' 'ice' 'ici' 'ic{a+}'
-                'abil' 'abila' 'abile' 'abili' 'abil{a+}'
-                'ibil' 'ibila' 'ibile' 'ibili' 'ibil{a+}'
-                'oasa' 'oas{a+}' 'oase' 'os' 'osi' 'o{s,}i'
-                'ant' 'anta' 'ante' 'anti' 'ant{a+}'
-                'ator' 'atori'
-                'itate' 'itati' 'it{a+}i' 'it{a+}{t,}i'
-                'iv' 'iva' 'ive' 'ivi' 'iv{a+}' (
-                    delete
-                )
-                'iune' 'iuni' (
-                    '{t,}'] &lt;- 't'
-                )
-                'ism' 'isme'
-                'ist' 'ista' 'iste' 'isti' 'ist{a+}' 'i{s,}ti' (
-                    &lt;- 'ist'
-                    /* 'IST'. alternative: remove with &lt;- '' */
-                )
-            )
-            set standard_suffix_removed
-        )
-    )
+            <span class="c1">// gerund:</span>
+            <span class="s">&#39;ind&#39;</span> <span class="s">&#39;{a^}nd&#39;</span>
+            <span class="s">&#39;indu&#39;</span> <span class="s">&#39;{a^}ndu&#39;</span>
 
-    define verb_suffix as setlimit tomark pV for (
-        [substring] among(
-            // 'long' infinitive:
-            'are' 'ere' 'ire' '{a^}re'
+            <span class="s">&#39;eze&#39;</span>
+            <span class="s">&#39;easc{a+}&#39;</span>
+            <span class="c1">// present:</span>
+            <span class="s">&#39;ez&#39;</span> <span class="s">&#39;ezi&#39;</span> <span class="s">&#39;eaz{a+}&#39;</span> <span class="s">&#39;esc&#39;</span> <span class="s">&#39;e{s,}ti&#39;</span>
+            <span class="s">&#39;e{s,}te&#39;</span>
+            <span class="s">&#39;{a+}sc&#39;</span> <span class="s">&#39;{a+}{s,}ti&#39;</span>
+            <span class="s">&#39;{a+}{s,}te&#39;</span>
 
-            // gerund:
-            'ind' '{a^}nd'
-            'indu' '{a^}ndu'
+            <span class="c1">// imperfect:</span>
+            <span class="s">&#39;am&#39;</span> <span class="s">&#39;ai&#39;</span> <span class="s">&#39;au&#39;</span>
+            <span class="s">&#39;eam&#39;</span> <span class="s">&#39;eai&#39;</span> <span class="s">&#39;ea&#39;</span> <span class="s">&#39;ea{t,}i&#39;</span> <span class="s">&#39;eau&#39;</span>
+            <span class="s">&#39;iam&#39;</span> <span class="s">&#39;iai&#39;</span> <span class="s">&#39;ia&#39;</span> <span class="s">&#39;ia{t,}i&#39;</span> <span class="s">&#39;iau&#39;</span>
 
-            'eze'
-            'easc{a+}'
-            // present:
-            'ez' 'ezi' 'eaz{a+}' 'esc' 'e{s,}ti'
-            'e{s,}te'
-            '{a+}sc' '{a+}{s,}ti'
-            '{a+}{s,}te'
+            <span class="c1">// past: // (not &#39;ii&#39;)</span>
+            <span class="s">&#39;ui&#39;</span>
+            <span class="s">&#39;a{s,}i&#39;</span> <span class="s">&#39;ar{a+}m&#39;</span> <span class="s">&#39;ar{a+}{t,}i&#39;</span> <span class="s">&#39;ar{a+}&#39;</span>
+            <span class="s">&#39;u{s,}i&#39;</span> <span class="s">&#39;ur{a+}m&#39;</span> <span class="s">&#39;ur{a+}{t,}i&#39;</span> <span class="s">&#39;ur{a+}&#39;</span>
+            <span class="s">&#39;i{s,}i&#39;</span> <span class="s">&#39;ir{a+}m&#39;</span> <span class="s">&#39;ir{a+}{t,}i&#39;</span> <span class="s">&#39;ir{a+}&#39;</span>
+            <span class="s">&#39;{a^}i&#39;</span> <span class="s">&#39;{a^}{s,}i&#39;</span> <span class="s">&#39;{a^}r{a+}m&#39;</span> <span class="s">&#39;{a^}r{a+}{t,}i&#39;</span> <span class="s">&#39;{a^}r{a+}&#39;</span>
 
-            // imperfect:
-            'am' 'ai' 'au'
-            'eam' 'eai' 'ea' 'ea{t,}i' 'eau'
-            'iam' 'iai' 'ia' 'ia{t,}i' 'iau'
+            <span class="c1">// pluferfect:</span>
+            <span class="s">&#39;asem&#39;</span> <span class="s">&#39;ase{s,}i&#39;</span> <span class="s">&#39;ase&#39;</span> <span class="s">&#39;aser{a+}m&#39;</span> <span class="s">&#39;aser{a+}{t,}i&#39;</span> <span class="s">&#39;aser{a+}&#39;</span>
+            <span class="s">&#39;isem&#39;</span> <span class="s">&#39;ise{s,}i&#39;</span> <span class="s">&#39;ise&#39;</span> <span class="s">&#39;iser{a+}m&#39;</span> <span class="s">&#39;iser{a+}{t,}i&#39;</span> <span class="s">&#39;iser{a+}&#39;</span>
+            <span class="s">&#39;{a^}sem&#39;</span> <span class="s">&#39;{a^}se{s,}i&#39;</span> <span class="s">&#39;{a^}se&#39;</span> <span class="s">&#39;{a^}ser{a+}m&#39;</span> <span class="s">&#39;{a^}ser{a+}{t,}i&#39;</span>
+            <span class="s">&#39;{a^}ser{a+}&#39;</span>
+            <span class="s">&#39;usem&#39;</span> <span class="s">&#39;use{s,}i&#39;</span> <span class="s">&#39;use&#39;</span> <span class="s">&#39;user{a+}m&#39;</span> <span class="s">&#39;user{a+}{t,}i&#39;</span> <span class="s">&#39;user{a+}&#39;</span>
 
-            // past: // (not 'ii')
-            'ui'
-            'a{s,}i' 'ar{a+}m' 'ar{a+}{t,}i' 'ar{a+}'
-            'u{s,}i' 'ur{a+}m' 'ur{a+}{t,}i' 'ur{a+}'
-            'i{s,}i' 'ir{a+}m' 'ir{a+}{t,}i' 'ir{a+}'
-            '{a^}i' '{a^}{s,}i' '{a^}r{a+}m' '{a^}r{a+}{t,}i' '{a^}r{a+}'
+                <span class="p">(</span> <span class="ow">non-</span><span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;u&#39;</span>  <span class="ow">delete</span> <span class="p">)</span>
 
-            // pluferfect:
-            'asem' 'ase{s,}i' 'ase' 'aser{a+}m' 'aser{a+}{t,}i' 'aser{a+}'
-            'isem' 'ise{s,}i' 'ise' 'iser{a+}m' 'iser{a+}{t,}i' 'iser{a+}'
-            '{a^}sem' '{a^}se{s,}i' '{a^}se' '{a^}ser{a+}m' '{a^}ser{a+}{t,}i'
-            '{a^}ser{a+}'
-            'usem' 'use{s,}i' 'use' 'user{a+}m' 'user{a+}{t,}i' 'user{a+}'
+            <span class="c1">// present:</span>
+            <span class="s">&#39;{a+}m&#39;</span> <span class="s">&#39;a{t,}i&#39;</span>
+            <span class="s">&#39;em&#39;</span> <span class="s">&#39;e{t,}i&#39;</span>
+            <span class="s">&#39;im&#39;</span> <span class="s">&#39;i{t,}i&#39;</span>
+            <span class="s">&#39;{a^}m&#39;</span> <span class="s">&#39;{a^}{t,}i&#39;</span>
 
-                ( non-v or 'u'  delete )
+            <span class="c1">// past:</span>
+            <span class="s">&#39;se{s,}i&#39;</span> <span class="s">&#39;ser{a+}m&#39;</span> <span class="s">&#39;ser{a+}{t,}i&#39;</span> <span class="s">&#39;ser{a+}&#39;</span>
+            <span class="s">&#39;sei&#39;</span> <span class="s">&#39;se&#39;</span>
 
-            // present:
-            '{a+}m' 'a{t,}i'
-            'em' 'e{t,}i'
-            'im' 'i{t,}i'
-            '{a^}m' '{a^}{t,}i'
+            <span class="c1">// pluperfect:</span>
+            <span class="s">&#39;sesem&#39;</span> <span class="s">&#39;sese{s,}i&#39;</span> <span class="s">&#39;sese&#39;</span> <span class="s">&#39;seser{a+}m&#39;</span> <span class="s">&#39;seser{a+}{t,}i&#39;</span> <span class="s">&#39;seser{a+}&#39;</span>
+                <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-            // past:
-            'se{s,}i' 'ser{a+}m' 'ser{a+}{t,}i' 'ser{a+}'
-            'sei' 'se'
+    <span class="kd">define</span> <span class="n">vowel_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">RV</span> <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;a&#39;</span> <span class="s">&#39;e&#39;</span> <span class="s">&#39;i&#39;</span> <span class="s">&#39;ie&#39;</span> <span class="s">&#39;{a+}&#39;</span> <span class="p">(</span> <span class="ow">delete</span> <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-            // pluperfect:
-            'sesem' 'sese{s,}i' 'sese' 'seser{a+}m' 'seser{a+}{t,}i' 'seser{a+}'
-                (delete)
-        )
-    )
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">do</span> <span class="n">prelude</span>
+    <span class="ow">do</span> <span class="n">mark_regions</span>
+    <span class="ow">backwards</span> <span class="p">(</span>
+        <span class="ow">do</span> <span class="n">step_0</span>
+        <span class="ow">do</span> <span class="n">standard_suffix</span>
+        <span class="ow">do</span> <span class="p">(</span> <span class="n">standard_suffix_removed</span> <span class="ow">or</span> <span class="n">verb_suffix</span> <span class="p">)</span>
+        <span class="ow">do</span> <span class="n">vowel_suffix</span>
+    <span class="p">)</span>
+    <span class="ow">do</span> <span class="n">postlude</span>
+<span class="p">)</span>
+</pre></div>
 
-    define vowel_suffix as (
-        [substring] RV among (
-            'a' 'e' 'i' 'ie' '{a+}' ( delete )
-        )
-    )
-)
+</pre></TR>
 
-define stem as (
-    do prelude
-    do mark_regions
-    backwards (
-        do step_0
-        do standard_suffix
-        do ( standard_suffix_removed or verb_suffix )
-        do vowel_suffix
-    )
-    do postlude
-)
-
-</DL>
-</PRE>
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>

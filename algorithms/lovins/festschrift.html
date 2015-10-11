@@ -1,7 +1,17 @@
-<HTML>
-<HEAD>
-<TITLE>Lovins revisited</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>Lovins revisited</title>
+  </head>
+
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 
 <TR><TD>
@@ -445,10 +455,11 @@ into routines with the same name. Taking condition L,
 
 corresponds to
 
-<BR><PRE>
-    define L as ( test hop 2 not 'u' not 'x' not ('s' not 'o') )
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="kd">define</span> <span class="n">L</span> <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;u&#39;</span> <span class="ow">not</span> <span class="s">&#39;x&#39;</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;s&#39;</span> <span class="ow">not</span> <span class="s">&#39;o&#39;</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
 
+</pre>
 When &nbsp;<code>L</code>&nbsp; is called, we are the right end of the stem, moving left towards the
 front of the word. Each Lovins condition has an implicit test for a stem of
 length 2, and this is done by &nbsp;<code>test hop 2</code>, which sees if it is possible to
@@ -473,20 +484,22 @@ At its simplest, &nbsp;<code>among</code>&nbsp; can be used to test for alternat
 <code>among</code>s used in the definition of condition AA and the &nbsp;<code>undouble</code>
 routine have this form. In Snowball you can write
 
-<BR><PRE>
-    'sh' or 's' or 't'  'o' or 'i'  'p'
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="s">&#39;sh&#39;</span> <span class="ow">or</span> <span class="s">&#39;s&#39;</span> <span class="ow">or</span> <span class="s">&#39;t&#39;</span>  <span class="s">&#39;o&#39;</span> <span class="ow">or</span> <span class="s">&#39;i&#39;</span>  <span class="s">&#39;p&#39;</span>
+</pre></div>
 
+</pre>
 which will match the various forms <I>shop, ship, sop, sip, top, tip</I>. The
 order is important, because if &nbsp;<code>'sh'</code>&nbsp; and &nbsp;<code>'s'</code>&nbsp; are swapped over, the
 <code>'s'</code>&nbsp; would match the first letter of ship, while &nbsp;<code>'o'</code>&nbsp; or &nbsp;<code>'i'</code>
 would fail to match with the following &nbsp;<code>'h'</code>&nbsp; &#x2014; in other words the pattern
 matching has no backtracking. But it can also be written as
 
-<BR><PRE>
-    among('sh' 's' 't') among('i' 'o') 'p'
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="k">among</span><span class="p">(</span><span class="s">&#39;sh&#39;</span> <span class="s">&#39;s&#39;</span> <span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="k">among</span><span class="p">(</span><span class="s">&#39;i&#39;</span> <span class="s">&#39;o&#39;</span><span class="p">)</span> <span class="s">&#39;p&#39;</span>
+</pre></div>
 
+</pre>
 The order of the strings in each &nbsp;<code>among</code>&nbsp; is not important, because the
 match will be with the longest of all the strings that can match. In
 Snowball the implementation of &nbsp;<code>among</code>&nbsp; is based on the binary-chop idea,
@@ -573,9 +586,11 @@ More importantly, &nbsp;<code>substring</code>&nbsp; and &nbsp;<code>among</code
 example, &nbsp;<code>substring</code>&nbsp; could be used to test for the longest string, matching from
 right to left, while the commands in the &nbsp;<code>among</code>&nbsp; could operate in a left to
 right direction. In the Lovins stemmer, &nbsp;<code>substring</code>&nbsp; is used in this style:
-<BR><PRE>
-    [substring] among ( ... )
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span> <span class="o">...</span> <span class="p">)</span>
+</pre></div>
+
+</pre>
 The two square brackets are in fact individual commands, so before the &nbsp;<code>among</code>
 come three commands. &nbsp;<code>[</code>&nbsp; sets a lower marker, &nbsp;<code>substring</code>&nbsp; is obeyed, searching
 for the strings in the following among, and then &nbsp;<code>]</code>&nbsp; sets an upper marker.
@@ -857,54 +872,55 @@ can offer a Snowball script that does the Latin verb respelling with more
 care. It should be invoked, in the Porter stemmer, after removal of <B><I>ive</I></B> or
 <B><I>ion</I></B> endings only,
 
-<BR><PRE>
-define prefix as (
+<BR>
+<div class="highlight"><pre><span class="kd">define</span> <span class="n">prefix</span> <span class="k">as</span> <span class="p">(</span>
 
-    among (
+    <span class="k">among</span> <span class="p">(</span>
 
-        'a' 'ab' 'ad' 'al' 'ap' 'col' 'com' 'con' 'cor' 'de'
-        'di' 'dis' 'e' 'ex' 'in' 'inter' 'o' 'ob' 'oc' 'of'
-        'per' 'pre' 'pro' 're' 'se' 'sub' 'suc' 'trans'
-    ) atlimit
-)
+        <span class="s">&#39;a&#39;</span> <span class="s">&#39;ab&#39;</span> <span class="s">&#39;ad&#39;</span> <span class="s">&#39;al&#39;</span> <span class="s">&#39;ap&#39;</span> <span class="s">&#39;col&#39;</span> <span class="s">&#39;com&#39;</span> <span class="s">&#39;con&#39;</span> <span class="s">&#39;cor&#39;</span> <span class="s">&#39;de&#39;</span>
+        <span class="s">&#39;di&#39;</span> <span class="s">&#39;dis&#39;</span> <span class="s">&#39;e&#39;</span> <span class="s">&#39;ex&#39;</span> <span class="s">&#39;in&#39;</span> <span class="s">&#39;inter&#39;</span> <span class="s">&#39;o&#39;</span> <span class="s">&#39;ob&#39;</span> <span class="s">&#39;oc&#39;</span> <span class="s">&#39;of&#39;</span>
+        <span class="s">&#39;per&#39;</span> <span class="s">&#39;pre&#39;</span> <span class="s">&#39;pro&#39;</span> <span class="s">&#39;re&#39;</span> <span class="s">&#39;se&#39;</span> <span class="s">&#39;sub&#39;</span> <span class="s">&#39;suc&#39;</span> <span class="s">&#39;trans&#39;</span>
+    <span class="p">)</span> <span class="ow">atlimit</span>
+<span class="p">)</span>
 
-define second_conjugation_form as (
+<span class="kd">define</span> <span class="n">second_conjugation_form</span> <span class="k">as</span> <span class="p">(</span>
 
-    [substring] prefix among (
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">prefix</span> <span class="k">among</span> <span class="p">(</span>
 
-        'cept'    (&lt;-'ceiv')    //-e    con de re
-        'cess'    (&lt;-'ced')     //-e    con ex inter pre re se suc
-        'cis'     (&lt;-'cid')     //-e    de (20)
-        'clus'    (&lt;-'clud')    //-e    con ex in oc (26)
-        'curs'    (&lt;-'cur')     //      re (6)
-        'dempt'   (&lt;-'deem')    //      re
-        'duct'    (&lt;-'duc')     //-e    de in re pro (3)
-        'fens'    (&lt;-'fend')    //      de of
-        'hes'     (&lt;-'her')     //-e    ad (28)
-        'lis'     (&lt;-'lid')     //-e    e col (21)
-        'lus'     (&lt;-'lud')     //-e    al de e
-        'miss'    (&lt;-'mit')     //      ad com o per re sub trans (29)
-        'pans'    (&lt;-'pand')    //      ex (23)
-        'plos'    (&lt;-'plod')    //-e    ex
-        'prehens' (&lt;-'prehend') //      ap com
-        'ris'     (&lt;-'rid')     //-e    de (22)
-        'ros'     (&lt;-'rod')     //-e    cor e
-        'scens'   (&lt;-'scend')   //      a
-        'script'  (&lt;-'scrib')   //-e    de in pro
-        'solut'   (&lt;-'solv')    //-e    dis re (8)
-        'sorpt'   (&lt;-'sorb')    //      ab (5)
-        'spons'   (&lt;-'spond')   //      re (25)
-        'sumpt'   (&lt;-'sum')     //      con pre re (4)
-        'suas'    (&lt;-'suad')    //-e    dis per (18)
-        'tens'    (&lt;-'tend')    //      ex in pre (24)
-        'trus'    (&lt;-'trud')    //-e    ob (27)
-        'vas'     (&lt;-'vad')     //-e    e (19)
-        'vers'    (&lt;-'vert')    //      con in re (31)
-        'vis'     (&lt;-'vid')     //-e    di pro
-    )
-)
-</PRE>
+        <span class="s">&#39;cept&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ceiv&#39;</span><span class="p">)</span>    <span class="c1">//-e    con de re</span>
+        <span class="s">&#39;cess&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ced&#39;</span><span class="p">)</span>     <span class="c1">//-e    con ex inter pre re se suc</span>
+        <span class="s">&#39;cis&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;cid&#39;</span><span class="p">)</span>     <span class="c1">//-e    de (20)</span>
+        <span class="s">&#39;clus&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;clud&#39;</span><span class="p">)</span>    <span class="c1">//-e    con ex in oc (26)</span>
+        <span class="s">&#39;curs&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;cur&#39;</span><span class="p">)</span>     <span class="c1">//      re (6)</span>
+        <span class="s">&#39;dempt&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;deem&#39;</span><span class="p">)</span>    <span class="c1">//      re</span>
+        <span class="s">&#39;duct&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;duc&#39;</span><span class="p">)</span>     <span class="c1">//-e    de in re pro (3)</span>
+        <span class="s">&#39;fens&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;fend&#39;</span><span class="p">)</span>    <span class="c1">//      de of</span>
+        <span class="s">&#39;hes&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;her&#39;</span><span class="p">)</span>     <span class="c1">//-e    ad (28)</span>
+        <span class="s">&#39;lis&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;lid&#39;</span><span class="p">)</span>     <span class="c1">//-e    e col (21)</span>
+        <span class="s">&#39;lus&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;lud&#39;</span><span class="p">)</span>     <span class="c1">//-e    al de e</span>
+        <span class="s">&#39;miss&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;mit&#39;</span><span class="p">)</span>     <span class="c1">//      ad com o per re sub trans (29)</span>
+        <span class="s">&#39;pans&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;pand&#39;</span><span class="p">)</span>    <span class="c1">//      ex (23)</span>
+        <span class="s">&#39;plos&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;plod&#39;</span><span class="p">)</span>    <span class="c1">//-e    ex</span>
+        <span class="s">&#39;prehens&#39;</span> <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;prehend&#39;</span><span class="p">)</span> <span class="c1">//      ap com</span>
+        <span class="s">&#39;ris&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;rid&#39;</span><span class="p">)</span>     <span class="c1">//-e    de (22)</span>
+        <span class="s">&#39;ros&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;rod&#39;</span><span class="p">)</span>     <span class="c1">//-e    cor e</span>
+        <span class="s">&#39;scens&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;scend&#39;</span><span class="p">)</span>   <span class="c1">//      a</span>
+        <span class="s">&#39;script&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;scrib&#39;</span><span class="p">)</span>   <span class="c1">//-e    de in pro</span>
+        <span class="s">&#39;solut&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;solv&#39;</span><span class="p">)</span>    <span class="c1">//-e    dis re (8)</span>
+        <span class="s">&#39;sorpt&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;sorb&#39;</span><span class="p">)</span>    <span class="c1">//      ab (5)</span>
+        <span class="s">&#39;spons&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;spond&#39;</span><span class="p">)</span>   <span class="c1">//      re (25)</span>
+        <span class="s">&#39;sumpt&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;sum&#39;</span><span class="p">)</span>     <span class="c1">//      con pre re (4)</span>
+        <span class="s">&#39;suas&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;suad&#39;</span><span class="p">)</span>    <span class="c1">//-e    dis per (18)</span>
+        <span class="s">&#39;tens&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;tend&#39;</span><span class="p">)</span>    <span class="c1">//      ex in pre (24)</span>
+        <span class="s">&#39;trus&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;trud&#39;</span><span class="p">)</span>    <span class="c1">//-e    ob (27)</span>
+        <span class="s">&#39;vas&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;vad&#39;</span><span class="p">)</span>     <span class="c1">//-e    e (19)</span>
+        <span class="s">&#39;vers&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;vert&#39;</span><span class="p">)</span>    <span class="c1">//      con in re (31)</span>
+        <span class="s">&#39;vis&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;vid&#39;</span><span class="p">)</span>     <span class="c1">//-e    di pro</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
 
+</pre>
 This means that if <B><I>suas</I></B>, for example, is preceded by one of the strings
 in &nbsp;<code>prefix</code>, and there is nothing more before the prefix string (which is
 what the
@@ -922,19 +938,20 @@ beyond&#8217;) <I>pro</I> + <I>cedere</I> (&#8216;go forth&#8217;), and <I>sub</
 by an oddity of English orthography, have an extra letter <B><I>e</I></B>: <I>exceed, proceed,
 succeed</I>. They can be sorted out in a final respelling step:
 
-<BR><PRE>
-define final_respell as (
+<BR>
+<div class="highlight"><pre><span class="kd">define</span> <span class="n">final_respell</span> <span class="k">as</span> <span class="p">(</span>
 
-    [substring] atlimit among(
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="ow">atlimit</span> <span class="k">among</span><span class="p">(</span>
 
-        'exced'     (&lt;-'exceed')
-        'proced'    (&lt;-'proceed')
-        'succed'    (&lt;-'succeed')
-        /* extra forms here perhaps */
-    )
-)
-</PRE>
+        <span class="s">&#39;exced&#39;</span>     <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;exceed&#39;</span><span class="p">)</span>
+        <span class="s">&#39;proced&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;proceed&#39;</span><span class="p">)</span>
+        <span class="s">&#39;succed&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;succeed&#39;</span><span class="p">)</span>
+        <span class="cm">/* extra forms here perhaps */</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
 
+</pre>
 As you might expect, close inspection of this process creates doubts in
 the same way as for English verb respelling. (Should we really conflate
 <I>commission</I> and <I>commit</I>? etc.)
@@ -1469,217 +1486,216 @@ Porter MF (1980) An algorithm for suffix stripping. <I>Program</I>, 14:
 
 The Lovins stemmer in Snowball.
 
-<BR><PRE>
+<BR>
+<pre><div class="highlight"><pre><span class="kd">stringescapes</span> <span class="p">{}</span>
 
-stringescapes {}
+<span class="kd">routines</span> <span class="p">(</span>
+   <span class="n">A</span> <span class="n">B</span> <span class="n">C</span> <span class="n">D</span> <span class="n">E</span> <span class="n">F</span> <span class="n">G</span> <span class="n">H</span> <span class="n">I</span> <span class="n">J</span> <span class="n">K</span> <span class="n">L</span> <span class="n">M</span> <span class="n">N</span> <span class="n">O</span> <span class="n">P</span> <span class="n">Q</span> <span class="n">R</span> <span class="n">S</span> <span class="n">T</span> <span class="n">U</span> <span class="n">V</span> <span class="n">W</span> <span class="n">X</span> <span class="n">Y</span> <span class="n">Z</span> <span class="n">AA</span> <span class="n">BB</span> <span class="n">CC</span>
 
-routines (
-   A B C D E F G H I J K L M N O P Q R S T U V W X Y Z AA BB CC
+   <span class="n">endings</span>
 
-   endings
+   <span class="n">undouble</span> <span class="n">respell</span>
+<span class="p">)</span>
 
-   undouble respell
-)
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-externals ( stem )
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-backwardmode (
+  <span class="cm">/* Lovins&#39; conditions A, B ... CC, as given in her Appendix B, where</span>
+<span class="cm">     a test for a two letter prefix (&#39;test hop 2&#39;) is implicitly</span>
+<span class="cm">     assumed. Note that &#39;e&#39; next &#39;u&#39; corresponds to her u*e because</span>
+<span class="cm">     Snowball is scanning backwards. */</span>
 
-  /* Lovins' conditions A, B ... CC, as given in her Appendix B, where
-     a test for a two letter prefix ('test hop 2') is implicitly
-     assumed. Note that 'e' next 'u' corresponds to her u*e because
-     Snowball is scanning backwards. */
-
-  define A  as ( hop 2 )
-  define B  as ( hop 3 )
-  define C  as ( hop 4 )
-  define D  as ( hop 5 )
-  define E  as ( test hop 2 not 'e' )
-  define F  as ( test hop 3 not 'e' )
-  define G  as ( test hop 3 'f' )
-  define H  as ( test hop 2 't' or 'll' )
-  define I  as ( test hop 2 not 'o' not 'e' )
-  define J  as ( test hop 2 not 'a' not 'e' )
-  define K  as ( test hop 3 'l' or 'i' or ('e' next 'u') )
-  define L  as ( test hop 2 not 'u' not 'x' not ('s' not 'o') )
-  define M  as ( test hop 2 not 'a' not 'c' not 'e' not 'm' )
-  define N  as ( test hop 3 ( hop 2 not 's' or hop 2 ) )
-  define O  as ( test hop 2 'l' or 'i' )
-  define P  as ( test hop 2 not 'c' )
-  define Q  as ( test hop 2 test hop 3 not 'l' not 'n' )
-  define R  as ( test hop 2 'n' or 'r' )
-  define S  as ( test hop 2 'dr' or ('t' not 't') )
-  define T  as ( test hop 2 's' or ('t' not 'o') )
-  define U  as ( test hop 2 'l' or 'm' or 'n' or 'r' )
-  define V  as ( test hop 2 'c' )
-  define W  as ( test hop 2 not 's' not 'u' )
-  define X  as ( test hop 2 'l' or 'i' or ('e' next 'u') )
-  define Y  as ( test hop 2 'in' )
-  define Z  as ( test hop 2 not 'f' )
-  define AA as ( test hop 2 among ( 'd' 'f' 'ph' 'th' 'l' 'er' 'or'
-                                    'es' 't' ) )
-  define BB as ( test hop 3 not 'met' not 'ryst' )
-  define CC as ( test hop 2 'l' )
+  <span class="kd">define</span> <span class="n">A</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">hop</span> <span class="m">2</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">B</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">hop</span> <span class="m">3</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">C</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">hop</span> <span class="m">4</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">D</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">hop</span> <span class="m">5</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">E</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">F</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">3</span> <span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">G</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">3</span> <span class="s">&#39;f&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">H</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;t&#39;</span> <span class="ow">or</span> <span class="s">&#39;ll&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">I</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;o&#39;</span> <span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">J</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;a&#39;</span> <span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">K</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">3</span> <span class="s">&#39;l&#39;</span> <span class="ow">or</span> <span class="s">&#39;i&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;e&#39;</span> <span class="ow">next</span> <span class="s">&#39;u&#39;</span><span class="p">)</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">L</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;u&#39;</span> <span class="ow">not</span> <span class="s">&#39;x&#39;</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;s&#39;</span> <span class="ow">not</span> <span class="s">&#39;o&#39;</span><span class="p">)</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">M</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;a&#39;</span> <span class="ow">not</span> <span class="s">&#39;c&#39;</span> <span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="ow">not</span> <span class="s">&#39;m&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">N</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">3</span> <span class="p">(</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;s&#39;</span> <span class="ow">or</span> <span class="ow">hop</span> <span class="m">2</span> <span class="p">)</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">O</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;l&#39;</span> <span class="ow">or</span> <span class="s">&#39;i&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">P</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;c&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">Q</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">3</span> <span class="ow">not</span> <span class="s">&#39;l&#39;</span> <span class="ow">not</span> <span class="s">&#39;n&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">R</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;n&#39;</span> <span class="ow">or</span> <span class="s">&#39;r&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">S</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;dr&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;t&#39;</span> <span class="ow">not</span> <span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">T</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;s&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;t&#39;</span> <span class="ow">not</span> <span class="s">&#39;o&#39;</span><span class="p">)</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">U</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;l&#39;</span> <span class="ow">or</span> <span class="s">&#39;m&#39;</span> <span class="ow">or</span> <span class="s">&#39;n&#39;</span> <span class="ow">or</span> <span class="s">&#39;r&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">V</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;c&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">W</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;s&#39;</span> <span class="ow">not</span> <span class="s">&#39;u&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">X</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;l&#39;</span> <span class="ow">or</span> <span class="s">&#39;i&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;e&#39;</span> <span class="ow">next</span> <span class="s">&#39;u&#39;</span><span class="p">)</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">Y</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;in&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">Z</span>  <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;f&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">AA</span> <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="k">among</span> <span class="p">(</span> <span class="s">&#39;d&#39;</span> <span class="s">&#39;f&#39;</span> <span class="s">&#39;ph&#39;</span> <span class="s">&#39;th&#39;</span> <span class="s">&#39;l&#39;</span> <span class="s">&#39;er&#39;</span> <span class="s">&#39;or&#39;</span>
+                                    <span class="s">&#39;es&#39;</span> <span class="s">&#39;t&#39;</span> <span class="p">)</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">BB</span> <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">3</span> <span class="ow">not</span> <span class="s">&#39;met&#39;</span> <span class="ow">not</span> <span class="s">&#39;ryst&#39;</span> <span class="p">)</span>
+  <span class="kd">define</span> <span class="n">CC</span> <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="s">&#39;l&#39;</span> <span class="p">)</span>
 
 
-  /* The system of endings, as given in Appendix A. */
+  <span class="cm">/* The system of endings, as given in Appendix A. */</span>
 
-  define endings as (
-    [substring] among(
-    'alistically' B 'arizability' A 'izationally' B
+  <span class="kd">define</span> <span class="n">endings</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+    <span class="s">&#39;alistically&#39;</span> <span class="n">B</span> <span class="s">&#39;arizability&#39;</span> <span class="n">A</span> <span class="s">&#39;izationally&#39;</span> <span class="n">B</span>
 
-     'antialness' A  'arisations' A  'arizations' A  'entialness' A
+     <span class="s">&#39;antialness&#39;</span> <span class="n">A</span>  <span class="s">&#39;arisations&#39;</span> <span class="n">A</span>  <span class="s">&#39;arizations&#39;</span> <span class="n">A</span>  <span class="s">&#39;entialness&#39;</span> <span class="n">A</span>
 
-      'allically' C   'antaneous' A   'antiality' A   'arisation' A
-      'arization' A   'ationally' B   'ativeness' A   'eableness' E
-      'entations' A   'entiality' A   'entialize' A   'entiation' A
-      'ionalness' A   'istically' A   'itousness' A   'izability' A
-      'izational' A
+      <span class="s">&#39;allically&#39;</span> <span class="n">C</span>   <span class="s">&#39;antaneous&#39;</span> <span class="n">A</span>   <span class="s">&#39;antiality&#39;</span> <span class="n">A</span>   <span class="s">&#39;arisation&#39;</span> <span class="n">A</span>
+      <span class="s">&#39;arization&#39;</span> <span class="n">A</span>   <span class="s">&#39;ationally&#39;</span> <span class="n">B</span>   <span class="s">&#39;ativeness&#39;</span> <span class="n">A</span>   <span class="s">&#39;eableness&#39;</span> <span class="n">E</span>
+      <span class="s">&#39;entations&#39;</span> <span class="n">A</span>   <span class="s">&#39;entiality&#39;</span> <span class="n">A</span>   <span class="s">&#39;entialize&#39;</span> <span class="n">A</span>   <span class="s">&#39;entiation&#39;</span> <span class="n">A</span>
+      <span class="s">&#39;ionalness&#39;</span> <span class="n">A</span>   <span class="s">&#39;istically&#39;</span> <span class="n">A</span>   <span class="s">&#39;itousness&#39;</span> <span class="n">A</span>   <span class="s">&#39;izability&#39;</span> <span class="n">A</span>
+      <span class="s">&#39;izational&#39;</span> <span class="n">A</span>
 
-       'ableness' A    'arizable' A    'entation' A    'entially' A
-       'eousness' A    'ibleness' A    'icalness' A    'ionalism' A
-       'ionality' A    'ionalize' A    'iousness' A    'izations' A
-       'lessness' A
+       <span class="s">&#39;ableness&#39;</span> <span class="n">A</span>    <span class="s">&#39;arizable&#39;</span> <span class="n">A</span>    <span class="s">&#39;entation&#39;</span> <span class="n">A</span>    <span class="s">&#39;entially&#39;</span> <span class="n">A</span>
+       <span class="s">&#39;eousness&#39;</span> <span class="n">A</span>    <span class="s">&#39;ibleness&#39;</span> <span class="n">A</span>    <span class="s">&#39;icalness&#39;</span> <span class="n">A</span>    <span class="s">&#39;ionalism&#39;</span> <span class="n">A</span>
+       <span class="s">&#39;ionality&#39;</span> <span class="n">A</span>    <span class="s">&#39;ionalize&#39;</span> <span class="n">A</span>    <span class="s">&#39;iousness&#39;</span> <span class="n">A</span>    <span class="s">&#39;izations&#39;</span> <span class="n">A</span>
+       <span class="s">&#39;lessness&#39;</span> <span class="n">A</span>
 
-        'ability' A     'aically' A     'alistic' B     'alities' A
-        'ariness' E     'aristic' A     'arizing' A     'ateness' A
-        'atingly' A     'ational' B     'atively' A     'ativism' A
-        'elihood' E     'encible' A     'entally' A     'entials' A
-        'entiate' A     'entness' A     'fulness' A     'ibility' A
-        'icalism' A     'icalist' A     'icality' A     'icalize' A
-        'ication' G     'icianry' A     'ination' A     'ingness' A
-        'ionally' A     'isation' A     'ishness' A     'istical' A
-        'iteness' A     'iveness' A     'ivistic' A     'ivities' A
-        'ization' F     'izement' A     'oidally' A     'ousness' A
+        <span class="s">&#39;ability&#39;</span> <span class="n">A</span>     <span class="s">&#39;aically&#39;</span> <span class="n">A</span>     <span class="s">&#39;alistic&#39;</span> <span class="n">B</span>     <span class="s">&#39;alities&#39;</span> <span class="n">A</span>
+        <span class="s">&#39;ariness&#39;</span> <span class="n">E</span>     <span class="s">&#39;aristic&#39;</span> <span class="n">A</span>     <span class="s">&#39;arizing&#39;</span> <span class="n">A</span>     <span class="s">&#39;ateness&#39;</span> <span class="n">A</span>
+        <span class="s">&#39;atingly&#39;</span> <span class="n">A</span>     <span class="s">&#39;ational&#39;</span> <span class="n">B</span>     <span class="s">&#39;atively&#39;</span> <span class="n">A</span>     <span class="s">&#39;ativism&#39;</span> <span class="n">A</span>
+        <span class="s">&#39;elihood&#39;</span> <span class="n">E</span>     <span class="s">&#39;encible&#39;</span> <span class="n">A</span>     <span class="s">&#39;entally&#39;</span> <span class="n">A</span>     <span class="s">&#39;entials&#39;</span> <span class="n">A</span>
+        <span class="s">&#39;entiate&#39;</span> <span class="n">A</span>     <span class="s">&#39;entness&#39;</span> <span class="n">A</span>     <span class="s">&#39;fulness&#39;</span> <span class="n">A</span>     <span class="s">&#39;ibility&#39;</span> <span class="n">A</span>
+        <span class="s">&#39;icalism&#39;</span> <span class="n">A</span>     <span class="s">&#39;icalist&#39;</span> <span class="n">A</span>     <span class="s">&#39;icality&#39;</span> <span class="n">A</span>     <span class="s">&#39;icalize&#39;</span> <span class="n">A</span>
+        <span class="s">&#39;ication&#39;</span> <span class="n">G</span>     <span class="s">&#39;icianry&#39;</span> <span class="n">A</span>     <span class="s">&#39;ination&#39;</span> <span class="n">A</span>     <span class="s">&#39;ingness&#39;</span> <span class="n">A</span>
+        <span class="s">&#39;ionally&#39;</span> <span class="n">A</span>     <span class="s">&#39;isation&#39;</span> <span class="n">A</span>     <span class="s">&#39;ishness&#39;</span> <span class="n">A</span>     <span class="s">&#39;istical&#39;</span> <span class="n">A</span>
+        <span class="s">&#39;iteness&#39;</span> <span class="n">A</span>     <span class="s">&#39;iveness&#39;</span> <span class="n">A</span>     <span class="s">&#39;ivistic&#39;</span> <span class="n">A</span>     <span class="s">&#39;ivities&#39;</span> <span class="n">A</span>
+        <span class="s">&#39;ization&#39;</span> <span class="n">F</span>     <span class="s">&#39;izement&#39;</span> <span class="n">A</span>     <span class="s">&#39;oidally&#39;</span> <span class="n">A</span>     <span class="s">&#39;ousness&#39;</span> <span class="n">A</span>
 
-         'aceous' A      'acious' B      'action' G      'alness' A
-         'ancial' A      'ancies' A      'ancing' B      'ariser' A
-         'arized' A      'arizer' A      'atable' A      'ations' B
-         'atives' A      'eature' Z      'efully' A      'encies' A
-         'encing' A      'ential' A      'enting' C      'entist' A
-         'eously' A      'ialist' A      'iality' A      'ialize' A
-         'ically' A      'icance' A      'icians' A      'icists' A
-         'ifully' A      'ionals' A      'ionate' D      'ioning' A
-         'ionist' A      'iously' A      'istics' A      'izable' E
-         'lessly' A      'nesses' A      'oidism' A
+         <span class="s">&#39;aceous&#39;</span> <span class="n">A</span>      <span class="s">&#39;acious&#39;</span> <span class="n">B</span>      <span class="s">&#39;action&#39;</span> <span class="n">G</span>      <span class="s">&#39;alness&#39;</span> <span class="n">A</span>
+         <span class="s">&#39;ancial&#39;</span> <span class="n">A</span>      <span class="s">&#39;ancies&#39;</span> <span class="n">A</span>      <span class="s">&#39;ancing&#39;</span> <span class="n">B</span>      <span class="s">&#39;ariser&#39;</span> <span class="n">A</span>
+         <span class="s">&#39;arized&#39;</span> <span class="n">A</span>      <span class="s">&#39;arizer&#39;</span> <span class="n">A</span>      <span class="s">&#39;atable&#39;</span> <span class="n">A</span>      <span class="s">&#39;ations&#39;</span> <span class="n">B</span>
+         <span class="s">&#39;atives&#39;</span> <span class="n">A</span>      <span class="s">&#39;eature&#39;</span> <span class="n">Z</span>      <span class="s">&#39;efully&#39;</span> <span class="n">A</span>      <span class="s">&#39;encies&#39;</span> <span class="n">A</span>
+         <span class="s">&#39;encing&#39;</span> <span class="n">A</span>      <span class="s">&#39;ential&#39;</span> <span class="n">A</span>      <span class="s">&#39;enting&#39;</span> <span class="n">C</span>      <span class="s">&#39;entist&#39;</span> <span class="n">A</span>
+         <span class="s">&#39;eously&#39;</span> <span class="n">A</span>      <span class="s">&#39;ialist&#39;</span> <span class="n">A</span>      <span class="s">&#39;iality&#39;</span> <span class="n">A</span>      <span class="s">&#39;ialize&#39;</span> <span class="n">A</span>
+         <span class="s">&#39;ically&#39;</span> <span class="n">A</span>      <span class="s">&#39;icance&#39;</span> <span class="n">A</span>      <span class="s">&#39;icians&#39;</span> <span class="n">A</span>      <span class="s">&#39;icists&#39;</span> <span class="n">A</span>
+         <span class="s">&#39;ifully&#39;</span> <span class="n">A</span>      <span class="s">&#39;ionals&#39;</span> <span class="n">A</span>      <span class="s">&#39;ionate&#39;</span> <span class="n">D</span>      <span class="s">&#39;ioning&#39;</span> <span class="n">A</span>
+         <span class="s">&#39;ionist&#39;</span> <span class="n">A</span>      <span class="s">&#39;iously&#39;</span> <span class="n">A</span>      <span class="s">&#39;istics&#39;</span> <span class="n">A</span>      <span class="s">&#39;izable&#39;</span> <span class="n">E</span>
+         <span class="s">&#39;lessly&#39;</span> <span class="n">A</span>      <span class="s">&#39;nesses&#39;</span> <span class="n">A</span>      <span class="s">&#39;oidism&#39;</span> <span class="n">A</span>
 
-          'acies' A       'acity' A       'aging' B       'aical' A
-          'alist' A       'alism' B       'ality' A       'alize' A
-          'allic'BB       'anced' B       'ances' B       'antic' C
-          'arial' A       'aries' A       'arily' A       'arity' B
-          'arize' A       'aroid' A       'ately' A       'ating' I
-          'ation' B       'ative' A       'ators' A       'atory' A
-          'ature' E       'early' Y       'ehood' A       'eless' A
-          'elity' A       'ement' A       'enced' A       'ences' A
-          'eness' E       'ening' E       'ental' A       'ented' C
-          'ently' A       'fully' A       'ially' A       'icant' A
-          'ician' A       'icide' A       'icism' A       'icist' A
-          'icity' A       'idine' I       'iedly' A       'ihood' A
-          'inate' A       'iness' A       'ingly' B       'inism' J
-          'inity'CC       'ional' A       'ioned' A       'ished' A
-          'istic' A       'ities' A       'itous' A       'ively' A
-          'ivity' A       'izers' F       'izing' F       'oidal' A
-          'oides' A       'otide' A       'ously' A
+          <span class="s">&#39;acies&#39;</span> <span class="n">A</span>       <span class="s">&#39;acity&#39;</span> <span class="n">A</span>       <span class="s">&#39;aging&#39;</span> <span class="n">B</span>       <span class="s">&#39;aical&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;alist&#39;</span> <span class="n">A</span>       <span class="s">&#39;alism&#39;</span> <span class="n">B</span>       <span class="s">&#39;ality&#39;</span> <span class="n">A</span>       <span class="s">&#39;alize&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;allic&#39;</span><span class="n">BB</span>       <span class="s">&#39;anced&#39;</span> <span class="n">B</span>       <span class="s">&#39;ances&#39;</span> <span class="n">B</span>       <span class="s">&#39;antic&#39;</span> <span class="n">C</span>
+          <span class="s">&#39;arial&#39;</span> <span class="n">A</span>       <span class="s">&#39;aries&#39;</span> <span class="n">A</span>       <span class="s">&#39;arily&#39;</span> <span class="n">A</span>       <span class="s">&#39;arity&#39;</span> <span class="n">B</span>
+          <span class="s">&#39;arize&#39;</span> <span class="n">A</span>       <span class="s">&#39;aroid&#39;</span> <span class="n">A</span>       <span class="s">&#39;ately&#39;</span> <span class="n">A</span>       <span class="s">&#39;ating&#39;</span> <span class="n">I</span>
+          <span class="s">&#39;ation&#39;</span> <span class="n">B</span>       <span class="s">&#39;ative&#39;</span> <span class="n">A</span>       <span class="s">&#39;ators&#39;</span> <span class="n">A</span>       <span class="s">&#39;atory&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;ature&#39;</span> <span class="n">E</span>       <span class="s">&#39;early&#39;</span> <span class="n">Y</span>       <span class="s">&#39;ehood&#39;</span> <span class="n">A</span>       <span class="s">&#39;eless&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;elity&#39;</span> <span class="n">A</span>       <span class="s">&#39;ement&#39;</span> <span class="n">A</span>       <span class="s">&#39;enced&#39;</span> <span class="n">A</span>       <span class="s">&#39;ences&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;eness&#39;</span> <span class="n">E</span>       <span class="s">&#39;ening&#39;</span> <span class="n">E</span>       <span class="s">&#39;ental&#39;</span> <span class="n">A</span>       <span class="s">&#39;ented&#39;</span> <span class="n">C</span>
+          <span class="s">&#39;ently&#39;</span> <span class="n">A</span>       <span class="s">&#39;fully&#39;</span> <span class="n">A</span>       <span class="s">&#39;ially&#39;</span> <span class="n">A</span>       <span class="s">&#39;icant&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;ician&#39;</span> <span class="n">A</span>       <span class="s">&#39;icide&#39;</span> <span class="n">A</span>       <span class="s">&#39;icism&#39;</span> <span class="n">A</span>       <span class="s">&#39;icist&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;icity&#39;</span> <span class="n">A</span>       <span class="s">&#39;idine&#39;</span> <span class="n">I</span>       <span class="s">&#39;iedly&#39;</span> <span class="n">A</span>       <span class="s">&#39;ihood&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;inate&#39;</span> <span class="n">A</span>       <span class="s">&#39;iness&#39;</span> <span class="n">A</span>       <span class="s">&#39;ingly&#39;</span> <span class="n">B</span>       <span class="s">&#39;inism&#39;</span> <span class="n">J</span>
+          <span class="s">&#39;inity&#39;</span><span class="n">CC</span>       <span class="s">&#39;ional&#39;</span> <span class="n">A</span>       <span class="s">&#39;ioned&#39;</span> <span class="n">A</span>       <span class="s">&#39;ished&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;istic&#39;</span> <span class="n">A</span>       <span class="s">&#39;ities&#39;</span> <span class="n">A</span>       <span class="s">&#39;itous&#39;</span> <span class="n">A</span>       <span class="s">&#39;ively&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;ivity&#39;</span> <span class="n">A</span>       <span class="s">&#39;izers&#39;</span> <span class="n">F</span>       <span class="s">&#39;izing&#39;</span> <span class="n">F</span>       <span class="s">&#39;oidal&#39;</span> <span class="n">A</span>
+          <span class="s">&#39;oides&#39;</span> <span class="n">A</span>       <span class="s">&#39;otide&#39;</span> <span class="n">A</span>       <span class="s">&#39;ously&#39;</span> <span class="n">A</span>
 
-           'able' A        'ably' A        'ages' B        'ally' B
-           'ance' B        'ancy' B        'ants' B        'aric' A
-           'arly' K        'ated' I        'ates' A        'atic' B
-           'ator' A        'ealy' Y        'edly' E        'eful' A
-           'eity' A        'ence' A        'ency' A        'ened' E
-           'enly' E        'eous' A        'hood' A        'ials' A
-           'ians' A        'ible' A        'ibly' A        'ical' A
-           'ides' L        'iers' A        'iful' A        'ines' M
-           'ings' N        'ions' B        'ious' A        'isms' B
-           'ists' A        'itic' H        'ized' F        'izer' F
-           'less' A        'lily' A        'ness' A        'ogen' A
-           'ward' A        'wise' A        'ying' B        'yish' A
+           <span class="s">&#39;able&#39;</span> <span class="n">A</span>        <span class="s">&#39;ably&#39;</span> <span class="n">A</span>        <span class="s">&#39;ages&#39;</span> <span class="n">B</span>        <span class="s">&#39;ally&#39;</span> <span class="n">B</span>
+           <span class="s">&#39;ance&#39;</span> <span class="n">B</span>        <span class="s">&#39;ancy&#39;</span> <span class="n">B</span>        <span class="s">&#39;ants&#39;</span> <span class="n">B</span>        <span class="s">&#39;aric&#39;</span> <span class="n">A</span>
+           <span class="s">&#39;arly&#39;</span> <span class="n">K</span>        <span class="s">&#39;ated&#39;</span> <span class="n">I</span>        <span class="s">&#39;ates&#39;</span> <span class="n">A</span>        <span class="s">&#39;atic&#39;</span> <span class="n">B</span>
+           <span class="s">&#39;ator&#39;</span> <span class="n">A</span>        <span class="s">&#39;ealy&#39;</span> <span class="n">Y</span>        <span class="s">&#39;edly&#39;</span> <span class="n">E</span>        <span class="s">&#39;eful&#39;</span> <span class="n">A</span>
+           <span class="s">&#39;eity&#39;</span> <span class="n">A</span>        <span class="s">&#39;ence&#39;</span> <span class="n">A</span>        <span class="s">&#39;ency&#39;</span> <span class="n">A</span>        <span class="s">&#39;ened&#39;</span> <span class="n">E</span>
+           <span class="s">&#39;enly&#39;</span> <span class="n">E</span>        <span class="s">&#39;eous&#39;</span> <span class="n">A</span>        <span class="s">&#39;hood&#39;</span> <span class="n">A</span>        <span class="s">&#39;ials&#39;</span> <span class="n">A</span>
+           <span class="s">&#39;ians&#39;</span> <span class="n">A</span>        <span class="s">&#39;ible&#39;</span> <span class="n">A</span>        <span class="s">&#39;ibly&#39;</span> <span class="n">A</span>        <span class="s">&#39;ical&#39;</span> <span class="n">A</span>
+           <span class="s">&#39;ides&#39;</span> <span class="n">L</span>        <span class="s">&#39;iers&#39;</span> <span class="n">A</span>        <span class="s">&#39;iful&#39;</span> <span class="n">A</span>        <span class="s">&#39;ines&#39;</span> <span class="n">M</span>
+           <span class="s">&#39;ings&#39;</span> <span class="n">N</span>        <span class="s">&#39;ions&#39;</span> <span class="n">B</span>        <span class="s">&#39;ious&#39;</span> <span class="n">A</span>        <span class="s">&#39;isms&#39;</span> <span class="n">B</span>
+           <span class="s">&#39;ists&#39;</span> <span class="n">A</span>        <span class="s">&#39;itic&#39;</span> <span class="n">H</span>        <span class="s">&#39;ized&#39;</span> <span class="n">F</span>        <span class="s">&#39;izer&#39;</span> <span class="n">F</span>
+           <span class="s">&#39;less&#39;</span> <span class="n">A</span>        <span class="s">&#39;lily&#39;</span> <span class="n">A</span>        <span class="s">&#39;ness&#39;</span> <span class="n">A</span>        <span class="s">&#39;ogen&#39;</span> <span class="n">A</span>
+           <span class="s">&#39;ward&#39;</span> <span class="n">A</span>        <span class="s">&#39;wise&#39;</span> <span class="n">A</span>        <span class="s">&#39;ying&#39;</span> <span class="n">B</span>        <span class="s">&#39;yish&#39;</span> <span class="n">A</span>
 
-            'acy' A         'age' B         'aic' A         'als'BB
-            'ant' B         'ars' O         'ary' F         'ata' A
-            'ate' A         'eal' Y         'ear' Y         'ely' E
-            'ene' E         'ent' C         'ery' E         'ese' A
-            'ful' A         'ial' A         'ian' A         'ics' A
-            'ide' L         'ied' A         'ier' A         'ies' P
-            'ily' A         'ine' M         'ing' N         'ion' Q
-            'ish' C         'ism' B         'ist' A         'ite'AA
-            'ity' A         'ium' A         'ive' A         'ize' F
-            'oid' A         'one' R         'ous' A
+            <span class="s">&#39;acy&#39;</span> <span class="n">A</span>         <span class="s">&#39;age&#39;</span> <span class="n">B</span>         <span class="s">&#39;aic&#39;</span> <span class="n">A</span>         <span class="s">&#39;als&#39;</span><span class="n">BB</span>
+            <span class="s">&#39;ant&#39;</span> <span class="n">B</span>         <span class="s">&#39;ars&#39;</span> <span class="n">O</span>         <span class="s">&#39;ary&#39;</span> <span class="n">F</span>         <span class="s">&#39;ata&#39;</span> <span class="n">A</span>
+            <span class="s">&#39;ate&#39;</span> <span class="n">A</span>         <span class="s">&#39;eal&#39;</span> <span class="n">Y</span>         <span class="s">&#39;ear&#39;</span> <span class="n">Y</span>         <span class="s">&#39;ely&#39;</span> <span class="n">E</span>
+            <span class="s">&#39;ene&#39;</span> <span class="n">E</span>         <span class="s">&#39;ent&#39;</span> <span class="n">C</span>         <span class="s">&#39;ery&#39;</span> <span class="n">E</span>         <span class="s">&#39;ese&#39;</span> <span class="n">A</span>
+            <span class="s">&#39;ful&#39;</span> <span class="n">A</span>         <span class="s">&#39;ial&#39;</span> <span class="n">A</span>         <span class="s">&#39;ian&#39;</span> <span class="n">A</span>         <span class="s">&#39;ics&#39;</span> <span class="n">A</span>
+            <span class="s">&#39;ide&#39;</span> <span class="n">L</span>         <span class="s">&#39;ied&#39;</span> <span class="n">A</span>         <span class="s">&#39;ier&#39;</span> <span class="n">A</span>         <span class="s">&#39;ies&#39;</span> <span class="n">P</span>
+            <span class="s">&#39;ily&#39;</span> <span class="n">A</span>         <span class="s">&#39;ine&#39;</span> <span class="n">M</span>         <span class="s">&#39;ing&#39;</span> <span class="n">N</span>         <span class="s">&#39;ion&#39;</span> <span class="n">Q</span>
+            <span class="s">&#39;ish&#39;</span> <span class="n">C</span>         <span class="s">&#39;ism&#39;</span> <span class="n">B</span>         <span class="s">&#39;ist&#39;</span> <span class="n">A</span>         <span class="s">&#39;ite&#39;</span><span class="n">AA</span>
+            <span class="s">&#39;ity&#39;</span> <span class="n">A</span>         <span class="s">&#39;ium&#39;</span> <span class="n">A</span>         <span class="s">&#39;ive&#39;</span> <span class="n">A</span>         <span class="s">&#39;ize&#39;</span> <span class="n">F</span>
+            <span class="s">&#39;oid&#39;</span> <span class="n">A</span>         <span class="s">&#39;one&#39;</span> <span class="n">R</span>         <span class="s">&#39;ous&#39;</span> <span class="n">A</span>
 
-             'ae' A          'al'BB          'ar' X          'as' B
-             'ed' E          'en' F          'es' E          'ia' A
-             'ic' A          'is' A          'ly' B          'on' S
-             'or' T          'um' U          'us' V          'yl' R
-           '{'}s' A        's{'}' A
+             <span class="s">&#39;ae&#39;</span> <span class="n">A</span>          <span class="s">&#39;al&#39;</span><span class="n">BB</span>          <span class="s">&#39;ar&#39;</span> <span class="n">X</span>          <span class="s">&#39;as&#39;</span> <span class="n">B</span>
+             <span class="s">&#39;ed&#39;</span> <span class="n">E</span>          <span class="s">&#39;en&#39;</span> <span class="n">F</span>          <span class="s">&#39;es&#39;</span> <span class="n">E</span>          <span class="s">&#39;ia&#39;</span> <span class="n">A</span>
+             <span class="s">&#39;ic&#39;</span> <span class="n">A</span>          <span class="s">&#39;is&#39;</span> <span class="n">A</span>          <span class="s">&#39;ly&#39;</span> <span class="n">B</span>          <span class="s">&#39;on&#39;</span> <span class="n">S</span>
+             <span class="s">&#39;or&#39;</span> <span class="n">T</span>          <span class="s">&#39;um&#39;</span> <span class="n">U</span>          <span class="s">&#39;us&#39;</span> <span class="n">V</span>          <span class="s">&#39;yl&#39;</span> <span class="n">R</span>
+           <span class="s">&#39;{&#39;}s&#39;</span> <span class="n">A</span>        <span class="s">&#39;s{&#39;}&#39;</span> <span class="n">A</span>
 
-              'a' A           'e' A           'i' A           'o' A
-              's' W           'y' B
+              <span class="s">&#39;a&#39;</span> <span class="n">A</span>           <span class="s">&#39;e&#39;</span> <span class="n">A</span>           <span class="s">&#39;i&#39;</span> <span class="n">A</span>           <span class="s">&#39;o&#39;</span> <span class="n">A</span>
+              <span class="s">&#39;s&#39;</span> <span class="n">W</span>           <span class="s">&#39;y&#39;</span> <span class="n">B</span>
 
-        (delete)
-    )
-  )
+        <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+    <span class="p">)</span>
+  <span class="p">)</span>
 
-  /* Undoubling is rule 1 of appendix C. */
+  <span class="cm">/* Undoubling is rule 1 of appendix C. */</span>
 
-  define undouble as (
-    test substring among ('bb' 'dd' 'gg' 'll' 'mm' 'nn' 'pp' 'rr' 'ss'
-                          'tt')
-    [next] delete
-  )
+  <span class="kd">define</span> <span class="n">undouble</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">test</span> <span class="ow">substring</span> <span class="k">among</span> <span class="p">(</span><span class="s">&#39;bb&#39;</span> <span class="s">&#39;dd&#39;</span> <span class="s">&#39;gg&#39;</span> <span class="s">&#39;ll&#39;</span> <span class="s">&#39;mm&#39;</span> <span class="s">&#39;nn&#39;</span> <span class="s">&#39;pp&#39;</span> <span class="s">&#39;rr&#39;</span> <span class="s">&#39;ss&#39;</span>
+                          <span class="s">&#39;tt&#39;</span><span class="p">)</span>
+    <span class="p">[</span><span class="ow">next</span><span class="p">]</span> <span class="ow">delete</span>
+  <span class="p">)</span>
 
-  /* The other appendix C rules can be done together. */
+  <span class="cm">/* The other appendix C rules can be done together. */</span>
 
-  define respell as (
-    [substring] among (
-      'iev'  (&lt;-'ief')
-      'uct'  (&lt;-'uc')
-      'umpt' (&lt;-'um')
-      'rpt'  (&lt;-'rb')
-      'urs'  (&lt;-'ur')
-      'istr' (&lt;-'ister')
-      'metr' (&lt;-'meter')
-      'olv'  (&lt;-'olut')
-      'ul'   (not 'a' not 'i' not 'o' &lt;-'l')
-      'bex'  (&lt;-'bic')
-      'dex'  (&lt;-'dic')
-      'pex'  (&lt;-'pic')
-      'tex'  (&lt;-'tic')
-      'ax'   (&lt;-'ac')
-      'ex'   (&lt;-'ec')
-      'ix'   (&lt;-'ic')
-      'lux'  (&lt;-'luc')
-      'uad'  (&lt;-'uas')
-      'vad'  (&lt;-'vas')
-      'cid'  (&lt;-'cis')
-      'lid'  (&lt;-'lis')
-      'erid' (&lt;-'eris')
-      'pand' (&lt;-'pans')
-      'end'  (not 's' &lt;-'ens')
-      'ond'  (&lt;-'ons')
-      'lud'  (&lt;-'lus')
-      'rud'  (&lt;-'rus')
-      'her'  (not 'p' not 't' &lt;-'hes')
-      'mit'  (&lt;-'mis')
-      'ent'  (not 'm' &lt;-'ens')
-        /* 'ent' was 'end' in the 1968 paper - a typo. */
-      'ert'  (&lt;-'ers')
-      'et'   (not 'n' &lt;-'es')
-      'yt'   (&lt;-'ys')
-      'yz'   (&lt;-'ys')
-    )
-  )
-)
+  <span class="kd">define</span> <span class="n">respell</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span>
+      <span class="s">&#39;iev&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ief&#39;</span><span class="p">)</span>
+      <span class="s">&#39;uct&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;uc&#39;</span><span class="p">)</span>
+      <span class="s">&#39;umpt&#39;</span> <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;um&#39;</span><span class="p">)</span>
+      <span class="s">&#39;rpt&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;rb&#39;</span><span class="p">)</span>
+      <span class="s">&#39;urs&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ur&#39;</span><span class="p">)</span>
+      <span class="s">&#39;istr&#39;</span> <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ister&#39;</span><span class="p">)</span>
+      <span class="s">&#39;metr&#39;</span> <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;meter&#39;</span><span class="p">)</span>
+      <span class="s">&#39;olv&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;olut&#39;</span><span class="p">)</span>
+      <span class="s">&#39;ul&#39;</span>   <span class="p">(</span><span class="ow">not</span> <span class="s">&#39;a&#39;</span> <span class="ow">not</span> <span class="s">&#39;i&#39;</span> <span class="ow">not</span> <span class="s">&#39;o&#39;</span> <span class="o">&lt;-</span><span class="s">&#39;l&#39;</span><span class="p">)</span>
+      <span class="s">&#39;bex&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;bic&#39;</span><span class="p">)</span>
+      <span class="s">&#39;dex&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;dic&#39;</span><span class="p">)</span>
+      <span class="s">&#39;pex&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;pic&#39;</span><span class="p">)</span>
+      <span class="s">&#39;tex&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;tic&#39;</span><span class="p">)</span>
+      <span class="s">&#39;ax&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ac&#39;</span><span class="p">)</span>
+      <span class="s">&#39;ex&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ec&#39;</span><span class="p">)</span>
+      <span class="s">&#39;ix&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ic&#39;</span><span class="p">)</span>
+      <span class="s">&#39;lux&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;luc&#39;</span><span class="p">)</span>
+      <span class="s">&#39;uad&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;uas&#39;</span><span class="p">)</span>
+      <span class="s">&#39;vad&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;vas&#39;</span><span class="p">)</span>
+      <span class="s">&#39;cid&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;cis&#39;</span><span class="p">)</span>
+      <span class="s">&#39;lid&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;lis&#39;</span><span class="p">)</span>
+      <span class="s">&#39;erid&#39;</span> <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;eris&#39;</span><span class="p">)</span>
+      <span class="s">&#39;pand&#39;</span> <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;pans&#39;</span><span class="p">)</span>
+      <span class="s">&#39;end&#39;</span>  <span class="p">(</span><span class="ow">not</span> <span class="s">&#39;s&#39;</span> <span class="o">&lt;-</span><span class="s">&#39;ens&#39;</span><span class="p">)</span>
+      <span class="s">&#39;ond&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ons&#39;</span><span class="p">)</span>
+      <span class="s">&#39;lud&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;lus&#39;</span><span class="p">)</span>
+      <span class="s">&#39;rud&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;rus&#39;</span><span class="p">)</span>
+      <span class="s">&#39;her&#39;</span>  <span class="p">(</span><span class="ow">not</span> <span class="s">&#39;p&#39;</span> <span class="ow">not</span> <span class="s">&#39;t&#39;</span> <span class="o">&lt;-</span><span class="s">&#39;hes&#39;</span><span class="p">)</span>
+      <span class="s">&#39;mit&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;mis&#39;</span><span class="p">)</span>
+      <span class="s">&#39;ent&#39;</span>  <span class="p">(</span><span class="ow">not</span> <span class="s">&#39;m&#39;</span> <span class="o">&lt;-</span><span class="s">&#39;ens&#39;</span><span class="p">)</span>
+        <span class="cm">/* &#39;ent&#39; was &#39;end&#39; in the 1968 paper - a typo. */</span>
+      <span class="s">&#39;ert&#39;</span>  <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ers&#39;</span><span class="p">)</span>
+      <span class="s">&#39;et&#39;</span>   <span class="p">(</span><span class="ow">not</span> <span class="s">&#39;n&#39;</span> <span class="o">&lt;-</span><span class="s">&#39;es&#39;</span><span class="p">)</span>
+      <span class="s">&#39;yt&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ys&#39;</span><span class="p">)</span>
+      <span class="s">&#39;yz&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ys&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+  <span class="p">)</span>
+<span class="p">)</span>
 
-define stem as (
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
 
-  backwards (
-    do endings
-    do undouble
-    do respell
-  )
-)
+  <span class="ow">backwards</span> <span class="p">(</span>
+    <span class="ow">do</span> <span class="n">endings</span>
+    <span class="ow">do</span> <span class="n">undouble</span>
+    <span class="ow">do</span> <span class="n">respell</span>
+  <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
 
-</PRE>
-</TR>
+</pre></TR>
 
 <TR><TD>
 <BR>&nbsp;<H2>Appendix 2</H2>
@@ -1687,112 +1703,112 @@ define stem as (
 The Porter stemmer, cast, as far as is possible, into Lovins form.
 <BR><BR>
 
-<BR><PRE>
-integers ( p1 p2 )
-booleans ( Y_found )
+<pre><div class="highlight"><pre><span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
+<span class="kd">booleans</span> <span class="p">(</span> <span class="n">Y_found</span> <span class="p">)</span>
 
-routines (
-    endings respell
-    shortv
-    undouble
-    A B C D E F G H I J
-)
+<span class="kd">routines</span> <span class="p">(</span>
+    <span class="n">endings</span> <span class="n">respell</span>
+    <span class="n">shortv</span>
+    <span class="n">undouble</span>
+    <span class="n">A</span> <span class="n">B</span> <span class="n">C</span> <span class="n">D</span> <span class="n">E</span> <span class="n">F</span> <span class="n">G</span> <span class="n">H</span> <span class="n">I</span> <span class="n">J</span>
+<span class="p">)</span>
 
-externals ( stem )
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-groupings ( v v_WXY )
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="n">v_WXY</span> <span class="p">)</span>
 
-define v        'aeiouy'
-define v_WXY    v + 'wxY'
+<span class="kd">define</span> <span class="n">v</span>        <span class="s">&#39;aeiouy&#39;</span>
+<span class="kd">define</span> <span class="n">v_WXY</span>    <span class="n">v</span> <span class="o">+</span> <span class="s">&#39;wxY&#39;</span>
 
-backwardmode (
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-    define shortv as ( non-v_WXY v non-v )
+    <span class="kd">define</span> <span class="n">shortv</span> <span class="k">as</span> <span class="p">(</span> <span class="ow">non-</span><span class="n">v_WXY</span> <span class="n">v</span> <span class="ow">non-</span><span class="n">v</span> <span class="p">)</span>
 
-    define undouble as (
-        among ('bb' 'dd' 'ff' 'gg' 'mm' 'nn' 'pp' 'rr' 'tt')
-        and ([next] delete)
-    )
+    <span class="kd">define</span> <span class="n">undouble</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="k">among</span> <span class="p">(</span><span class="s">&#39;bb&#39;</span> <span class="s">&#39;dd&#39;</span> <span class="s">&#39;ff&#39;</span> <span class="s">&#39;gg&#39;</span> <span class="s">&#39;mm&#39;</span> <span class="s">&#39;nn&#39;</span> <span class="s">&#39;pp&#39;</span> <span class="s">&#39;rr&#39;</span> <span class="s">&#39;tt&#39;</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="p">([</span><span class="ow">next</span><span class="p">]</span> <span class="ow">delete</span><span class="p">)</span>
+    <span class="p">)</span>
 
-    define A as $p1 &lt;= cursor
-    define B as $p2 &lt;= cursor
-    define C as (B 's' or 't')
-    define D as (B not 'm')
-    define E as ('e' or 'ous' A)
+    <span class="kd">define</span> <span class="n">A</span> <span class="k">as</span> <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">B</span> <span class="k">as</span> <span class="o">$</span><span class="n">p2</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">C</span> <span class="k">as</span> <span class="p">(</span><span class="n">B</span> <span class="s">&#39;s&#39;</span> <span class="ow">or</span> <span class="s">&#39;t&#39;</span><span class="p">)</span>
+    <span class="kd">define</span> <span class="n">D</span> <span class="k">as</span> <span class="p">(</span><span class="n">B</span> <span class="ow">not</span> <span class="s">&#39;m&#39;</span><span class="p">)</span>
+    <span class="kd">define</span> <span class="n">E</span> <span class="k">as</span> <span class="p">(</span><span class="s">&#39;e&#39;</span> <span class="ow">or</span> <span class="s">&#39;ous&#39;</span> <span class="n">A</span><span class="p">)</span>
 
-    define F as ('ss' or 'i')
-    define G as not 's'
-    define H as gopast v
-    define I as (not 'e' gopast v)
-    define J as ('ee' A)
+    <span class="kd">define</span> <span class="n">F</span> <span class="k">as</span> <span class="p">(</span><span class="s">&#39;ss&#39;</span> <span class="ow">or</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+    <span class="kd">define</span> <span class="n">G</span> <span class="k">as</span> <span class="ow">not</span> <span class="s">&#39;s&#39;</span>
+    <span class="kd">define</span> <span class="n">H</span> <span class="k">as</span> <span class="ow">gopast</span> <span class="n">v</span>
+    <span class="kd">define</span> <span class="n">I</span> <span class="k">as</span> <span class="p">(</span><span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="ow">gopast</span> <span class="n">v</span><span class="p">)</span>
+    <span class="kd">define</span> <span class="n">J</span> <span class="k">as</span> <span class="p">(</span><span class="s">&#39;ee&#39;</span> <span class="n">A</span><span class="p">)</span>
 
-    define endings as (
+    <span class="kd">define</span> <span class="n">endings</span> <span class="k">as</span> <span class="p">(</span>
 
-        [substring] among (
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span>
 
-            'ed'   I
-            'ing'  H
-            'ings' H
+            <span class="s">&#39;ed&#39;</span>   <span class="n">I</span>
+            <span class="s">&#39;ing&#39;</span>  <span class="n">H</span>
+            <span class="s">&#39;ings&#39;</span> <span class="n">H</span>
 
-                   (delete
-                    undouble or (atmark p1  test shortv  &lt;+ 'e')
-                   )
+                   <span class="p">(</span><span class="ow">delete</span>
+                    <span class="n">undouble</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">atmark</span> <span class="n">p1</span>  <span class="ow">test</span> <span class="n">shortv</span>  <span class="o">&lt;+</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+                   <span class="p">)</span>
 
-            'd'    J
-            'es'   F
-            's'    G
+            <span class="s">&#39;d&#39;</span>    <span class="n">J</span>
+            <span class="s">&#39;es&#39;</span>   <span class="n">F</span>
+            <span class="s">&#39;s&#39;</span>    <span class="n">G</span>
 
-            get '/home/martin/Snowball/festschrift/endings'
-                   (delete)
-        )
-    )
+            <span class="kn">get</span> <span class="s">&#39;/home/martin/Snowball/festschrift/endings&#39;</span>
+                   <span class="p">(</span><span class="ow">delete</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    define respell as (
-        [substring] among (
-            'e'     (B or (A not shortv) delete)
-            'l'     (B 'l' delete)
-            'enci'
-            'ency'  ((A &lt;- 'enc') or &lt;- 'enci')
-            'anci'
-            'ancy'  ((A &lt;- 'anc') or &lt;- 'anci')
-            'ally'  ((A &lt;- 'al') or &lt;- 'alli')
-            'ently' ((A &lt;- 'ent') or &lt;- 'entli')
-            'ator'  (A &lt;- 'at')
+    <span class="kd">define</span> <span class="n">respell</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span>
+            <span class="s">&#39;e&#39;</span>     <span class="p">(</span><span class="n">B</span> <span class="ow">or</span> <span class="p">(</span><span class="n">A</span> <span class="ow">not</span> <span class="n">shortv</span><span class="p">)</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;l&#39;</span>     <span class="p">(</span><span class="n">B</span> <span class="s">&#39;l&#39;</span> <span class="ow">delete</span><span class="p">)</span>
+            <span class="s">&#39;enci&#39;</span>
+            <span class="s">&#39;ency&#39;</span>  <span class="p">((</span><span class="n">A</span> <span class="o">&lt;-</span> <span class="s">&#39;enc&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="o">&lt;-</span> <span class="s">&#39;enci&#39;</span><span class="p">)</span>
+            <span class="s">&#39;anci&#39;</span>
+            <span class="s">&#39;ancy&#39;</span>  <span class="p">((</span><span class="n">A</span> <span class="o">&lt;-</span> <span class="s">&#39;anc&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="o">&lt;-</span> <span class="s">&#39;anci&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ally&#39;</span>  <span class="p">((</span><span class="n">A</span> <span class="o">&lt;-</span> <span class="s">&#39;al&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="o">&lt;-</span> <span class="s">&#39;alli&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ently&#39;</span> <span class="p">((</span><span class="n">A</span> <span class="o">&lt;-</span> <span class="s">&#39;ent&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="o">&lt;-</span> <span class="s">&#39;entli&#39;</span><span class="p">)</span>
+            <span class="s">&#39;ator&#39;</span>  <span class="p">(</span><span class="n">A</span> <span class="o">&lt;-</span> <span class="s">&#39;at&#39;</span><span class="p">)</span>
 
-            'logi'
-            'logy'  ((A &lt;- 'log') or &lt;- 'logi')
-            'bli'
-            'bly'   ((A &lt;- 'bl') or &lt;- 'bli')
-            'bil'   (v A &lt;- 'bl')
-            'y' 'Y'
-                    (gopast v  &lt;-'i')
+            <span class="s">&#39;logi&#39;</span>
+            <span class="s">&#39;logy&#39;</span>  <span class="p">((</span><span class="n">A</span> <span class="o">&lt;-</span> <span class="s">&#39;log&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="o">&lt;-</span> <span class="s">&#39;logi&#39;</span><span class="p">)</span>
+            <span class="s">&#39;bli&#39;</span>
+            <span class="s">&#39;bly&#39;</span>   <span class="p">((</span><span class="n">A</span> <span class="o">&lt;-</span> <span class="s">&#39;bl&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="o">&lt;-</span> <span class="s">&#39;bli&#39;</span><span class="p">)</span>
+            <span class="s">&#39;bil&#39;</span>   <span class="p">(</span><span class="n">v</span> <span class="n">A</span> <span class="o">&lt;-</span> <span class="s">&#39;bl&#39;</span><span class="p">)</span>
+            <span class="s">&#39;y&#39;</span> <span class="s">&#39;Y&#39;</span>
+                    <span class="p">(</span><span class="ow">gopast</span> <span class="n">v</span>  <span class="o">&lt;-</span><span class="s">&#39;i&#39;</span><span class="p">)</span>
 
-        )
-    )
-)
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-define stem as (
-    test hop 3
-    unset Y_found
-    do ( ['y'] &lt;-'Y' set Y_found)
-    do repeat(goto (v ['y']) &lt;-'Y' set Y_found)
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">test</span> <span class="ow">hop</span> <span class="m">3</span>
+    <span class="ow">unset</span> <span class="n">Y_found</span>
+    <span class="ow">do</span> <span class="p">(</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span> <span class="o">&lt;-</span><span class="s">&#39;Y&#39;</span> <span class="ow">set</span> <span class="n">Y_found</span><span class="p">)</span>
+    <span class="ow">do</span> <span class="ow">repeat</span><span class="p">(</span><span class="ow">goto</span> <span class="p">(</span><span class="n">v</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">])</span> <span class="o">&lt;-</span><span class="s">&#39;Y&#39;</span> <span class="ow">set</span> <span class="n">Y_found</span><span class="p">)</span>
 
-    $p1 = limit
-    $p2 = limit
-    do(
-        gopast v  gopast non-v  setmark p1
-        gopast v  gopast non-v  setmark p2
-    )
+    <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="o">$</span><span class="n">p2</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="ow">do</span><span class="p">(</span>
+        <span class="ow">gopast</span> <span class="n">v</span>  <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p1</span>
+        <span class="ow">gopast</span> <span class="n">v</span>  <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p2</span>
+    <span class="p">)</span>
 
-    backwards (
-        do endings
-        do respell
-    )
-    do(Y_found  repeat(goto (['Y']) &lt;-'y'))
+    <span class="ow">backwards</span> <span class="p">(</span>
+        <span class="ow">do</span> <span class="n">endings</span>
+        <span class="ow">do</span> <span class="n">respell</span>
+    <span class="p">)</span>
+    <span class="ow">do</span><span class="p">(</span><span class="n">Y_found</span>  <span class="ow">repeat</span><span class="p">(</span><span class="ow">goto</span> <span class="p">([</span><span class="s">&#39;Y&#39;</span><span class="p">])</span> <span class="o">&lt;-</span><span class="s">&#39;y&#39;</span><span class="p">))</span>
 
-)
-</PRE>
-</TR>
+<span class="p">)</span>
+</pre></div>
+
+</pre></TR>
 
 <TR><TD>
 <BR>&nbsp;<H2>Appendix 3</H2>
@@ -1802,190 +1818,191 @@ of Appendix 2. The numbers to the right show their frequency of occurrence
 in the sample vocabulary. The 75 rare endings are shown commented out.
 <BR><BR>
 
-<BR><PRE>
-    'abilities'     B /*   (3) */
-    'ability'       B /*  (14) */
-    'able'          B /* (293) */
-    'ables'         B /*   (4) */
-    'ably'          B /*  (68) */
-    'al'            B /* (285) */
-    'alism'         B /*   (5) */
-//  'alisms'        B /*   (-) */
-    'alities'       B /*   (7) */
-    'ality'         B /*  (24) */
-    'alization'     B /*   (1) */
-//  'alizationed'   B /*   (-) */
-//  'alizationing'  B /*   (-) */
-//  'alizations'    B /*   (-) */
-    'alize'         B /*   (2) */
-    'alized'        B /*   (4) */
-//  'alizer'        B /*   (-) */
-//  'alizered'      B /*   (-) */
-//  'alizering'     B /*   (-) */
-//  'alizers'       B /*   (-) */
-//  'alizes'        B /*   (-) */
-//  'alizing'       B /*   (-) */
-    'ally'          B /*  (78) */
-    'alness'        B /*   (2) */
-//  'alnesses'      B /*   (-) */
-    'als'           B /*  (46) */
-    'ance'          B /*  (93) */
-    'ances'         B /*  (30) */
-    'ancies'        B /*   (2) */
-    'ancy'          B /*  (18) */
-    'ant'           B /*  (92) */
-    'ants'          B /*  (29) */
-    'ate'           B /* (261) */
-    'ated'          B /* (208) */
-    'ately'         B /*  (38) */
-    'ates'          B /*  (73) */
-    'ating'         B /* (119) */
-    'ation'         B /* (356) */
-    'ational'       B /*   (4) */
-//  'ationalism'    B /*   (-) */
-//  'ationalisms'   B /*   (-) */
-//  'ationalities'  B /*   (-) */
-//  'ationality'    B /*   (-) */
-//  'ationalize'    B /*   (-) */
-//  'ationalized'   B /*   (-) */
-//  'ationalizes'   B /*   (-) */
-//  'ationalizing'  B /*   (-) */
-    'ationally'     B /*   (2) */
-//  'ationalness'   B /*   (-) */
-//  'ationalnesses' B /*   (-) */
-//  'ationals'      B /*   (-) */
-//  'ationed'       B /*   (-) */
-//  'ationing'      B /*   (-) */
-    'ations'        B /* (139) */
-    'ative'         B /*  (40) */
-    'atively'       B /*   (4) */
-//  'ativeness'     B /*   (-) */
-//  'ativenesses'   B /*   (-) */
-    'atives'        B /*   (7) */
-//  'ativities'     B /*   (-) */
-//  'ativity'       B /*   (-) */
-    'ator'          B /*  (25) */
-    'ators'         B /*  (10) */
-    'ement'         B /*  (70) */
-//  'emently'       B /*   (-) */
-    'ements'        B /*  (31) */
-    'ence'          B /* (100) */
-    'ences'         B /*  (25) */
-    'encies'        B /*   (9) */
-    'ency'          B /*  (41) */
-    'ent'           D /* (154) */
-    'ently'         D /*  (53) */
-    'ents'          D /*  (25) */
-    'er'            B /* (613) */
-    'ered'          B /*  (44) */
-    'ering'         B /*  (31) */
-    'ers'           B /* (281) */
-    'ful'           A /* (163) */
-    'fulness'       A /*  (31) */
-//  'fulnesses'     A /*   (-) */
-    'fuls'          A /*   (5) */
-    'ibilities'     B /*   (2) */
-    'ibility'       B /*  (10) */
-    'ible'          B /*  (53) */
-    'ibles'         B /*   (2) */
-    'ibly'          B /*  (14) */
-    'ic'            B /* (142) */
-    'ical'          B /*  (91) */
-//  'icalism'       B /*   (-) */
-//  'icalisms'      B /*   (-) */
-//  'icalities'     B /*   (-) */
-    'icality'       B /*   (1) */
-//  'icalize'       B /*   (-) */
-//  'icalized'      B /*   (-) */
-//  'icalizer'      B /*   (-) */
-//  'icalizered'    B /*   (-) */
-//  'icalizering'   B /*   (-) */
-//  'icalizers'     B /*   (-) */
-//  'icalizes'      B /*   (-) */
-//  'icalizing'     B /*   (-) */
-    'ically'        B /*  (59) */
-//  'icalness'      B /*   (-) */
-//  'icalnesses'    B /*   (-) */
-    'icals'         B /*   (2) */
-    'icate'         B /*   (9) */
-    'icated'        B /*   (7) */
-//  'icately'       B /*   (-) */
-    'icates'        B /*   (4) */
-    'icating'       B /*   (3) */
-    'ication'       B /*  (23) */
-//  'icational'     B /*   (-) */
-//  'icationals'    B /*   (-) */
-//  'icationed'     B /*   (-) */
-//  'icationing'    B /*   (-) */
-    'ications'      B /*   (8) */
-    'icative'       B /*   (2) */
-//  'icatively'     B /*   (-) */
-//  'icativeness'   B /*   (-) */
-//  'icativenesses' B /*   (-) */
-//  'icatives'      B /*   (-) */
-//  'icativities'   B /*   (-) */
-//  'icativity'     B /*   (-) */
-    'icities'       B /*   (1) */
-    'icity'         B /*   (5) */
-    'ics'           B /*  (21) */
-    'ion'           C /* (383) */
-    'ional'         C /*  (18) */
-//  'ionalism'      C /*   (-) */
-//  'ionalisms'     C /*   (-) */
-    'ionalities'    C /*   (1) */
-    'ionality'      C /*   (1) */
-//  'ionalize'      C /*   (-) */
-//  'ionalized'     C /*   (-) */
-//  'ionalizer'     C /*   (-) */
-//  'ionalizered'   C /*   (-) */
-//  'ionalizering'  C /*   (-) */
-//  'ionalizers'    C /*   (-) */
-//  'ionalizes'     C /*   (-) */
-//  'ionalizing'    C /*   (-) */
-    'ionally'       C /*  (12) */
-    'ionalness'     C /*   (1) */
-//  'ionalnesses'   C /*   (-) */
-    'ionals'        C /*   (1) */
-    'ioned'         C /*  (13) */
-    'ioning'        C /*   (3) */
-    'ions'          C /* (192) */
-    'ism'           B /*  (33) */
-    'isms'          B /*   (5) */
-    'ities'         B /*  (62) */
-    'ity'           B /* (236) */
-    'ive'           B /* (132) */
-    'ively'         B /*  (34) */
-    'iveness'       B /*  (14) */
-//  'ivenesses'     B /*   (-) */
-    'ives'          B /*  (12) */
-//  'ivities'       B /*   (-) */
-    'ivity'         B /*   (1) */
-    'ization'       B /*   (4) */
-//  'izational'     B /*   (-) */
-//  'izationals'    B /*   (-) */
-//  'izationed'     B /*   (-) */
-//  'izationing'    B /*   (-) */
-    'izations'      B /*   (1) */
-    'ize'           B /*  (32) */
-    'ized'          B /*  (32) */
-    'izer'          B /*   (3) */
-//  'izered'        B /*   (-) */
-//  'izering'       B /*   (-) */
-    'izers'         B /*   (1) */
-    'izes'          B /*   (6) */
-    'izing'         B /*  (30) */
-    'ly'            E /* (135) */
-    'ment'          B /* (105) */
-//  'mently'        B /*   (-) */
-    'ments'         B /*  (50) */
-    'ness'          A /* (428) */
-    'nesses'        A /*  (21) */
-    'ous'           B /* (340) */
-    'ously'         B /* (130) */
-    'ousness'       B /*  (22) */
-//  'ousnesses'     B /*   (-) */
-</PRE>
-</TR>
+<BR>
+<div class="highlight"><pre>    <span class="s">&#39;abilities&#39;</span>     <span class="n">B</span> <span class="cm">/*   (3) */</span>
+    <span class="s">&#39;ability&#39;</span>       <span class="n">B</span> <span class="cm">/*  (14) */</span>
+    <span class="s">&#39;able&#39;</span>          <span class="n">B</span> <span class="cm">/* (293) */</span>
+    <span class="s">&#39;ables&#39;</span>         <span class="n">B</span> <span class="cm">/*   (4) */</span>
+    <span class="s">&#39;ably&#39;</span>          <span class="n">B</span> <span class="cm">/*  (68) */</span>
+    <span class="s">&#39;al&#39;</span>            <span class="n">B</span> <span class="cm">/* (285) */</span>
+    <span class="s">&#39;alism&#39;</span>         <span class="n">B</span> <span class="cm">/*   (5) */</span>
+<span class="c1">//  &#39;alisms&#39;        B /*   (-) */</span>
+    <span class="s">&#39;alities&#39;</span>       <span class="n">B</span> <span class="cm">/*   (7) */</span>
+    <span class="s">&#39;ality&#39;</span>         <span class="n">B</span> <span class="cm">/*  (24) */</span>
+    <span class="s">&#39;alization&#39;</span>     <span class="n">B</span> <span class="cm">/*   (1) */</span>
+<span class="c1">//  &#39;alizationed&#39;   B /*   (-) */</span>
+<span class="c1">//  &#39;alizationing&#39;  B /*   (-) */</span>
+<span class="c1">//  &#39;alizations&#39;    B /*   (-) */</span>
+    <span class="s">&#39;alize&#39;</span>         <span class="n">B</span> <span class="cm">/*   (2) */</span>
+    <span class="s">&#39;alized&#39;</span>        <span class="n">B</span> <span class="cm">/*   (4) */</span>
+<span class="c1">//  &#39;alizer&#39;        B /*   (-) */</span>
+<span class="c1">//  &#39;alizered&#39;      B /*   (-) */</span>
+<span class="c1">//  &#39;alizering&#39;     B /*   (-) */</span>
+<span class="c1">//  &#39;alizers&#39;       B /*   (-) */</span>
+<span class="c1">//  &#39;alizes&#39;        B /*   (-) */</span>
+<span class="c1">//  &#39;alizing&#39;       B /*   (-) */</span>
+    <span class="s">&#39;ally&#39;</span>          <span class="n">B</span> <span class="cm">/*  (78) */</span>
+    <span class="s">&#39;alness&#39;</span>        <span class="n">B</span> <span class="cm">/*   (2) */</span>
+<span class="c1">//  &#39;alnesses&#39;      B /*   (-) */</span>
+    <span class="s">&#39;als&#39;</span>           <span class="n">B</span> <span class="cm">/*  (46) */</span>
+    <span class="s">&#39;ance&#39;</span>          <span class="n">B</span> <span class="cm">/*  (93) */</span>
+    <span class="s">&#39;ances&#39;</span>         <span class="n">B</span> <span class="cm">/*  (30) */</span>
+    <span class="s">&#39;ancies&#39;</span>        <span class="n">B</span> <span class="cm">/*   (2) */</span>
+    <span class="s">&#39;ancy&#39;</span>          <span class="n">B</span> <span class="cm">/*  (18) */</span>
+    <span class="s">&#39;ant&#39;</span>           <span class="n">B</span> <span class="cm">/*  (92) */</span>
+    <span class="s">&#39;ants&#39;</span>          <span class="n">B</span> <span class="cm">/*  (29) */</span>
+    <span class="s">&#39;ate&#39;</span>           <span class="n">B</span> <span class="cm">/* (261) */</span>
+    <span class="s">&#39;ated&#39;</span>          <span class="n">B</span> <span class="cm">/* (208) */</span>
+    <span class="s">&#39;ately&#39;</span>         <span class="n">B</span> <span class="cm">/*  (38) */</span>
+    <span class="s">&#39;ates&#39;</span>          <span class="n">B</span> <span class="cm">/*  (73) */</span>
+    <span class="s">&#39;ating&#39;</span>         <span class="n">B</span> <span class="cm">/* (119) */</span>
+    <span class="s">&#39;ation&#39;</span>         <span class="n">B</span> <span class="cm">/* (356) */</span>
+    <span class="s">&#39;ational&#39;</span>       <span class="n">B</span> <span class="cm">/*   (4) */</span>
+<span class="c1">//  &#39;ationalism&#39;    B /*   (-) */</span>
+<span class="c1">//  &#39;ationalisms&#39;   B /*   (-) */</span>
+<span class="c1">//  &#39;ationalities&#39;  B /*   (-) */</span>
+<span class="c1">//  &#39;ationality&#39;    B /*   (-) */</span>
+<span class="c1">//  &#39;ationalize&#39;    B /*   (-) */</span>
+<span class="c1">//  &#39;ationalized&#39;   B /*   (-) */</span>
+<span class="c1">//  &#39;ationalizes&#39;   B /*   (-) */</span>
+<span class="c1">//  &#39;ationalizing&#39;  B /*   (-) */</span>
+    <span class="s">&#39;ationally&#39;</span>     <span class="n">B</span> <span class="cm">/*   (2) */</span>
+<span class="c1">//  &#39;ationalness&#39;   B /*   (-) */</span>
+<span class="c1">//  &#39;ationalnesses&#39; B /*   (-) */</span>
+<span class="c1">//  &#39;ationals&#39;      B /*   (-) */</span>
+<span class="c1">//  &#39;ationed&#39;       B /*   (-) */</span>
+<span class="c1">//  &#39;ationing&#39;      B /*   (-) */</span>
+    <span class="s">&#39;ations&#39;</span>        <span class="n">B</span> <span class="cm">/* (139) */</span>
+    <span class="s">&#39;ative&#39;</span>         <span class="n">B</span> <span class="cm">/*  (40) */</span>
+    <span class="s">&#39;atively&#39;</span>       <span class="n">B</span> <span class="cm">/*   (4) */</span>
+<span class="c1">//  &#39;ativeness&#39;     B /*   (-) */</span>
+<span class="c1">//  &#39;ativenesses&#39;   B /*   (-) */</span>
+    <span class="s">&#39;atives&#39;</span>        <span class="n">B</span> <span class="cm">/*   (7) */</span>
+<span class="c1">//  &#39;ativities&#39;     B /*   (-) */</span>
+<span class="c1">//  &#39;ativity&#39;       B /*   (-) */</span>
+    <span class="s">&#39;ator&#39;</span>          <span class="n">B</span> <span class="cm">/*  (25) */</span>
+    <span class="s">&#39;ators&#39;</span>         <span class="n">B</span> <span class="cm">/*  (10) */</span>
+    <span class="s">&#39;ement&#39;</span>         <span class="n">B</span> <span class="cm">/*  (70) */</span>
+<span class="c1">//  &#39;emently&#39;       B /*   (-) */</span>
+    <span class="s">&#39;ements&#39;</span>        <span class="n">B</span> <span class="cm">/*  (31) */</span>
+    <span class="s">&#39;ence&#39;</span>          <span class="n">B</span> <span class="cm">/* (100) */</span>
+    <span class="s">&#39;ences&#39;</span>         <span class="n">B</span> <span class="cm">/*  (25) */</span>
+    <span class="s">&#39;encies&#39;</span>        <span class="n">B</span> <span class="cm">/*   (9) */</span>
+    <span class="s">&#39;ency&#39;</span>          <span class="n">B</span> <span class="cm">/*  (41) */</span>
+    <span class="s">&#39;ent&#39;</span>           <span class="n">D</span> <span class="cm">/* (154) */</span>
+    <span class="s">&#39;ently&#39;</span>         <span class="n">D</span> <span class="cm">/*  (53) */</span>
+    <span class="s">&#39;ents&#39;</span>          <span class="n">D</span> <span class="cm">/*  (25) */</span>
+    <span class="s">&#39;er&#39;</span>            <span class="n">B</span> <span class="cm">/* (613) */</span>
+    <span class="s">&#39;ered&#39;</span>          <span class="n">B</span> <span class="cm">/*  (44) */</span>
+    <span class="s">&#39;ering&#39;</span>         <span class="n">B</span> <span class="cm">/*  (31) */</span>
+    <span class="s">&#39;ers&#39;</span>           <span class="n">B</span> <span class="cm">/* (281) */</span>
+    <span class="s">&#39;ful&#39;</span>           <span class="n">A</span> <span class="cm">/* (163) */</span>
+    <span class="s">&#39;fulness&#39;</span>       <span class="n">A</span> <span class="cm">/*  (31) */</span>
+<span class="c1">//  &#39;fulnesses&#39;     A /*   (-) */</span>
+    <span class="s">&#39;fuls&#39;</span>          <span class="n">A</span> <span class="cm">/*   (5) */</span>
+    <span class="s">&#39;ibilities&#39;</span>     <span class="n">B</span> <span class="cm">/*   (2) */</span>
+    <span class="s">&#39;ibility&#39;</span>       <span class="n">B</span> <span class="cm">/*  (10) */</span>
+    <span class="s">&#39;ible&#39;</span>          <span class="n">B</span> <span class="cm">/*  (53) */</span>
+    <span class="s">&#39;ibles&#39;</span>         <span class="n">B</span> <span class="cm">/*   (2) */</span>
+    <span class="s">&#39;ibly&#39;</span>          <span class="n">B</span> <span class="cm">/*  (14) */</span>
+    <span class="s">&#39;ic&#39;</span>            <span class="n">B</span> <span class="cm">/* (142) */</span>
+    <span class="s">&#39;ical&#39;</span>          <span class="n">B</span> <span class="cm">/*  (91) */</span>
+<span class="c1">//  &#39;icalism&#39;       B /*   (-) */</span>
+<span class="c1">//  &#39;icalisms&#39;      B /*   (-) */</span>
+<span class="c1">//  &#39;icalities&#39;     B /*   (-) */</span>
+    <span class="s">&#39;icality&#39;</span>       <span class="n">B</span> <span class="cm">/*   (1) */</span>
+<span class="c1">//  &#39;icalize&#39;       B /*   (-) */</span>
+<span class="c1">//  &#39;icalized&#39;      B /*   (-) */</span>
+<span class="c1">//  &#39;icalizer&#39;      B /*   (-) */</span>
+<span class="c1">//  &#39;icalizered&#39;    B /*   (-) */</span>
+<span class="c1">//  &#39;icalizering&#39;   B /*   (-) */</span>
+<span class="c1">//  &#39;icalizers&#39;     B /*   (-) */</span>
+<span class="c1">//  &#39;icalizes&#39;      B /*   (-) */</span>
+<span class="c1">//  &#39;icalizing&#39;     B /*   (-) */</span>
+    <span class="s">&#39;ically&#39;</span>        <span class="n">B</span> <span class="cm">/*  (59) */</span>
+<span class="c1">//  &#39;icalness&#39;      B /*   (-) */</span>
+<span class="c1">//  &#39;icalnesses&#39;    B /*   (-) */</span>
+    <span class="s">&#39;icals&#39;</span>         <span class="n">B</span> <span class="cm">/*   (2) */</span>
+    <span class="s">&#39;icate&#39;</span>         <span class="n">B</span> <span class="cm">/*   (9) */</span>
+    <span class="s">&#39;icated&#39;</span>        <span class="n">B</span> <span class="cm">/*   (7) */</span>
+<span class="c1">//  &#39;icately&#39;       B /*   (-) */</span>
+    <span class="s">&#39;icates&#39;</span>        <span class="n">B</span> <span class="cm">/*   (4) */</span>
+    <span class="s">&#39;icating&#39;</span>       <span class="n">B</span> <span class="cm">/*   (3) */</span>
+    <span class="s">&#39;ication&#39;</span>       <span class="n">B</span> <span class="cm">/*  (23) */</span>
+<span class="c1">//  &#39;icational&#39;     B /*   (-) */</span>
+<span class="c1">//  &#39;icationals&#39;    B /*   (-) */</span>
+<span class="c1">//  &#39;icationed&#39;     B /*   (-) */</span>
+<span class="c1">//  &#39;icationing&#39;    B /*   (-) */</span>
+    <span class="s">&#39;ications&#39;</span>      <span class="n">B</span> <span class="cm">/*   (8) */</span>
+    <span class="s">&#39;icative&#39;</span>       <span class="n">B</span> <span class="cm">/*   (2) */</span>
+<span class="c1">//  &#39;icatively&#39;     B /*   (-) */</span>
+<span class="c1">//  &#39;icativeness&#39;   B /*   (-) */</span>
+<span class="c1">//  &#39;icativenesses&#39; B /*   (-) */</span>
+<span class="c1">//  &#39;icatives&#39;      B /*   (-) */</span>
+<span class="c1">//  &#39;icativities&#39;   B /*   (-) */</span>
+<span class="c1">//  &#39;icativity&#39;     B /*   (-) */</span>
+    <span class="s">&#39;icities&#39;</span>       <span class="n">B</span> <span class="cm">/*   (1) */</span>
+    <span class="s">&#39;icity&#39;</span>         <span class="n">B</span> <span class="cm">/*   (5) */</span>
+    <span class="s">&#39;ics&#39;</span>           <span class="n">B</span> <span class="cm">/*  (21) */</span>
+    <span class="s">&#39;ion&#39;</span>           <span class="n">C</span> <span class="cm">/* (383) */</span>
+    <span class="s">&#39;ional&#39;</span>         <span class="n">C</span> <span class="cm">/*  (18) */</span>
+<span class="c1">//  &#39;ionalism&#39;      C /*   (-) */</span>
+<span class="c1">//  &#39;ionalisms&#39;     C /*   (-) */</span>
+    <span class="s">&#39;ionalities&#39;</span>    <span class="n">C</span> <span class="cm">/*   (1) */</span>
+    <span class="s">&#39;ionality&#39;</span>      <span class="n">C</span> <span class="cm">/*   (1) */</span>
+<span class="c1">//  &#39;ionalize&#39;      C /*   (-) */</span>
+<span class="c1">//  &#39;ionalized&#39;     C /*   (-) */</span>
+<span class="c1">//  &#39;ionalizer&#39;     C /*   (-) */</span>
+<span class="c1">//  &#39;ionalizered&#39;   C /*   (-) */</span>
+<span class="c1">//  &#39;ionalizering&#39;  C /*   (-) */</span>
+<span class="c1">//  &#39;ionalizers&#39;    C /*   (-) */</span>
+<span class="c1">//  &#39;ionalizes&#39;     C /*   (-) */</span>
+<span class="c1">//  &#39;ionalizing&#39;    C /*   (-) */</span>
+    <span class="s">&#39;ionally&#39;</span>       <span class="n">C</span> <span class="cm">/*  (12) */</span>
+    <span class="s">&#39;ionalness&#39;</span>     <span class="n">C</span> <span class="cm">/*   (1) */</span>
+<span class="c1">//  &#39;ionalnesses&#39;   C /*   (-) */</span>
+    <span class="s">&#39;ionals&#39;</span>        <span class="n">C</span> <span class="cm">/*   (1) */</span>
+    <span class="s">&#39;ioned&#39;</span>         <span class="n">C</span> <span class="cm">/*  (13) */</span>
+    <span class="s">&#39;ioning&#39;</span>        <span class="n">C</span> <span class="cm">/*   (3) */</span>
+    <span class="s">&#39;ions&#39;</span>          <span class="n">C</span> <span class="cm">/* (192) */</span>
+    <span class="s">&#39;ism&#39;</span>           <span class="n">B</span> <span class="cm">/*  (33) */</span>
+    <span class="s">&#39;isms&#39;</span>          <span class="n">B</span> <span class="cm">/*   (5) */</span>
+    <span class="s">&#39;ities&#39;</span>         <span class="n">B</span> <span class="cm">/*  (62) */</span>
+    <span class="s">&#39;ity&#39;</span>           <span class="n">B</span> <span class="cm">/* (236) */</span>
+    <span class="s">&#39;ive&#39;</span>           <span class="n">B</span> <span class="cm">/* (132) */</span>
+    <span class="s">&#39;ively&#39;</span>         <span class="n">B</span> <span class="cm">/*  (34) */</span>
+    <span class="s">&#39;iveness&#39;</span>       <span class="n">B</span> <span class="cm">/*  (14) */</span>
+<span class="c1">//  &#39;ivenesses&#39;     B /*   (-) */</span>
+    <span class="s">&#39;ives&#39;</span>          <span class="n">B</span> <span class="cm">/*  (12) */</span>
+<span class="c1">//  &#39;ivities&#39;       B /*   (-) */</span>
+    <span class="s">&#39;ivity&#39;</span>         <span class="n">B</span> <span class="cm">/*   (1) */</span>
+    <span class="s">&#39;ization&#39;</span>       <span class="n">B</span> <span class="cm">/*   (4) */</span>
+<span class="c1">//  &#39;izational&#39;     B /*   (-) */</span>
+<span class="c1">//  &#39;izationals&#39;    B /*   (-) */</span>
+<span class="c1">//  &#39;izationed&#39;     B /*   (-) */</span>
+<span class="c1">//  &#39;izationing&#39;    B /*   (-) */</span>
+    <span class="s">&#39;izations&#39;</span>      <span class="n">B</span> <span class="cm">/*   (1) */</span>
+    <span class="s">&#39;ize&#39;</span>           <span class="n">B</span> <span class="cm">/*  (32) */</span>
+    <span class="s">&#39;ized&#39;</span>          <span class="n">B</span> <span class="cm">/*  (32) */</span>
+    <span class="s">&#39;izer&#39;</span>          <span class="n">B</span> <span class="cm">/*   (3) */</span>
+<span class="c1">//  &#39;izered&#39;        B /*   (-) */</span>
+<span class="c1">//  &#39;izering&#39;       B /*   (-) */</span>
+    <span class="s">&#39;izers&#39;</span>         <span class="n">B</span> <span class="cm">/*   (1) */</span>
+    <span class="s">&#39;izes&#39;</span>          <span class="n">B</span> <span class="cm">/*   (6) */</span>
+    <span class="s">&#39;izing&#39;</span>         <span class="n">B</span> <span class="cm">/*  (30) */</span>
+    <span class="s">&#39;ly&#39;</span>            <span class="n">E</span> <span class="cm">/* (135) */</span>
+    <span class="s">&#39;ment&#39;</span>          <span class="n">B</span> <span class="cm">/* (105) */</span>
+<span class="c1">//  &#39;mently&#39;        B /*   (-) */</span>
+    <span class="s">&#39;ments&#39;</span>         <span class="n">B</span> <span class="cm">/*  (50) */</span>
+    <span class="s">&#39;ness&#39;</span>          <span class="n">A</span> <span class="cm">/* (428) */</span>
+    <span class="s">&#39;nesses&#39;</span>        <span class="n">A</span> <span class="cm">/*  (21) */</span>
+    <span class="s">&#39;ous&#39;</span>           <span class="n">B</span> <span class="cm">/* (340) */</span>
+    <span class="s">&#39;ously&#39;</span>         <span class="n">B</span> <span class="cm">/* (130) */</span>
+    <span class="s">&#39;ousness&#39;</span>       <span class="n">B</span> <span class="cm">/*  (22) */</span>
+<span class="c1">//  &#39;ousnesses&#39;     B /*   (-) */</span>
+</pre></div>
+
+</pre></TR>
 
 <TR><TD>
 <BR>&nbsp;<H2>Appendix 4</H2>
@@ -1995,195 +2012,192 @@ An ANSI C program which will generate on &nbsp;<code>stdout</code>&nbsp; the raw
 constructed.
 <BR><BR>
 
-<BR><PRE>
+<pre><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
 
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
+<span class="k">static</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">p</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">depth</span><span class="p">;</span>
 
-static char * p;
-static k = 0;
-static int depth;
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+<span class="p">{</span>   <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ch</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+        <span class="n">j</span><span class="o">++</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
 
-static int add(char * s, int i)
-{   int j = 0;
-    int ch;
-    while (ch = s[j]) {
-        p[i] = ch;
-        j++; i++;
-    }
-    p[i] = 0; k = i;
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">w</span><span class="p">(</span><span class="kt">int</span> <span class="n">code</span><span class="p">)</span> <span class="p">{</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;&#39;%s&#39; %c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="sc">&#39;A&#39;</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">code</span><span class="p">);</span> <span class="p">}</span>
 
-static void w(int code) { printf("'%s' %c\n", p, 'A' - 1 + code); }
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">wn</span><span class="p">(</span><span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">w</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="p">{</span>   <span class="kt">int</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;y&#39;</span><span class="p">)</span> <span class="n">p</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;i&#39;</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;&#39;%s&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;y&#39;</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;s&#39;</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;e&quot;</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;s&#39; %c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="sc">&#39;A&#39;</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">code</span><span class="p">);</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-static void wn(int code)
-{   w(code);
-    {   int ch = p[k - 1];
-        if (ch == 'y') p[k - 1] = 'i';
-        printf("'%s", p);
-        if (ch == 'y' || ch == 's') printf("e");
-        printf("s' %c\n", 'A' - 1 + code);
-        p[k - 1] = ch;
-    }
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">wv</span><span class="p">(</span><span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="p">{</span>   <span class="kt">int</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;e&#39;</span><span class="p">)</span> <span class="n">p</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;&#39;%sed&#39; %c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="sc">&#39;A&#39;</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">code</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;&#39;%sing&#39; %c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="sc">&#39;A&#39;</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">code</span><span class="p">);</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-static void wv(int code)
-{   wn(code);
-    {   int ch = p[k - 1];
-        if (ch == 'e') p[k - 1] = 0;
-        printf("'%sed' %c\n", p, 'A' - 1 + code);
-        printf("'%sing' %c\n", p, 'A' - 1 + code);
-        p[k - 1] = ch;
-    }
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">f</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">gen</span><span class="p">)(),</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="k">if</span> <span class="p">(</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="n">depth</span><span class="o">++</span><span class="p">;</span> <span class="n">gen</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">depth</span><span class="o">--</span><span class="p">;</span>
+<span class="p">}</span>
 
-static void f(void (*gen)(), int i, int code)
-{   if (depth &gt; 2) return;
-    depth++; gen(i, code); depth--;
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ize</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ism</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ity</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ly</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ness</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ic</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ate</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ive</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_tion</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">);</span>
 
-static void gen_ize(int i, int code);
-static void gen_ism(int i, int code);
-static void gen_ity(int i, int code);
-static void gen_ly(int i, int code);
-static void gen_ness(int i, int code);
-static void gen_ic(int i, int code);
-static void gen_ate(int i, int code);
-static void gen_ive(int i, int code);
-static void gen_tion(int i, int code);
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_al</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;al&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ize</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ism</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ity</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ly</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ness</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_al(int i, int code)
-{   i = add("al", i); wn(code);
-    f(gen_ize, i, code); f(gen_ism, i, code); f(gen_ity, i, code); f(gen_ly, i, code);
-    f(gen_ness, i, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ance</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ance&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">add</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ance(int i, int code)
-{   i = add("ance", i); wn(code);
-    add("y", i - 1); wn(code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ence</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ence&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">add</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ence(int i, int code)
-{   i = add("ence", i); wn(code);
-    add("y", i - 1); wn(code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_er</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>  <span class="p">{</span>  <span class="n">add</span><span class="p">(</span><span class="s">&quot;er&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wv</span><span class="p">(</span><span class="n">code</span><span class="p">);</span> <span class="p">}</span>
 
-static void gen_er(int i, int code)  {  add("er", i); wv(code); }
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ic</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ic&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ate</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ity</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_al</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ic(int i, int code)
-{   i = add("ic", i); wn(code);
-    f(gen_ate, i, code); f(gen_ity, i, code); f(gen_al, i, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_able</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">add</span><span class="p">(</span><span class="s">&quot;able&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">add</span><span class="p">(</span><span class="s">&quot;abil&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ity</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+    <span class="n">add</span><span class="p">(</span><span class="s">&quot;ab&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ly</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_able(int i, int code)
-{   add("able", i); wn(code);
-    add("abil", i); f(gen_ity, i + 4, code);
-    add("ab", i); f(gen_ly, i + 2, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ible</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">add</span><span class="p">(</span><span class="s">&quot;ible&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">add</span><span class="p">(</span><span class="s">&quot;ibil&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ity</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+    <span class="n">add</span><span class="p">(</span><span class="s">&quot;ib&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ly</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ible(int i, int code)
-{   add("ible", i); wn(code);
-    add("ibil", i); f(gen_ity, i + 4, code);
-    add("ib", i); f(gen_ly, i + 2, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ant</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">add</span><span class="p">(</span><span class="s">&quot;ant&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+<span class="cm">/*  f(gen_ly, i, code);  */</span>
+<span class="p">}</span>
 
-static void gen_ant(int i, int code)
-{   add("ant", i); wn(code);
-/*  f(gen_ly, i, code);  */
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ement</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ement&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ly</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ement(int i, int code)
-{   i = add("ement", i); wn(code);
-    f(gen_ly, i, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ment</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ment&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ly</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ment(int i, int code)
-{   i = add("ment", i); wn(code);
-    f(gen_ly, i, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ent</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ent&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ly</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ent(int i, int code)
-{   i = add("ent", i); wn(code);
-    f(gen_ly, i, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ism</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>  <span class="p">{</span>  <span class="n">add</span><span class="p">(</span><span class="s">&quot;ism&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span> <span class="p">}</span>
 
-static void gen_ism(int i, int code)  {  add("ism", i); wn(code); }
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ate</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">add</span><span class="p">(</span><span class="s">&quot;ate&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wv</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ly</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ive</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_tion</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ate(int i, int code)
-{   add("ate", i); wv(code);
-    f(gen_ly, i + 3, code); f(gen_ive, i + 2, code); f(gen_tion, i + 1, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ator</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>  <span class="p">{</span>  <span class="n">add</span><span class="p">(</span><span class="s">&quot;ator&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span> <span class="p">}</span>
 
-static void gen_ator(int i, int code)  {  add("ator", i); wn(code); }
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ful</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ful&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">w</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ness</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="cm">/*  f(gen_ly, i, code);  */</span>
+<span class="p">}</span>
 
-static void gen_ful(int i, int code)
-{   i = add("ful", i); w(code);
-    f(gen_ness, i, code);
-/*  f(gen_ly, i, code);  */
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ly</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>  <span class="p">{</span>  <span class="n">add</span><span class="p">(</span><span class="s">&quot;ly&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">w</span><span class="p">(</span><span class="n">code</span><span class="p">);</span> <span class="p">}</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ness</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>  <span class="p">{</span>  <span class="n">add</span><span class="p">(</span><span class="s">&quot;ness&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span> <span class="p">}</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ity</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>  <span class="p">{</span>  <span class="n">add</span><span class="p">(</span><span class="s">&quot;ity&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span> <span class="p">}</span>
 
-static void gen_ly(int i, int code)  {  add("ly", i); w(code); }
-static void gen_ness(int i, int code)  {  add("ness", i); wn(code); }
-static void gen_ity(int i, int code)  {  add("ity", i); wn(code); }
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ous</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ous&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">w</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ly</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_ness</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ous(int i, int code)
-{   i = add("ous", i); w(code);
-    f(gen_ly, i, code); f(gen_ness, i, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ive</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ive&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wn</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ness</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ly</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_ity</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
-static void gen_ive(int i, int code)
-{   i = add("ive", i); wn(code);
-    f(gen_ness, i, code);
-    f(gen_ly, i, code);
-    f(gen_ity, i - 1, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_ize</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="s">&quot;ize&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wv</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_er</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+    <span class="n">add</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">depth</span> <span class="o">++</span><span class="p">;</span> <span class="n">f</span><span class="p">(</span><span class="n">gen_tion</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span> <span class="n">depth</span><span class="o">--</span><span class="p">;</span>
+<span class="p">}</span>
 
-static void gen_ize(int i, int code)
-{   i = add("ize", i); wv(code);
-    f(gen_er, i - 1, code);
-    add("a", i - 1);
-    depth ++; f(gen_tion, i, code); depth--;
-}
-
-static void gen_tion(int i, int code)
-{   i = add(i == 0 ? "ion" : "tion", i); wv(code);
-    f(gen_al, i, code);
-}
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">gen_tion</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">code</span><span class="p">)</span>
+<span class="p">{</span>   <span class="n">i</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="s">&quot;ion&quot;</span> <span class="o">:</span> <span class="s">&quot;tion&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="n">wv</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">(</span><span class="n">gen_al</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
 
 
-main()
-{
-    p = malloc(100);
-    depth = 0;
+<span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+    <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    gen_al(0, 2);
-    gen_ance(0, 2);
-    gen_ence(0, 2);
-    gen_er(0, 2);
-    gen_ic(0, 2);
-    gen_able(0, 2);
-    gen_ible(0, 2);
-    gen_ant(0, 2);
-    gen_ement(0, 2);
-    gen_ment(0, 2);
-    gen_ent(0, 4);
-    gen_ism(0, 2);
-    gen_ate(0, 2); gen_ator(0, 2);
-    gen_ful(0, 1);
-    gen_ly(0, 5);
-    gen_ness(0, 1);
-    gen_ity(0, 2);
-    gen_ous(0, 2);
-    gen_ive(0, 2);
-    gen_ize(0, 2);
-    gen_tion(0, 3);
-    free(p);
-    return 0;
-}
-
-</PRE>
-</TR>
+    <span class="n">gen_al</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ance</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ence</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_er</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ic</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_able</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ible</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ement</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ment</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ent</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+    <span class="n">gen_ism</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="n">gen_ator</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ful</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">gen_ly</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+    <span class="n">gen_ness</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">gen_ity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ous</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ive</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_ize</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">gen_tion</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</pre></TR>
 
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>

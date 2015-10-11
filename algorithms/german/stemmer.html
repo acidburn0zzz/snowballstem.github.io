@@ -1,8 +1,17 @@
-<HTML>
-<HEAD>
-<META http-equiv="content-type" content="text/html; charset=UTF-8">
-<TITLE>German stemming algorithm</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="../../styles.css" rel="stylesheet">
+    <title>German stemming algorithm</title>
+  </head>
+
+  <body bgcolor="white">
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
 <H1 ALIGN=CENTER>German stemming algorithm</H1>
 
@@ -315,153 +324,151 @@ Finally,
 
 </TR>
 
-<TR><TD BGCOLOR="lightblue">
+<TR><TD>
+<H2>The same algorithm in Snowball</H2>
 
-<BR>&nbsp;<H2>The same algorithm in Snowball</H2>
+<pre><div class="highlight"><pre><span class="cm">/*</span>
+<span class="cm">    Extra rule for -nisse ending added 11 Dec 2009</span>
+<span class="cm">*/</span>
 
-<BR><PRE>
-<DL><DD>
+<span class="kd">routines</span> <span class="p">(</span>
+           <span class="n">prelude</span> <span class="n">postlude</span>
+           <span class="n">mark_regions</span>
+           <span class="n">R1</span> <span class="n">R2</span>
+           <span class="n">standard_suffix</span>
+<span class="p">)</span>
 
-/*
-    Extra rule for -nisse ending added 11 Dec 2009
-*/
+<span class="kd">externals</span> <span class="p">(</span> <span class="n">stem</span> <span class="p">)</span>
 
-routines (
-           prelude postlude
-           mark_regions
-           R1 R2
-           standard_suffix
-)
+<span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="n">x</span> <span class="p">)</span>
 
-externals ( stem )
+<span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="n">s_ending</span> <span class="n">st_ending</span> <span class="p">)</span>
 
-integers ( p1 p2 x )
+<span class="kd">stringescapes</span> <span class="p">{}</span>
 
-groupings ( v s_ending st_ending )
+<span class="cm">/* special characters (in ISO Latin I) */</span>
 
-stringescapes {}
+<span class="kd">stringdef</span> <span class="n">a&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;E4&#39;</span>
+<span class="kd">stringdef</span> <span class="n">o&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;F6&#39;</span>
+<span class="kd">stringdef</span> <span class="n">u&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;FC&#39;</span>
+<span class="kd">stringdef</span> <span class="n">ss</span>   <span class="mh">hex</span> <span class="s">&#39;DF&#39;</span>
 
-/* special characters (in ISO Latin I) */
+<span class="kd">define</span> <span class="n">v</span> <span class="s">&#39;aeiouy{a&quot;}{o&quot;}{u&quot;}&#39;</span>
 
-stringdef a"   hex 'E4'
-stringdef o"   hex 'F6'
-stringdef u"   hex 'FC'
-stringdef ss   hex 'DF'
+<span class="kd">define</span> <span class="n">s_ending</span>  <span class="s">&#39;bdfghklmnrt&#39;</span>
+<span class="kd">define</span> <span class="n">st_ending</span> <span class="n">s_ending</span> <span class="o">-</span> <span class="s">&#39;r&#39;</span>
 
-define v 'aeiouy{a"}{o"}{u"}'
+<span class="kd">define</span> <span class="n">prelude</span> <span class="k">as</span> <span class="p">(</span>
 
-define s_ending  'bdfghklmnrt'
-define st_ending s_ending - 'r'
+    <span class="ow">test</span> <span class="ow">repeat</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;{ss}&#39;</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="s">&#39;ss&#39;</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="ow">next</span>
+    <span class="p">)</span>
 
-define prelude as (
+    <span class="ow">repeat</span> <span class="ow">goto</span> <span class="p">(</span>
+        <span class="n">v</span> <span class="p">[(</span><span class="s">&#39;u&#39;</span><span class="p">]</span> <span class="n">v</span> <span class="o">&lt;-</span> <span class="s">&#39;U&#39;</span><span class="p">)</span> <span class="ow">or</span>
+           <span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">]</span> <span class="n">v</span> <span class="o">&lt;-</span> <span class="s">&#39;Y&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-    test repeat (
-        (
-            ['{ss}'] &lt;- 'ss'
-        ) or next
-    )
+<span class="kd">define</span> <span class="n">mark_regions</span> <span class="k">as</span> <span class="p">(</span>
 
-    repeat goto (
-        v [('u'] v &lt;- 'U') or
-           ('y'] v &lt;- 'Y')
-    )
-)
+    <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>
+    <span class="o">$</span><span class="n">p2</span> <span class="o">=</span> <span class="ow">limit</span>
 
-define mark_regions as (
+    <span class="ow">test</span><span class="p">(</span><span class="ow">hop</span> <span class="m">3</span> <span class="ow">setmark</span> <span class="n">x</span><span class="p">)</span>
 
-    $p1 = limit
-    $p2 = limit
+    <span class="ow">gopast</span> <span class="n">v</span>  <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p1</span>
+    <span class="ow">try</span><span class="p">(</span><span class="o">$</span><span class="n">p1</span> <span class="o">&lt;</span> <span class="n">x</span>  <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="n">x</span><span class="p">)</span>  <span class="c1">// at least 3</span>
+    <span class="ow">gopast</span> <span class="n">v</span>  <span class="ow">gopast</span> <span class="ow">non-</span><span class="n">v</span>  <span class="ow">setmark</span> <span class="n">p2</span>
 
-    test(hop 3 setmark x)
+<span class="p">)</span>
 
-    gopast v  gopast non-v  setmark p1
-    try($p1 &lt; x  $p1 = x)  // at least 3
-    gopast v  gopast non-v  setmark p2
+<span class="kd">define</span> <span class="n">postlude</span> <span class="k">as</span> <span class="ow">repeat</span> <span class="p">(</span>
 
-)
+    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span><span class="p">(</span>
+        <span class="s">&#39;Y&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;y&#39;</span><span class="p">)</span>
+        <span class="s">&#39;U&#39;</span>    <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{a&quot;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{o&quot;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;o&#39;</span><span class="p">)</span>
+        <span class="s">&#39;{u&quot;}&#39;</span> <span class="p">(</span><span class="o">&lt;-</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+        <span class="s">&#39;&#39;</span>     <span class="p">(</span><span class="ow">next</span><span class="p">)</span>
+    <span class="p">)</span>
 
-define postlude as repeat (
+<span class="p">)</span>
 
-    [substring] among(
-        'Y'    (&lt;- 'y')
-        'U'    (&lt;- 'u')
-        '{a"}' (&lt;- 'a')
-        '{o"}' (&lt;- 'o')
-        '{u"}' (&lt;- 'u')
-        ''     (next)
-    )
+<span class="kd">backwardmode</span> <span class="p">(</span>
 
-)
+    <span class="kd">define</span> <span class="n">R1</span> <span class="k">as</span> <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
+    <span class="kd">define</span> <span class="n">R2</span> <span class="k">as</span> <span class="o">$</span><span class="n">p2</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>
 
-backwardmode (
+    <span class="kd">define</span> <span class="n">standard_suffix</span> <span class="k">as</span> <span class="p">(</span>
+        <span class="ow">do</span> <span class="p">(</span>
+            <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+                <span class="s">&#39;em&#39;</span> <span class="s">&#39;ern&#39;</span> <span class="s">&#39;er&#39;</span>
+                <span class="p">(</span>   <span class="ow">delete</span>
+                <span class="p">)</span>
+                <span class="s">&#39;e&#39;</span> <span class="s">&#39;en&#39;</span> <span class="s">&#39;es&#39;</span>
+                <span class="p">(</span>   <span class="ow">delete</span>
+                    <span class="ow">try</span> <span class="p">([</span><span class="s">&#39;s&#39;</span><span class="p">]</span> <span class="s">&#39;nis&#39;</span> <span class="ow">delete</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="s">&#39;s&#39;</span>
+                <span class="p">(</span>   <span class="n">s_ending</span> <span class="ow">delete</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="ow">do</span> <span class="p">(</span>
+            <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R1</span> <span class="k">among</span><span class="p">(</span>
+                <span class="s">&#39;en&#39;</span> <span class="s">&#39;er&#39;</span> <span class="s">&#39;est&#39;</span>
+                <span class="p">(</span>   <span class="ow">delete</span>
+                <span class="p">)</span>
+                <span class="s">&#39;st&#39;</span>
+                <span class="p">(</span>   <span class="n">st_ending</span> <span class="ow">hop</span> <span class="m">3</span> <span class="ow">delete</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="ow">do</span> <span class="p">(</span>
+            <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R2</span> <span class="k">among</span><span class="p">(</span>
+                <span class="s">&#39;end&#39;</span> <span class="s">&#39;ung&#39;</span>
+                <span class="p">(</span>   <span class="ow">delete</span>
+                    <span class="ow">try</span> <span class="p">([</span><span class="s">&#39;ig&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="n">R2</span> <span class="ow">delete</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="s">&#39;ig&#39;</span> <span class="s">&#39;ik&#39;</span> <span class="s">&#39;isch&#39;</span>
+                <span class="p">(</span>   <span class="ow">not</span> <span class="s">&#39;e&#39;</span> <span class="ow">delete</span>
+                <span class="p">)</span>
+                <span class="s">&#39;lich&#39;</span> <span class="s">&#39;heit&#39;</span>
+                <span class="p">(</span>   <span class="ow">delete</span>
+                    <span class="ow">try</span> <span class="p">(</span>
+                        <span class="p">[</span><span class="s">&#39;er&#39;</span> <span class="ow">or</span> <span class="s">&#39;en&#39;</span><span class="p">]</span> <span class="n">R1</span> <span class="ow">delete</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="s">&#39;keit&#39;</span>
+                <span class="p">(</span>   <span class="ow">delete</span>
+                    <span class="ow">try</span> <span class="p">(</span>
+                        <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="n">R2</span> <span class="k">among</span><span class="p">(</span>
+                            <span class="s">&#39;lich&#39;</span> <span class="s">&#39;ig&#39;</span>
+                            <span class="p">(</span>   <span class="ow">delete</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-    define R1 as $p1 &lt;= cursor
-    define R2 as $p2 &lt;= cursor
+<span class="kd">define</span> <span class="n">stem</span> <span class="k">as</span> <span class="p">(</span>
+    <span class="ow">do</span> <span class="n">prelude</span>
+    <span class="ow">do</span> <span class="n">mark_regions</span>
+    <span class="ow">backwards</span>
+        <span class="ow">do</span> <span class="n">standard_suffix</span>
+    <span class="ow">do</span> <span class="n">postlude</span>
+<span class="p">)</span>
+</pre></div>
 
-    define standard_suffix as (
-        do (
-            [substring] R1 among(
-                'em' 'ern' 'er'
-                (   delete
-                )
-                'e' 'en' 'es'
-                (   delete
-                    try (['s'] 'nis' delete)
-                )
-                's'
-                (   s_ending delete
-                )
-            )
-        )
-        do (
-            [substring] R1 among(
-                'en' 'er' 'est'
-                (   delete
-                )
-                'st'
-                (   st_ending hop 3 delete
-                )
-            )
-        )
-        do (
-            [substring] R2 among(
-                'end' 'ung'
-                (   delete
-                    try (['ig'] not 'e' R2 delete)
-                )
-                'ig' 'ik' 'isch'
-                (   not 'e' delete
-                )
-                'lich' 'heit'
-                (   delete
-                    try (
-                        ['er' or 'en'] R1 delete
-                    )
-                )
-                'keit'
-                (   delete
-                    try (
-                        [substring] R2 among(
-                            'lich' 'ig'
-                            (   delete
-                            )
-                        )
-                    )
-                )
-            )
-        )
-    )
-)
+</pre></TR>
 
-define stem as (
-    do prelude
-    do mark_regions
-    backwards
-        do standard_suffix
-    do postlude
-)
-</DL>
-</PRE>
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>
