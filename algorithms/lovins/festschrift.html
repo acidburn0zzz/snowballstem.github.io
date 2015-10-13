@@ -459,7 +459,7 @@ corresponds to
 <div class="highlight"><pre>    <span class="kd">define</span> <span class="n">L</span> <span class="k">as</span> <span class="p">(</span> <span class="ow">test</span> <span class="ow">hop</span> <span class="m">2</span> <span class="ow">not</span> <span class="s">&#39;u&#39;</span> <span class="ow">not</span> <span class="s">&#39;x&#39;</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;s&#39;</span> <span class="ow">not</span> <span class="s">&#39;o&#39;</span><span class="p">)</span> <span class="p">)</span>
 </pre></div>
 
-</pre>
+
 When &nbsp;<code>L</code>&nbsp; is called, we are the right end of the stem, moving left towards the
 front of the word. Each Lovins condition has an implicit test for a stem of
 length 2, and this is done by &nbsp;<code>test hop 2</code>, which sees if it is possible to
@@ -488,7 +488,7 @@ routine have this form. In Snowball you can write
 <div class="highlight"><pre>    <span class="s">&#39;sh&#39;</span> <span class="ow">or</span> <span class="s">&#39;s&#39;</span> <span class="ow">or</span> <span class="s">&#39;t&#39;</span>  <span class="s">&#39;o&#39;</span> <span class="ow">or</span> <span class="s">&#39;i&#39;</span>  <span class="s">&#39;p&#39;</span>
 </pre></div>
 
-</pre>
+
 which will match the various forms <I>shop, ship, sop, sip, top, tip</I>. The
 order is important, because if &nbsp;<code>'sh'</code>&nbsp; and &nbsp;<code>'s'</code>&nbsp; are swapped over, the
 <code>'s'</code>&nbsp; would match the first letter of ship, while &nbsp;<code>'o'</code>&nbsp; or &nbsp;<code>'i'</code>
@@ -499,7 +499,7 @@ matching has no backtracking. But it can also be written as
 <div class="highlight"><pre>    <span class="k">among</span><span class="p">(</span><span class="s">&#39;sh&#39;</span> <span class="s">&#39;s&#39;</span> <span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="k">among</span><span class="p">(</span><span class="s">&#39;i&#39;</span> <span class="s">&#39;o&#39;</span><span class="p">)</span> <span class="s">&#39;p&#39;</span>
 </pre></div>
 
-</pre>
+
 The order of the strings in each &nbsp;<code>among</code>&nbsp; is not important, because the
 match will be with the longest of all the strings that can match. In
 Snowball the implementation of &nbsp;<code>among</code>&nbsp; is based on the binary-chop idea,
@@ -590,7 +590,7 @@ right direction. In the Lovins stemmer, &nbsp;<code>substring</code>&nbsp; is us
 <div class="highlight"><pre>    <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span> <span class="o">...</span> <span class="p">)</span>
 </pre></div>
 
-</pre>
+
 The two square brackets are in fact individual commands, so before the &nbsp;<code>among</code>
 come three commands. &nbsp;<code>[</code>&nbsp; sets a lower marker, &nbsp;<code>substring</code>&nbsp; is obeyed, searching
 for the strings in the following among, and then &nbsp;<code>]</code>&nbsp; sets an upper marker.
@@ -920,7 +920,7 @@ care. It should be invoked, in the Porter stemmer, after removal of <B><I>ive</I
 <span class="p">)</span>
 </pre></div>
 
-</pre>
+
 This means that if <B><I>suas</I></B>, for example, is preceded by one of the strings
 in &nbsp;<code>prefix</code>, and there is nothing more before the prefix string (which is
 what the
@@ -951,7 +951,7 @@ succeed</I>. They can be sorted out in a final respelling step:
 <span class="p">)</span>
 </pre></div>
 
-</pre>
+
 As you might expect, close inspection of this process creates doubts in
 the same way as for English verb respelling. (Should we really conflate
 <I>commission</I> and <I>commit</I>? etc.)
@@ -1487,7 +1487,7 @@ Porter MF (1980) An algorithm for suffix stripping. <I>Program</I>, 14:
 The Lovins stemmer in Snowball.
 
 <BR>
-<pre><div class="highlight"><pre><span class="kd">stringescapes</span> <span class="p">{}</span>
+<div class="highlight"><pre><span class="kd">stringescapes</span> <span class="p">{}</span>
 
 <span class="kd">routines</span> <span class="p">(</span>
    <span class="n">A</span> <span class="n">B</span> <span class="n">C</span> <span class="n">D</span> <span class="n">E</span> <span class="n">F</span> <span class="n">G</span> <span class="n">H</span> <span class="n">I</span> <span class="n">J</span> <span class="n">K</span> <span class="n">L</span> <span class="n">M</span> <span class="n">N</span> <span class="n">O</span> <span class="n">P</span> <span class="n">Q</span> <span class="n">R</span> <span class="n">S</span> <span class="n">T</span> <span class="n">U</span> <span class="n">V</span> <span class="n">W</span> <span class="n">X</span> <span class="n">Y</span> <span class="n">Z</span> <span class="n">AA</span> <span class="n">BB</span> <span class="n">CC</span>
@@ -1695,7 +1695,7 @@ The Lovins stemmer in Snowball.
 <span class="p">)</span>
 </pre></div>
 
-</pre></TR>
+</TR>
 
 <TR><TD>
 <BR>&nbsp;<H2>Appendix 2</H2>
@@ -1703,7 +1703,7 @@ The Lovins stemmer in Snowball.
 The Porter stemmer, cast, as far as is possible, into Lovins form.
 <BR><BR>
 
-<pre><div class="highlight"><pre><span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
+<div class="highlight"><pre><span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
 <span class="kd">booleans</span> <span class="p">(</span> <span class="n">Y_found</span> <span class="p">)</span>
 
 <span class="kd">routines</span> <span class="p">(</span>
@@ -1808,7 +1808,7 @@ The Porter stemmer, cast, as far as is possible, into Lovins form.
 <span class="p">)</span>
 </pre></div>
 
-</pre></TR>
+</TR>
 
 <TR><TD>
 <BR>&nbsp;<H2>Appendix 3</H2>
@@ -2002,7 +2002,7 @@ in the sample vocabulary. The 75 rare endings are shown commented out.
 <span class="c1">//  &#39;ousnesses&#39;     B /*   (-) */</span>
 </pre></div>
 
-</pre></TR>
+</TR>
 
 <TR><TD>
 <BR>&nbsp;<H2>Appendix 4</H2>
@@ -2012,7 +2012,7 @@ An ANSI C program which will generate on &nbsp;<code>stdout</code>&nbsp; the raw
 constructed.
 <BR><BR>
 
-<pre><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
 <span class="cp">#include &lt;stdlib.h&gt;</span>
 
 <span class="k">static</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">p</span><span class="p">;</span>
@@ -2196,7 +2196,7 @@ constructed.
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
-</pre></TR>
+</TR>
 
 </TABLE>
   </body>

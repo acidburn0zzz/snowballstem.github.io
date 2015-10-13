@@ -303,7 +303,7 @@ Snowball:
     <span class="p">)</span>
 </pre></div>
 
-</pre>The region to the right of <I>p</I>1 will be denoted by <I>R</I>1, the region to the
+The region to the right of <I>p</I>1 will be denoted by <I>R</I>1, the region to the
 right of <I>p</I>2 by <I>R</I>2:
 <BR><PRE>
     c r e p u s c u l a r
@@ -317,7 +317,7 @@ We can test for being in these regions with calls to &nbsp;<code>R1</code>&nbsp;
     <span class="kd">define</span> <span class="n">R2</span> <span class="k">as</span>  <span class="o">&lt;=</span> <span class="ow">cursor</span>
 </pre></div>
 
-</pre>and using these tests instead of computing <I>m</I> is acceptable, so long as the
+and using these tests instead of computing <I>m</I> is acceptable, so long as the
 stemming process never alters the <I>p</I>1 and <I>p</I>2 positions, which is indeed true
 in the Porter stemmer.
 <BR><BR>
@@ -363,7 +363,7 @@ with its Snowball equivalent,
     <span class="p">)</span>
 </pre></div>
 
-</pre>The word to be stemmed is being scanned right to left from the end. The
+The word to be stemmed is being scanned right to left from the end. The
 longest of &nbsp;<code>'sses'</code>, &nbsp;<code>'ies'</code>, &nbsp;<code>'ss'</code>&nbsp; or &nbsp;<code>'s'</code>&nbsp; is searched for and defined as the
 slice. (If none are found, Step_1a signals <B><I>f</I></B>.) If &nbsp;<code>'sses'</code>&nbsp; is found, it is
 replaced by &nbsp;<code>'ss'</code>, and so on. Of course, replacing &nbsp;<code>'ss'</code>&nbsp; by &nbsp;<code>'ss'</code>&nbsp; is a dummy
@@ -371,11 +371,11 @@ action, so we can write
 <BR><div class="highlight"><pre>            <span class="s">&#39;ss&#39;</span>   <span class="p">()</span>
 </pre></div>
 
-</pre>instead of
+instead of
 <BR><div class="highlight"><pre>            <span class="s">&#39;ss&#39;</span>   <span class="p">(</span><span class="o">&lt;-</span><span class="s">&#39;ss&#39;</span><span class="p">)</span>
 </pre></div>
 
-</pre>Remember that &nbsp;<code>delete</code>&nbsp; just means &nbsp;<code>&lt;- ''</code>.
+Remember that &nbsp;<code>delete</code>&nbsp; just means &nbsp;<code>&lt;- ''</code>.
 <BR><BR>
 The really tricky part of the whole algorithm is step 1<I>b</I>,
 which may be worth looking at in detail. Here it is, without the
@@ -407,7 +407,7 @@ preceded by a vowel. In Snowball this is simply,
     <span class="p">)</span>
 </pre></div>
 
-</pre>But this must be modified by the second part of the rule. <I>*d</I> indicates a
+But this must be modified by the second part of the rule. <I>*d</I> indicates a
 test for double letter consonant &#x2014; <B><I>bb</I></B>, <B><I>dd</I></B> etc. <I>*L</I>, <I>*S</I>, <I>*Z</I> are tests
 for <B><I>l</I></B>, <B><I>s</I></B>, <B><I>z</I></B>. <I>*o</I> is a short vowel test &#x2014; it is matched by
 consonant-vowel-consonant, where the consonant on the right is not <I>w</I>, <I>x</I>
@@ -422,11 +422,11 @@ We first need two extra groupings,
     <span class="kd">define</span> <span class="n">v_LSZ</span>    <span class="n">v</span> <span class="o">+</span> <span class="s">&#39;lsz&#39;</span>   <span class="c1">// v with &#39;l&#39;, &#39;s&#39;, &#39;z&#39;</span>
 </pre></div>
 
-</pre>and a test for a short vowel,
+and a test for a short vowel,
 <BR><div class="highlight"><pre>    <span class="kd">define</span> <span class="n">shortv</span> <span class="k">as</span> <span class="p">(</span> <span class="ow">non-</span><span class="n">v_WXY</span> <span class="n">v</span> <span class="ow">non-</span><span class="n">v</span> <span class="p">)</span>
 </pre></div>
 
-</pre>(The &nbsp;<code>v_WXY</code>&nbsp; test comes first because we are scanning backwards, from right to
+(The &nbsp;<code>v_WXY</code>&nbsp; test comes first because we are scanning backwards, from right to
 left.)
 <BR><BR>
 The double to single letter map can be done as follows: first define the
@@ -439,12 +439,12 @@ character,
     <span class="p">[</span><span class="ow">non-</span><span class="n">v_LSZ</span><span class="p">]</span> <span class="o">-&gt;</span><span class="n">ch</span>
 </pre></div>
 
-</pre>A further test, &nbsp;<code>ch</code>, tests that the next letter of the string is the same
+A further test, &nbsp;<code>ch</code>, tests that the next letter of the string is the same
 as the one in &nbsp;<code>ch</code>, and if this gives signal <B><I>t</I></B>, &nbsp;<code>delete</code>&nbsp; deletes the slice,
 <BR><div class="highlight"><pre>    <span class="p">[</span><span class="ow">non-</span><span class="n">v_LSZ</span><span class="p">]</span> <span class="o">-&gt;</span><span class="n">ch</span>  <span class="n">ch</span>  <span class="ow">delete</span>
 </pre></div>
 
-</pre><code>Step_1b</code>&nbsp; can then be written like this,
+<code>Step_1b</code>&nbsp; can then be written like this,
 <BR><div class="highlight"><pre>    <span class="kd">define</span> <span class="n">Step_1b</span> <span class="k">as</span> <span class="p">(</span>
         <span class="p">[</span><span class="ow">substring</span><span class="p">]</span> <span class="k">among</span> <span class="p">(</span>
             <span class="s">&#39;eed&#39;</span>  <span class="p">(</span><span class="n">R1</span> <span class="o">&lt;-</span><span class="s">&#39;ee&#39;</span><span class="p">)</span>
@@ -461,7 +461,7 @@ as the one in &nbsp;<code>ch</code>, and if this gives signal <B><I>t</I></B>, &
     <span class="p">)</span>
 </pre></div>
 
-</pre>But we can improve the appearance, and speed, of this by turning the
+But we can improve the appearance, and speed, of this by turning the
 second part of the rule into another &nbsp;<code>among</code>&nbsp; command, noting that the only
 letters that need undoubling are <B><I>b</I></B>, <B><I>d</I></B>, <B><I>f</I></B>, <B><I>g</I></B>, <B><I>m</I></B>, <B><I>n</I></B>, <B><I>p</I></B>, <B><I>r</I></B>
 and <B><I>t</I></B>,
@@ -485,7 +485,7 @@ and <B><I>t</I></B>,
     <span class="p">)</span>
 </pre></div>
 
-</pre>Note the null string in the second &nbsp;<code>among</code>, which acts as a default case.
+Note the null string in the second &nbsp;<code>among</code>, which acts as a default case.
 <BR><BR>
 The Porter stemmer in Snowball is given below. This is an exact
 implementation of the algorithm described in the 1980 paper, unlike the
@@ -501,7 +501,7 @@ correct implementation.
 <TR><TD>
 <H2>The full algorithm in Snowball</H2>
 
-<pre><div class="highlight"><pre><span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
+<div class="highlight"><pre><span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
 <span class="kd">booleans</span> <span class="p">(</span> <span class="n">Y_found</span> <span class="p">)</span>
 
 <span class="kd">routines</span> <span class="p">(</span>
@@ -642,7 +642,7 @@ correct implementation.
 <span class="p">)</span>
 </pre></div>
 
-</pre></TR>
+</TR>
 
 </TABLE>
   </body>
