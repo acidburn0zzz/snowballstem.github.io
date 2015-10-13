@@ -117,7 +117,10 @@ string, and &nbsp;<code>m</code>&nbsp; a sequence of one or more printing charac
 with whitespace.
 <BR><BR>
 Two special <I>insert characters</I> are defined by the directive
-, where &nbsp;<code>A</code>&nbsp; and &nbsp;<code>B</code>&nbsp; are printing characters, and &nbsp;<code>A</code>&nbsp; is not
+<div class="highlight"><pre><span class="n">stringescapes</span> <span class="n">AB</span>
+</pre></div>
+
+</code>, where &nbsp;<code>A</code>&nbsp; and &nbsp;<code>B</code>&nbsp; are printing characters, and &nbsp;<code>A</code>&nbsp; is not
 single quote. (<code>B</code>&nbsp; may equal &nbsp;<code>A</code>, but then &nbsp;<code>A</code>&nbsp; itself can never be escaped.) For
 example,
 
@@ -239,9 +242,15 @@ If &nbsp;<code>C<SUB>1</SUB></code>&nbsp; and &nbsp;<code>C<SUB>2</SUB></code>&n
 </DL></DL>
 So for example,
 <DL><DD><DL>
-    <DT>        <DD>&#x2014; sets &nbsp;<code>y</code>&nbsp; to 1 if &nbsp;<code>x</code>&nbsp; is greater than zero, otherwise to zero.
+    <DT><div class="highlight"><pre><span class="p">(</span><span class="o">$</span><span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span>  <span class="o">$</span><span class="n">y</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="o">$</span><span class="n">y</span> <span class="o">=</span> <span class="m">0</span><span class="p">)</span>
+</pre></div>
 
-    <DT>        <DD>&#x2014; sets &nbsp;<code>y</code>&nbsp; to 1 if both &nbsp;<code>x</code>&nbsp; and &nbsp;<code>z</code>&nbsp; are greater than 0, and gives <B><I>t</I></B>.
+</code>        <DD>&#x2014; sets &nbsp;<code>y</code>&nbsp; to 1 if &nbsp;<code>x</code>&nbsp; is greater than zero, otherwise to zero.
+
+    <DT><div class="highlight"><pre><span class="ow">try</span><span class="p">(</span> <span class="p">(</span><span class="o">$</span><span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="o">$</span><span class="n">z</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="o">$</span><span class="n">y</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</pre></div>
+
+</code>        <DD>&#x2014; sets &nbsp;<code>y</code>&nbsp; to 1 if both &nbsp;<code>x</code>&nbsp; and &nbsp;<code>z</code>&nbsp; are greater than 0, and gives <B><I>t</I></B>.
 </DL></DL>
 This last example is the same as
 
@@ -266,7 +275,10 @@ would mean
 </pre></div>
 
 </pre>
-because  is the shortest valid command following &nbsp;<code>not</code>, and then
+because <div class="highlight"><pre><span class="o">$</span><span class="n">x</span> <span class="o">&lt;</span> <span class="m">1</span>
+</pre></div>
+
+</code> is the shortest valid command following &nbsp;<code>not</code>, and then
 <code>not $x &lt; 1</code>&nbsp; is the shortest valid command following &nbsp;<code>try</code>.
 <BR><BR>
 The &#8216;dyadic&#8217; constructs like &nbsp;<code>and</code>&nbsp; and &nbsp;<code>or</code>&nbsp; must sit in a bracketed list
@@ -538,8 +550,14 @@ or <I>slice</I> of the string being tested. Then
 <DT><code>]</code>
     <DD>sets the right-end of the slice to <B><I>c</I></B>,
 
-<DT>    <DD>moves the slice to variable &nbsp;<code>s</code>,
-<DT>    <DD>replaces the slice with variable (or literal) &nbsp;<code>S</code>.
+<DT><div class="highlight"><pre><span class="o">-&gt;</span> <span class="n">s</span>
+</pre></div>
+
+</code>    <DD>moves the slice to variable &nbsp;<code>s</code>,
+<DT><div class="highlight"><pre><span class="o">&lt;-</span> <span class="n">S</span>
+</pre></div>
+
+</code>    <DD>replaces the slice with variable (or literal) &nbsp;<code>S</code>.
 </DL>
 For example
 
@@ -558,7 +576,13 @@ set with the two commands &nbsp;<code>[</code>, &nbsp;<code>]</code>. Thereafter
 the same values until altered.
 
 <DL>
-<DT>    <DD>is equivalent to </DL>
+<DT><div class="highlight"><pre><span class="ow">delete</span>
+</pre></div>
+
+</code>    <DD>is equivalent to <div class="highlight"><pre><span class="o">&lt;-</span> <span class="s">&#39;&#39;</span>
+</pre></div>
+
+</code></DL>
 
 This next example deletes all vowels in x,
 
@@ -575,10 +599,16 @@ programming language, they are not true brackets.
 <BR><BR>
 More simply, text can be inserted at <B><I>c</I></B>.
 <DL>
-<DT>    <DD>insert variable or literal &nbsp;<code>S</code>&nbsp; before <B><I>c</I></B>, moving <B><I>c</I></B> to the right of the
+<DT><div class="highlight"><pre><span class="ow">insert</span> <span class="n">S</span>
+</pre></div>
+
+</code>    <DD>insert variable or literal &nbsp;<code>S</code>&nbsp; before <B><I>c</I></B>, moving <B><I>c</I></B> to the right of the
     insert. &nbsp;<code>&lt;+</code>&nbsp; is a synonym for &nbsp;<code>insert</code>.
 
-<DT>    <DD>the same, but leave <B><I>c</I></B> at the left of the insert.
+<DT><div class="highlight"><pre><span class="ow">attach</span> <span class="n">S</span>
+</pre></div>
+
+</code>    <DD>the same, but leave <B><I>c</I></B> at the left of the insert.
 </DL>
 
 &nbsp;<H4>d) Marks</H4>
@@ -593,25 +623,49 @@ value, from zero upwards:
 It is these numeric values of <B><I>c</I></B> and <B><I>l</I></B> which are accessible through
 <code>cursor</code>&nbsp; and &nbsp;<code>limit</code>&nbsp; in arithmetic expressions.
 <DL>
-<DT>    <DD>sets &nbsp;<code>X</code>&nbsp; to the current value of <B><I>c</I></B>, where &nbsp;<code>X</code>&nbsp; is an integer variable.
+<DT><div class="highlight"><pre><span class="ow">setmark</span> <span class="n">X</span>
+</pre></div>
 
-<DT>    <DD>moves <B><I>c</I></B> forward to the position given by AE,
+</code>    <DD>sets &nbsp;<code>X</code>&nbsp; to the current value of <B><I>c</I></B>, where &nbsp;<code>X</code>&nbsp; is an integer variable.
 
-<DT>    <DD>tests if <B><I>c</I></B> is at position AE (<B><I>t</I></B> or <B><I>f</I></B> signal).
+<DT><div class="highlight"><pre><span class="ow">tomark</span> <span class="n">AE</span>
+</pre></div>
+
+</code>    <DD>moves <B><I>c</I></B> forward to the position given by AE,
+
+<DT><div class="highlight"><pre><span class="ow">atmark</span> <span class="n">AE</span>
+</pre></div>
+
+</code>    <DD>tests if <B><I>c</I></B> is at position AE (<B><I>t</I></B> or <B><I>f</I></B> signal).
 </DL>
-In the case of , a similar fail condition occurs as with .
+In the case of <div class="highlight"><pre><span class="ow">tomark</span> <span class="n">AE</span>
+</pre></div>
+
+</code>, a similar fail condition occurs as with <div class="highlight"><pre><span class="ow">hop</span> <span class="n">AE</span>
+</pre></div>
+
+</code>.
 If <B><I>c</I></B> is already beyond AE, or if position <B><I>l</I></B> is before position AE, the
 signal is <B><I>f</I></B>.
 <BR><BR>
 In the stemming algorithms, certain regions of the word are defined by
-setting marks, and later the failure condition of  is used to see if
+setting marks, and later the failure condition of <div class="highlight"><pre><span class="ow">tomark</span>
+</pre></div>
+
+</code> is used to see if
 <B><I>c</I></B> is inside a particular region.
 <BR><BR>
 Two other commands put <B><I>c</I></B> at <B><I>l</I></B>, and test if <B><I>c</I></B> is at <B><I>l</I></B>,
 <DL>
-<DT>    <DD>moves <B><I>c</I></B> forward to <B><I>l</I></B> (signal <B><I>t</I></B> always),
+<DT><div class="highlight"><pre><span class="ow">tolimit</span>
+</pre></div>
 
-<DT>    <DD>tests if <B><I>c</I></B> is at <B><I>l</I></B> (<B><I>t</I></B> or <B><I>f</I></B> signal).
+</code>    <DD>moves <B><I>c</I></B> forward to <B><I>l</I></B> (signal <B><I>t</I></B> always),
+
+<DT><div class="highlight"><pre><span class="ow">atlimit</span>
+</pre></div>
+
+</code>    <DD>tests if <B><I>c</I></B> is at <B><I>l</I></B> (<B><I>t</I></B> or <B><I>f</I></B> signal).
 </DL>
 
 &nbsp;<H4>e) Changing <B><I>l</I></B></H4>
@@ -654,15 +708,27 @@ String commands have been described with <B><I>c</I></B> to the left of <B><I>l<
 right. But the process can be reversed.
 
 <DL>
-<DT>    <DD><B><I>c</I></B> and <B><I>l</I></B> are swapped over, and <B><I>c</I></B> moves left towards <B><I>l</I></B>. &nbsp;<code>C</code>&nbsp; is obeyed, the
+<DT><div class="highlight"><pre><span class="ow">backwards</span> <span class="n">C</span>
+</pre></div>
+
+</code>    <DD><B><I>c</I></B> and <B><I>l</I></B> are swapped over, and <B><I>c</I></B> moves left towards <B><I>l</I></B>. &nbsp;<code>C</code>&nbsp; is obeyed, the
     signal given by &nbsp;<code>C</code>&nbsp; becomes the signal of &nbsp;<code>backwards C</code>, and <B><I>c</I></B> and <B><I>l</I></B> are
     swapped back to their old values (except that <B><I>l</I></B> may have been adjusted
     because of deletions and insertions). &nbsp;<code>C</code>&nbsp; cannot contain another
-     command.
+    <div class="highlight"><pre><span class="ow">backwards</span>
+</pre></div>
 
-<DT>    <DD>A similar idea, but here <B><I>c</I></B> simply moves left instead of moving right,
+</code> command.
+
+<DT><div class="highlight"><pre><span class="ow">reverse</span> <span class="n">C</span>
+</pre></div>
+
+</code>    <DD>A similar idea, but here <B><I>c</I></B> simply moves left instead of moving right,
     with the beginning of the string as the limit, <B><I>l</I></B>. &nbsp;<code>C</code>&nbsp; can contain other
-     commands, but it cannot contain commands to do deletions or
+    <div class="highlight"><pre><span class="ow">reverse</span>
+</pre></div>
+
+</code> commands, but it cannot contain commands to do deletions or
     insertions &#x2014; it must be used for testing only. (Without this
     restriction Snowball's semantics would become very untidy.)
 </DL>
@@ -685,9 +751,21 @@ following are equivalent,
 If a routine is defined for backwards mode processing, it must be included
 inside a &nbsp;<code>backwardmode(...)</code>&nbsp; declaration.
 
-&nbsp;<H4>g)  and </H4>
+&nbsp;<H4>g) <div class="highlight"><pre><span class="ow">substring</span>
+</pre></div>
 
-The use of  and  is central to the implementation of the
+</code> and <div class="highlight"><pre><span class="k">among</span>
+</pre></div>
+
+</code></H4>
+
+The use of <div class="highlight"><pre><span class="ow">substring</span>
+</pre></div>
+
+</code> and <div class="highlight"><pre><span class="k">among</span>
+</pre></div>
+
+</code> is central to the implementation of the
 stemming algorithms. It is like a case switch on strings. In its simpler
 form,
 <BR><PRE>
@@ -708,15 +786,30 @@ semantics as
 </pre></div>
 
 </pre>
-without a preceding  is equivalent to
+without a preceding <div class="highlight"><pre><span class="ow">substring</span>
+</pre></div>
+
+</code> is equivalent to
 
 <div class="highlight"><pre>    <span class="p">(</span><span class="ow">substring</span> <span class="k">among</span><span class="p">(</span><span class="cm">/*...*/</span><span class="p">))</span>
 </pre></div>
 
 </pre>
- may also be detached from its , although it must
-precede it textually in the same routine in which the  appears.
-The more general form of  is,
+<div class="highlight"><pre><span class="ow">substring</span>
+</pre></div>
+
+</code> may also be detached from its <div class="highlight"><pre><span class="k">among</span>
+</pre></div>
+
+</code>, although it must
+precede it textually in the same routine in which the <div class="highlight"><pre><span class="k">among</span>
+</pre></div>
+
+</code> appears.
+The more general form of <div class="highlight"><pre><span class="ow">substring</span> <span class="cm">/* ... */</span> <span class="k">among</span>
+</pre></div>
+
+</code> is,
 <BR><PRE>
     substring
     ...
@@ -829,8 +922,17 @@ movement. (<B><I>c</I></B> is in any case set back to its old value following a 
 
 <BR>&nbsp;<H2>8 Booleans</H2>
 
- and  set &nbsp;<code>B</code>&nbsp; to true and false respectively, where &nbsp;<code>B</code>&nbsp; is a
-boolean name.  as a command gives a signal <B><I>t</I></B> if it is set true, <B><I>f</I></B>
+<div class="highlight"><pre><span class="ow">set</span> <span class="n">B</span>
+</pre></div>
+
+</code> and <div class="highlight"><pre><span class="ow">unset</span> <span class="n">B</span>
+</pre></div>
+
+</code> set &nbsp;<code>B</code>&nbsp; to true and false respectively, where &nbsp;<code>B</code>&nbsp; is a
+boolean name. <div class="highlight"><pre><span class="n">B</span>
+</pre></div>
+
+</code> as a command gives a signal <B><I>t</I></B> if it is set true, <B><I>f</I></B>
 otherwise. For example,
 
 <div class="highlight"><pre>    <span class="kd">booleans</span> <span class="p">(</span> <span class="n">Y_found</span> <span class="p">)</span>   <span class="c1">// declare the boolean</span>
@@ -887,12 +989,24 @@ Once &nbsp;<code>G</code>&nbsp; is defined, it can be used as a command, and is 
 </PRE>
 where &nbsp;<code>ch1</code>, &nbsp;<code>ch2</code>&nbsp; ... list all the characters in the grouping.
 <BR><BR>
- is the converse test, and matches any character except the
-characters of &nbsp;<code>G</code>. Note that  is not the same as , in fact
+<div class="highlight"><pre><span class="ow">non</span> <span class="n">G</span>
+</pre></div>
+
+</code> is the converse test, and matches any character except the
+characters of &nbsp;<code>G</code>. Note that <div class="highlight"><pre><span class="ow">non</span> <span class="n">G</span>
+</pre></div>
+
+</code> is not the same as <div class="highlight"><pre><span class="ow">not</span> <span class="n">G</span>
+</pre></div>
+
+</code>, in fact
 <BR><PRE>
     non G    is equivalent to     (not G next)
 </PRE>
- may be optionally followed by hyphen, so one may write
+<div class="highlight"><pre><span class="ow">non</span>
+</pre></div>
+
+</code> may be optionally followed by hyphen, so one may write
 
 <div class="highlight"><pre>    <span class="ow">non-</span><span class="n">vowel</span>
     <span class="ow">non-</span><span class="n">digit</span>
@@ -948,15 +1062,24 @@ Anywhere that whitespace can occur, there may also occur:
 <code>// ...</code>&nbsp; format.
 <BR><BR>
 (b) Get directives. These are like &nbsp;<code>#include</code>&nbsp; commands in C, and have the form
-, where &nbsp;<code>'S'</code>&nbsp; is a literal string. For example,
+<div class="highlight"><pre><span class="kn">get</span> <span class="s">&#39;S&#39;</span>
+</pre></div>
+
+</code>, where &nbsp;<code>'S'</code>&nbsp; is a literal string. For example,
 
 <div class="highlight"><pre>    <span class="kn">get</span> <span class="s">&#39;/home/martin/snowball/main-hdr&#39;</span> <span class="c1">// include the file contents</span>
 </pre></div>
 
 </pre>
-(c)  where &nbsp;<code>X</code>&nbsp; and &nbsp;<code>Y</code>&nbsp; are any two printing characters.
+(c) <div class="highlight"><pre><span class="n">stringescapes</span> <span class="n">XY</span>
+</pre></div>
+
+</code> where &nbsp;<code>X</code>&nbsp; and &nbsp;<code>Y</code>&nbsp; are any two printing characters.
 <BR><BR>
-(d)  where &nbsp;<code>m</code>&nbsp; is sequence of characters not including
+(d) <div class="highlight"><pre><span class="kd">stringdef</span> <span class="n">m</span> <span class="s">&#39;S&#39;</span>
+</pre></div>
+
+</code> where &nbsp;<code>m</code>&nbsp; is sequence of characters not including
 whitespace and terminated with whitespace, and &nbsp;<code>'S'</code>&nbsp; is a literal string.
 
 <BR>&nbsp;<H2>12 Character representation</H2>
