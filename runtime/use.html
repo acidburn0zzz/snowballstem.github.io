@@ -1,9 +1,19 @@
-<HTML>
-<HEAD>
-<TITLE>Using Snowball</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <link href="/styles.css" rel="stylesheet">
+    <title>Using Snowball</title>
+  </head>
+
+  <body bgcolor="white">
+    <h1>Using Snowball</h1>
 <TABLE WIDTH=75% ALIGN=CENTER COLS=1>
-<H1 ALIGN=CENTER>Using Snowball</H1>
 <TR><TD BGCOLOR="wheat">
 <BR>&nbsp;<H2>Links to resources</H2>
 <DL><DD><TABLE CELLPADDING=0>
@@ -65,55 +75,57 @@ generation; the &nbsp;<code>-name</code>&nbsp; option with Java generation.
 
 In the absence of the &nbsp;<code>-eprefix</code>&nbsp; and &nbsp;<code>-vprefix</code>&nbsp; options, the list of
 declared externals in the Snowball program, for example,
-<BR><PRE>
-    externals ( stem_1 stem_2 moderate )
-</PRE>
-gives rise to a header file containing,
-<BR><PRE>
-    extern struct SN_env * create_env(void);
-    extern void close_env(struct SN_env * z);
+<BR>
+<div class="highlight"><pre>    <span class="kd">externals</span> <span class="p">(</span> <span class="n">stem_1</span> <span class="n">stem_2</span> <span class="n">moderate</span> <span class="p">)</span>
+</pre></div>
 
-    extern int moderate(struct SN_env * z);
-    extern int stem_2(struct SN_env * z);
-    extern int stem_1(struct SN_env * z);
-</PRE>
+gives rise to a header file containing,
+<BR>
+<div class="highlight"><pre>    <span class="k">extern</span> <span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="nf">create_env</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+    <span class="k">extern</span> <span class="kt">void</span> <span class="nf">close_env</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
+
+    <span class="k">extern</span> <span class="kt">int</span> <span class="nf">moderate</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
+    <span class="k">extern</span> <span class="kt">int</span> <span class="nf">stem_2</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
+    <span class="k">extern</span> <span class="kt">int</span> <span class="nf">stem_1</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
+</pre></div>
 If &nbsp;<code>-eprefix</code>&nbsp; is used, its string, &nbsp;<code>S1</code>, is prefixed to each external
 name, for example
 <BR><PRE>
     -eprefix Khotanese_
 </PRE>
 would give rise to the header file,
-<BR><PRE>
-    extern struct SN_env * Khotanese_create_env(void);
-    extern void Khotanese_close_env(struct SN_env * z);
+<BR>
+<div class="highlight"><pre>    <span class="k">extern</span> <span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="nf">Khotanese_create_env</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+    <span class="k">extern</span> <span class="kt">void</span> <span class="nf">Khotanese_close_env</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
 
-    extern int Khotanese_moderate(struct SN_env * z);
-    extern int Khotanese_stem_2(struct SN_env * z);
-    extern int Khotanese_stem_1(struct SN_env * z);
-</PRE>
+    <span class="k">extern</span> <span class="kt">int</span> <span class="nf">Khotanese_moderate</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
+    <span class="k">extern</span> <span class="kt">int</span> <span class="nf">Khotanese_stem_2</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
+    <span class="k">extern</span> <span class="kt">int</span> <span class="nf">Khotanese_stem_1</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
+</pre></div>
 If &nbsp;<code>-vprefix</code>&nbsp; is used, all Snowball strings, integers and booleans give
 rise to a &nbsp;<code>#define</code>&nbsp; line in the header file. For example
 <BR><PRE>
     -eprefix Khotanese_ -vprefix Khotanese_variable
 </PRE>
 would give rise the header file,
-<BR><PRE>
-    extern struct SN_env * Khotanese_create_env(void);
-    extern void Khotanese_close_env(struct SN_env * z);
+<BR>
+<div class="highlight"><pre>    <span class="k">extern</span> <span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="nf">Khotanese_create_env</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+    <span class="k">extern</span> <span class="kt">void</span> <span class="nf">Khotanese_close_env</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
 
-    #define Khotanese_variable_ch (S[0])
-    #define Khotanese_variable_Y_found (B[0])
-    #define Khotanese_variable_p2 (I[1])
-    #define Khotanese_variable_p1 (I[0])
-    extern int Khotanese_stem(struct SN_env * z);
-</PRE>
+    <span class="cp">#define Khotanese_variable_ch (S[0])</span>
+    <span class="cp">#define Khotanese_variable_Y_found (B[0])</span>
+    <span class="cp">#define Khotanese_variable_p2 (I[1])</span>
+    <span class="cp">#define Khotanese_variable_p1 (I[0])</span>
+    <span class="k">extern</span> <span class="kt">int</span> <span class="nf">Khotanese_stem</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">);</span>
+</pre></div>
 
 The &nbsp;<code>-widechars</code>&nbsp; option affects interpretation of Snowball <I>hex</I> and
 <I>decimal</I> strings, as in
-<BR><PRE>
-    stringdef m hex 'H1 H2 ...'
-    stringdef m decimal 'D1 D2 ...'
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="kd">stringdef</span> <span class="n">m</span> <span class="mh">hex</span> <span class="s">&#39;H1 H2 ...&#39;</span>
+    <span class="kd">stringdef</span> <span class="n">m</span> <span class="mi">decimal</span> <span class="s">&#39;D1 D2 ...&#39;</span>
+</pre></div>
+
 where &nbsp;<code>H1</code>, &nbsp;<code>H2</code>&nbsp; ... are hex numbers and &nbsp;<code>D1</code>, &nbsp;<code>D2</code>&nbsp; ... are decimal
 numbers. Without the &nbsp;<code>-widechars</code>&nbsp; option it is an error for these numbers
 to exceed 255. With the &nbsp;<code>-widechars</code>&nbsp; option it is only an error if they
@@ -123,15 +135,15 @@ that (<I>a</I>) the output from Snowball is the same in both cases, and (<I>b</I
 the &nbsp;<code>-java</code>&nbsp; option automatically sets the &nbsp;<code>-widechars</code>&nbsp; option.
 Within the API header file &nbsp;<code>api.h</code>, &nbsp;<code>symbol</code>&nbsp; is given a typedef of
 <code>unsigned char</code>,
-<BR><PRE>
-        typedef unsigned char symbol;
-</PRE>
+<BR>
+<div class="highlight"><pre>        <span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">symbol</span><span class="p">;</span>
+</pre></div>
 &#x2014; and a sequence of characters representing a word to be stemmed is then
 held in a &nbsp;<code>symbol</code>&nbsp; array. To switch to a 16 bit representation of characters,
 just replace &nbsp;<code>char</code>&nbsp; by &nbsp;<code>short</code>&nbsp; here:
-<BR><PRE>
-        typedef unsigned short symbol;
-</PRE>
+<BR>
+<div class="highlight"><pre>        <span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">symbol</span><span class="p">;</span>
+</pre></div>
 
 The &nbsp;<code>-utf8</code>&nbsp; option is an alternative to &nbsp;<code>-widechars</code>. Again, it allows
 characters in the range 0 to 65535 in &nbsp;<code>stringdef</code>s, but these characters
@@ -175,9 +187,10 @@ Any number of &nbsp;<code>-include</code>&nbsp; options may be present, for exam
 </PRE>
 Each &nbsp;<code>-include</code>&nbsp; is followed by a directory name. With a chain of
 directories &nbsp;<code>D1</code>, &nbsp;<code>D2</code>&nbsp; ... &nbsp;<code>Dn</code>, a Snowball &nbsp;<code>get</code>&nbsp; directive,
-<BR><PRE>
-    get 'F'
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="kn">get</span> <span class="s">&#39;F&#39;</span>
+</pre></div>
+
 causes &nbsp;<code>F</code>&nbsp; to be searched for in the successive locations,
 <BR><PRE>
     F
@@ -193,57 +206,57 @@ causes &nbsp;<code>F</code>&nbsp; to be searched for in the successive locations
 
 To access Snowball from C, include the header &nbsp;<code>api.h</code>, and any headers
 generated from the Snowball scripts you wish to use. &nbsp;<code>api.h</code>&nbsp; declares
-<BR><PRE>
-    struct SN_env { ... };
-    extern void SN_set_current(struct SN_env * z, int size, char * s);
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="k">struct</span> <span class="n">SN_env</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">};</span>
+    <span class="k">extern</span> <span class="kt">void</span> <span class="nf">SN_set_current</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</pre></div>
 Continuing the previous example, you set up an environment to call the
 resources of the Khotanese module with
-<BR><PRE>
-    struct SN_env * z;
-    z = Khotanese_create_env();
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">;</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">Khotanese_create_env</span><span class="p">();</span>
+</pre></div>
 Snowball has the concept of a &#8216;current string&#8217;.
 This can be set up by,
-<BR><PRE>
-    SN_set_current(z, i, b);
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="n">SN_set_current</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</pre></div>
 This defines the current string as the &nbsp;<code>i</code>&nbsp; bytes of data starting at
 address &nbsp;<code>b</code>. The externals can then be called,
-<BR><PRE>
-    Khotanese_moderate(z);
-    ...
-    Khotanese_stem_1(z);
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="n">Khotanese_moderate</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
+    <span class="cm">/* ... */</span>
+    <span class="n">Khotanese_stem_1</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
+</pre></div>
 They give a 1 or 0 result, corresponding to the <B><I>t</I></B> or <B><I>f</I></B> result of
 the Snowball routine.
 <BR><BR>
 And later,
-<BR><PRE>
-    Khotanese_close_env(z);
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="n">Khotanese_close_env</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
+</pre></div>
 To release the space raised by z back to the system. You can do this for a
 number of Snowball modules at the same time: you will need a separate
 <code>struct SN_env * z;</code>&nbsp; for each module.
 
 The current string is given by the &nbsp;<code>z-&gt;l</code>&nbsp; bytes of data starting at &nbsp;<code>z-&gt;p</code>.
 The string is not zero-terminated, but you can zero terminate it yourself with
-<BR><PRE>
-    z-&gt;p[z-&gt;l] = 0;
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="n">z</span><span class="o">-&gt;</span><span class="n">p</span><span class="p">[</span><span class="n">z</span><span class="o">-&gt;</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
 (There is always room for this last zero byte.) For example,
-<BR><PRE>
-    SN_set_current(z, strlen(s), s);
-    Khotanese_stem_1(z);
-    z-&gt;p[z-&gt;l] = 0;
-    printf("Khotanese-1 stems '%s' to '%s'\n", s, z-&gt;p);
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="n">SN_set_current</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">s</span><span class="p">);</span>
+    <span class="n">Khotanese_stem_1</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
+    <span class="n">z</span><span class="o">-&gt;</span><span class="n">p</span><span class="p">[</span><span class="n">z</span><span class="o">-&gt;</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Khotanese-1 stems &#39;%s&#39; to &#39;%s&#39;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">z</span><span class="o">-&gt;</span><span class="n">p</span><span class="p">);</span>
+</pre></div>
 The values of the other variables can be accessed via the &nbsp;<code>#define</code>
 settings that result from the &nbsp;<code>-vprefix</code>&nbsp; option, although this should not
 usually be necessary:
-<BR><PRE>
-    printf("p1 is %d\n", z-&gt;Khotanese_variable_p1);
-</PRE>
+<BR>
+<div class="highlight"><pre>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;p1 is %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">z</span><span class="o">-&gt;</span><span class="n">Khotanese_variable_p1</span><span class="p">);</span>
+</pre></div>
 The stemming scripts on this Web site use Snowball very simply.
 <code>-vprefix</code>&nbsp; is left unset, and &nbsp;<code>-eprefix</code>&nbsp; is set to the name of the
 script (usually the language the script is for). All the programs are
@@ -280,128 +293,129 @@ snowball script,
 at the top of this page, but here it is,
 <BR>
 </TR>
-<TR><TD BGCOLOR="wheat">
-<BR><PRE>
-    #include &lt;stdio.h&gt;
-    #include &lt;stdlib.h&gt; /* for malloc, free */
-    #include &lt;string.h&gt; /* for memmove */
+<TR><TD>
+<div class="highlight"><pre>    <span class="cp">#include &lt;stdio.h&gt;</span>
+    <span class="cp">#include &lt;stdlib.h&gt; </span><span class="cm">/* for malloc, free */</span><span class="cp"></span>
+    <span class="cp">#include &lt;string.h&gt; </span><span class="cm">/* for memmove */</span><span class="cp"></span>
 
-    #include "api.h"
-    #include "hungarian.h"
+    <span class="cp">#include &quot;api.h&quot;</span>
+    <span class="cp">#include &quot;hungarian.h&quot;</span>
 
 
-    /* This derives from the source file driver.template */
+    <span class="cm">/* This derives from the source file driver.template */</span>
 
-    /* A simple driver for a single ANSI C generated Hungarian stemmer.
+    <span class="cm">/* A simple driver for a single ANSI C generated Hungarian stemmer.</span>
 
-       Following compilation with
+<span class="cm">       Following compilation with</span>
 
-           gcc -o H_prog q/*.c
+<span class="cm">           gcc -o H_prog q/*.c</span>
 
-       The command line syntax is
+<span class="cm">       The command line syntax is</span>
 
-           ./H_prog file [-o[utput] file] -h[elp]]
+<span class="cm">           ./H_prog file [-o[utput] file] -h[elp]]</span>
 
-       The first argument gives the input file, which consists of a list of words
-       to be stemmed, one per line. (Words must be in lower case.) If omitted, stdin
-       is used.
+<span class="cm">       The first argument gives the input file, which consists of a list of words</span>
+<span class="cm">       to be stemmed, one per line. (Words must be in lower case.) If omitted, stdin</span>
+<span class="cm">       is used.</span>
 
-       The output is sent to stdout by default, otherwise to the -output file.
+<span class="cm">       The output is sent to stdout by default, otherwise to the -output file.</span>
 
-    */
+<span class="cm">    */</span>
 
-    static void stem_file(struct SN_env * z, FILE * f_in, FILE * f_out) {
-    #define INC 10
-        int lim = INC;
-        symbol * b = (symbol *) malloc(lim * sizeof(symbol));
+    <span class="k">static</span> <span class="kt">void</span> <span class="nf">stem_file</span><span class="p">(</span><span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span><span class="p">,</span> <span class="kt">FILE</span> <span class="o">*</span> <span class="n">f_in</span><span class="p">,</span> <span class="kt">FILE</span> <span class="o">*</span> <span class="n">f_out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cp">#define INC 10</span>
+        <span class="kt">int</span> <span class="n">lim</span> <span class="o">=</span> <span class="n">INC</span><span class="p">;</span>
+        <span class="n">symbol</span> <span class="o">*</span> <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">symbol</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">lim</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">symbol</span><span class="p">));</span>
 
-        while(1) {
-            int ch = getc(f_in);
-            if (ch == EOF) {
-                free(b); return;
-            }
-            {
-                int i = 0;
-                while(1) {
-                    if (ch == '\n' || ch == EOF) break;
-                    if (i == lim) {  /* make b bigger */
-                        symbol * q = (symbol *) malloc((lim + INC) * sizeof(symbol));
-                        memmove(q, b, lim * sizeof(symbol));
-                        free(b); b = q;
-                        lim = lim + INC;
-                    }
-                    b[i] = ch; i++;
-                    ch = getc(f_in);
-                }
+        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">getc</span><span class="p">(</span><span class="n">f_in</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">free</span><span class="p">(</span><span class="n">b</span><span class="p">);</span> <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;\n&#39;</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">lim</span><span class="p">)</span> <span class="p">{</span>  <span class="cm">/* make b bigger */</span>
+                        <span class="n">symbol</span> <span class="o">*</span> <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="n">symbol</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">((</span><span class="n">lim</span> <span class="o">+</span> <span class="n">INC</span><span class="p">)</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">symbol</span><span class="p">));</span>
+                        <span class="n">memmove</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lim</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">symbol</span><span class="p">));</span>
+                        <span class="n">free</span><span class="p">(</span><span class="n">b</span><span class="p">);</span> <span class="n">b</span> <span class="o">=</span> <span class="n">q</span><span class="p">;</span>
+                        <span class="n">lim</span> <span class="o">=</span> <span class="n">lim</span> <span class="o">+</span> <span class="n">INC</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+                    <span class="n">ch</span> <span class="o">=</span> <span class="n">getc</span><span class="p">(</span><span class="n">f_in</span><span class="p">);</span>
+                <span class="p">}</span>
 
-                SN_set_current(z, i, b);
-                H_stem(z);
-                {
-                    int j;
-                    for (j = 0; j &lt; z-&gt;l; j++) fprintf(f_out, "%c", z-&gt;p[j]);
-                    fprintf(f_out, "\n");
-                }
-            }
-        }
-    }
+                <span class="n">SN_set_current</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+                <span class="n">H_stem</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
+                <span class="p">{</span>
+                    <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">z</span><span class="o">-&gt;</span><span class="n">l</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="s">&quot;%c&quot;</span><span class="p">,</span> <span class="n">z</span><span class="o">-&gt;</span><span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+                    <span class="n">fprintf</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    static int eq(char * s1, char * s2) {
-        int s1_len = strlen(s1);
-        int s2_len = strlen(s2);
-        return s1_len == s2_len &amp;&amp; memcmp(s1, s2, s1_len) == 0;
-    }
+    <span class="k">static</span> <span class="kt">int</span> <span class="nf">eq</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span> <span class="n">s1</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">s2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">s1_len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">s1</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">s2_len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">s2</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">s1_len</span> <span class="o">==</span> <span class="n">s2_len</span> <span class="o">&amp;&amp;</span> <span class="n">memcmp</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s1_len</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    static void show_options(int n) {
-        printf("options are: file [-o[utput] file] [-h[elp]]\n");
-        exit(n);
-    }
+    <span class="k">static</span> <span class="kt">void</span> <span class="nf">show_options</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;options are: file [-o[utput] file] [-h[elp]]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    int main(int argc, char * argv[])
-    {   char * in = 0;
-        char * out = 0;
-        {   char * s;
-            int i = 1;
-            while(1) {
-                if (i &gt;= argc) break;
-                s = argv[i++];
-                if (s[0] == '-') {
-                    if (eq(s, "-output") || eq(s, "-o")) {
-                        if (i &gt;= argc) {
-                            fprintf(stderr, "%s requires an argument\n", s);
-                            exit(1);
-                        }
-                        out = argv[i++];
-                    } else if (eq(s, "-help") || eq(s, "-h")) {
-                        show_options(0);
-                    } else {
-                        fprintf(stderr, "%s unknown\n", s);
-                        show_options(1);
-                    }
-                }
-                else in = s;
-            }
-        }
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+    <span class="p">{</span>   <span class="kt">char</span> <span class="o">*</span> <span class="n">in</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="o">*</span> <span class="n">out</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">{</span>   <span class="kt">char</span> <span class="o">*</span> <span class="n">s</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">argc</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;-&#39;</span><span class="p">)</span> <span class="p">{</span>
 
-        /* initialise the stemming process: */
+                    <span class="k">if</span> <span class="p">(</span><span class="n">eq</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&quot;-output&quot;</span><span class="p">)</span> <span class="o">||</span> <span class="n">eq</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&quot;-o&quot;</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">argc</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;%s requires an argument</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+                            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+                        <span class="p">}</span>
+                        <span class="n">out</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">eq</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&quot;-help&quot;</span><span class="p">)</span> <span class="o">||</span> <span class="n">eq</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&quot;-h&quot;</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="n">show_options</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;%s unknown</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+                        <span class="n">show_options</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="n">in</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        {
-            struct SN_env * z = H_create_env();
-            FILE * f_in;
-            FILE * f_out;
-            f_in = in == 0 ? stdin : fopen(in, "r");
-            if (f_in == 0) {
-                fprintf(stderr, "file %s not found\n", in); exit(1);
-            }
-            f_out = out == 0 ? stdout : fopen(out, "w");
-            if (f_out == 0) {
-                fprintf(stderr, "file %s cannot be opened\n", out); exit(1);
-            }
-            stem_file(z, f_in, f_out);
-            H_close_env(z);
-        }
+        <span class="cm">/* initialise the stemming process: */</span>
 
-        return 0;
-    }
+        <span class="p">{</span>
+            <span class="k">struct</span> <span class="n">SN_env</span> <span class="o">*</span> <span class="n">z</span> <span class="o">=</span> <span class="n">H_create_env</span><span class="p">();</span>
+            <span class="kt">FILE</span> <span class="o">*</span> <span class="n">f_in</span><span class="p">;</span>
+            <span class="kt">FILE</span> <span class="o">*</span> <span class="n">f_out</span><span class="p">;</span>
+            <span class="n">f_in</span> <span class="o">=</span> <span class="n">in</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="nl">stdin</span> <span class="p">:</span> <span class="n">fopen</span><span class="p">(</span><span class="n">in</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">f_in</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;file %s not found</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">in</span><span class="p">);</span> <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">f_out</span> <span class="o">=</span> <span class="n">out</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="nl">stdout</span> <span class="p">:</span> <span class="n">fopen</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">f_out</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;file %s cannot be opened</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">);</span> <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">stem_file</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">f_in</span><span class="p">,</span> <span class="n">f_out</span><span class="p">);</span>
+            <span class="n">H_close_env</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+</pre></div>
 </PRE>
 </TR>
 <TR><TD>
@@ -472,5 +486,5 @@ occasional side-effect.) It may be addressed in the future.
 </TR>
 
 </TABLE>
-</BODY>
-</HTML>
+  </body>
+</html>
