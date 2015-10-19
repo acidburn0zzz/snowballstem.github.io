@@ -7,30 +7,42 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
-    <link href="/styles.css" rel="stylesheet">
     <title>A Catalan stemming algorithm</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
 
-  <body bgcolor="white">
+  <body>
     <h1>A Catalan stemming algorithm</h1>
-<TABLE WIDTH=75% ALIGN=CENTER COLS=1>
-<TR><TD>
-<BR>&nbsp;<H2>Links to resources</H2>
 
-<DL><DD><TABLE CELLPADDING=0>
-<TR><TD><A HREF="../.."> Snowball main page</A>
-<TR><TD><A HREF="tarball.tgz"> Tar-gzipped file of the delivered resources</A>
-<TR><TD><A HREF="https://ca.wikipedia.org/wiki/Llista_de_sufixos"> Catalan suffixes</A> (as referenced below)
-<TR><TD><A HREF="https://ca.wikipedia.org/wiki/Flexi%C3%B3_verbal_del_catal%C3%A0"> Catalan irregular verbs</A>
+    <!-- Static navbar removed for now-->
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <!--$menu-->
+        </div>
+        <div class="col-md-10">
+<h2>Links to resources</h2>
+
+<ul>
+<li> <A HREF="../.."> Snowball main page</A>
+<li> <A HREF="tarball.tgz"> Tar-gzipped file of the delivered resources</A>
+<li> <A HREF="https://ca.wikipedia.org/wiki/Llista_de_sufixos"> Catalan suffixes</A> (as referenced below)
+<li> <A HREF="https://ca.wikipedia.org/wiki/Flexi%C3%B3_verbal_del_catal%C3%A0"> Catalan irregular verbs</A>
 (as referenced below)
-</TABLE></DL>
+</ul>
 
-<BR><BR>
+<p>
 A stemmer for Catalan was sent us by
 Israel Olalla of <A HREF="http://www.isoco.com">iSOCO</A> with this accompanying email:
+</p>
 
-<BR><PRE>
-<DL><DD>
+<blockquote><pre>
 From: Israel Olalla &lt;iolalla&#64;isoco.com&gt;
 Date: Mon, 26 Jul 2010 12:25:44 +0200
 Subject: Catalan Snowball Stemmer
@@ -58,14 +70,14 @@ Snowball community.
 Kind Regards,
 
 Israel Olalla
-</DL>
-</PRE>
+</pre></blockquote>
 
+<p>
 [For distribution, see the note for the <A HREF="../basque/stemmer.html">Basque stemmer</A>.
 Our thanks to <A HREF="http://www.isoco.com">iSOCO</A>!]
+</p>
 
-<TR><TD>
-<H2>The algorithm in Snowball</H2>
+<h2>The algorithm in Snowball</h2>
 
 <div class="highlight"><pre><span class="kd">routines</span> <span class="p">(</span>
            <span class="n">cleaning</span> <span class="n">mark_regions</span>
@@ -271,8 +283,19 @@ Our thanks to <A HREF="http://www.isoco.com">iSOCO</A>!]
 <span class="cm">*/</span>
 </pre></div>
 
-</TR>
 
-</TABLE>
+        </div><!-- /.col-md-10 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+
+    <div class="container">
+      <footer class="footer">
+        <p>
+          <a href="lists.html">Write to our mailing list</a> if you have comments or questions about the project.
+        </p>
+      </footer>
+    </div> <!-- /container -->
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </body>
 </html>

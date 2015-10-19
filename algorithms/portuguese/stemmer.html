@@ -7,45 +7,46 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
-    <link href="/styles.css" rel="stylesheet">
     <title>Portuguese stemming algorithm</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
 
-  <body bgcolor="white">
+  <body>
     <h1>Portuguese stemming algorithm</h1>
-<TABLE WIDTH=75% ALIGN=CENTER COLS=1>
-<TR><TD>
-<BR>&nbsp;<H2>Links to resources</H2>
 
-<DL><DD><TABLE CELLPADDING=0>
-<TR><TD><A HREF="../.."> Snowball main page</A>
-<TR><TD><A HREF="stem_ISO_8859_1.sbl">    The stemmer in Snowball</A>
-<TR><TD><A HREF="stem.c">      The ANSI C stemmer</A>
-<TR><TD><A HREF="stem.h">      &#x2014; and its header</A>
-<TR><TD><A HREF="voc.txt">     Sample Portuguese vocabulary</A>
-<TR><TD><A HREF="output.txt">  Its stemmed equivalent</A>
-<TR><TD><A HREF="tarball.tgz"> Tar-gzipped file of all of the above</A>
-<BR><BR>
-<TR><TD><A HREF="stop.txt">    Portuguese stop word list</A>
-</TABLE></DL>
+    <!-- Static navbar removed for now-->
 
-<DL><DD><TABLE CELLPADDING=0>
-<TR><TD><A HREF="../../texts/romance.html">
-                  Romance language stemmers</A>
-</TABLE></DL>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <!--$menu-->
+        </div>
+        <div class="col-md-10">
 
-</TR>
+<h2>Links to resources</h2>
 
-<TR><TD BGCOLOR="lightpink">
+<ul>
+<li> <A HREF="../.."> Snowball main page</A>
+<li> <A HREF="../../texts/romance.html"> Romance language stemmers</A>
+<li> <A HREF="stem_ISO_8859_1.sbl">    The stemmer in Snowball</A>
+<li> <A HREF="stem.c">      The ANSI C stemmer</A>
+<li> <A HREF="stem.h">      &#x2014; and its header</A>
+<li> <A HREF="voc.txt">     Sample Portuguese vocabulary</A>
+<li> <A HREF="output.txt">  Its stemmed equivalent</A>
+<li> <A HREF="tarball.tgz"> Tar-gzipped file of all of the above</A>
+<li> <A HREF="stop.txt">    Portuguese stop word list</A>
+</ul>
 
-<BR><BR>
-
+<div style="background-color:lightpink">
+<p>
 Here is a sample of Portuguese vocabulary, with the stemmed forms that will
 be generated with this algorithm.
-
-<BR><BR>
-
-
+</p>
 
 <DL><DD><TABLE CELLPADDING=0>
 <TR><TD>  <B>word</B> </TD>
@@ -230,17 +231,14 @@ quiosqu<BR>
 </TD>
 </TR>
 </TABLE></DL>
+</div>
 
+<h2>The stemming algorithm</h2>
 
-</TR>
-
-<TR><TD>
-
-<BR><BR>
-<BR>&nbsp;<H2>The stemming algorithm</H2>
-
-<BR><BR>
+<p>
 Letters in Portuguese include the following accented forms,
+</p>
+
 <DL><DD>
     <B><I>á  &nbsp;  é  &nbsp;  í  &nbsp;  ó  &nbsp;  ú  &nbsp;  â  &nbsp;  ê  &nbsp;  ô  &nbsp;  ç  &nbsp;  ã  &nbsp;  õ  &nbsp;  ü</I></B>
 </DL>
@@ -252,24 +250,34 @@ And the two nasalised vowel forms,
 <DL><DD>
     <B><I>ã  &nbsp;  õ</I></B>
 </DL>
+
+<p>
 should be treated as a vowel followed by a consonant.
-<BR><BR>
+</p>
+
+<p>
 <B><I>ã</I></B> and <B><I>õ</I></B> are therefore replaced by <B><I>a~</I></B> and <B><I>o~</I></B> in the word, where <B><I>~</I></B> is a
 separate character to be treated as a consonant. And then &#x2014;
-<BR><BR>
+</p>
+
+<p>
 <I>R</I>2
 (see the <A HREF="../../texts/r1r2.html"> note</A> on <I>R</I>1 and <I>R</I>2)
 and <I>RV</I> have the same definition as in the
  <A HREF="../spanish/stemmer.html">Spanish stemmer</A>.
+</p>
 
-<BR><BR>
+<p>
 Always do step 1.
-<BR><BR>
+</p>
+
+<p>
 Step 1: Standard suffix removal
+</p>
+
 <DL><DD>
     Search for the longest among the following suffixes, and perform the
     action indicated.
-<BR><BR>
 <DL>
     <DT><B><I>eza  &nbsp;  ezas  &nbsp;  ico  &nbsp;  ica  &nbsp;  icos  &nbsp;  icas  &nbsp;  ismo  &nbsp;  ismos  &nbsp;
     ável  &nbsp;  ível  &nbsp;  ista  &nbsp;  istas  &nbsp;  oso  &nbsp;  osa  &nbsp;
@@ -277,45 +285,43 @@ Step 1: Standard suffix removal
     adora  &nbsp;  ador  &nbsp;  aça~o  &nbsp;  adoras  &nbsp;  adores  &nbsp;  aço~es  &nbsp;
     ante  &nbsp;  antes  &nbsp;  ância</I></B>
         <DD>delete if in <I>R</I>2
-<BR><BR>
     <DT><B><I>logia  &nbsp;  logias</I></B>
         <DD>replace with <B><I>log</I></B> if in <I>R</I>2
-<BR><BR>
     <DT><B><I>ução  &nbsp;  uções</I></B>
         <DD>replace with <B><I>u</I></B> if in <I>R</I>2
-<BR><BR>
     <DT><B><I>ência  &nbsp;  ências</I></B>
         <DD>replace with <B><I>ente</I></B> if in <I>R</I>2
-<BR><BR>
     <DT><B><I>amente</I></B>
         <DD>delete if in <I>R</I>1
         <DD>if preceded by <B><I>iv</I></B>, delete if in <I>R</I>2 (and if further preceded by <B><I>at</I></B>,
         delete if in <I>R</I>2), otherwise,
         <DD>if preceded by <B><I>os</I></B>, <B><I>ic</I></B> or <B><I>ad</I></B>, delete if in <I>R</I>2
-<BR><BR>
     <DT><B><I>mente</I></B>
         <DD>delete if in <I>R</I>2
         <DD>if preceded by <B><I>ante</I></B>, <B><I>avel</I></B> or <B><I>ível</I></B>, delete if in <I>R</I>2
-<BR><BR>
     <DT><B><I>idade  &nbsp;  idades</I></B>
         <DD>delete if in <I>R</I>2
         <DD>if preceded by <B><I>abil</I></B>, <B><I>ic</I></B> or <B><I>iv</I></B>, delete if in <I>R</I>2
-<BR><BR>
     <DT><B><I>iva  &nbsp;  ivo  &nbsp;  ivas  &nbsp;  ivos</I></B>
         <DD>delete if in <I>R</I>2
         <DD>if preceded by <B><I>at</I></B>, delete if in <I>R</I>2
-<BR><BR>
     <DT><B><I>ira  &nbsp;  iras</I></B>
         <DD>replace with <B><I>ir</I></B> if in <I>RV</I> and preceded by <B><I>e</I></B>
 </DL>
 </DL>
+
+<p>
 Do step 2 if no ending was removed by step 1.
-<BR><BR>
+</p>
+
+<p>
 Step 2: Verb suffixes
+</p>
+
 <DL><DD>
     Search for the longest among the following suffixes in <I>RV</I>, and if found,
     delete.
-<BR><BR><DL><DD>
+    <DL><DD>
         <B><I>ada  &nbsp;  ida  &nbsp;  ia  &nbsp;  aria  &nbsp;  eria  &nbsp;  iria  &nbsp;  ará  &nbsp;  ara  &nbsp;  erá  &nbsp;  era  &nbsp;  irá  &nbsp;  ava  &nbsp;  asse  &nbsp;  esse
          &nbsp;  isse  &nbsp;  aste  &nbsp;  este  &nbsp;  iste  &nbsp;  ei  &nbsp;  arei  &nbsp;  erei  &nbsp;  irei  &nbsp;  am  &nbsp;  iam  &nbsp;  ariam  &nbsp;  eriam  &nbsp;  iriam
          &nbsp;  aram  &nbsp;  eram  &nbsp;  iram  &nbsp;  avam  &nbsp;  em  &nbsp;  arem  &nbsp;  erem  &nbsp;  irem  &nbsp;  assem  &nbsp;  essem  &nbsp;  issem  &nbsp;  ado  &nbsp;  ido
@@ -336,38 +342,57 @@ Step 3
 <DL><DD>
     Delete suffix <B><I>i</I></B> if in <I>RV</I> and preceded by <B><I>c</I></B>
 </DL>
+
+<p>
 Alternatively, if neither steps 1 nor 2 altered the word, do step 4
-<BR><BR>
+</p>
+
+<p>
 Step 4: Residual suffix
+</p>
+
 <DL><DD>
     If the word ends with one of the suffixes
-<BR><BR><DL><DD>
+    <DL><DD>
         <B><I>os  &nbsp;  a  &nbsp;  i  &nbsp;  o  &nbsp;  á  &nbsp;  í  &nbsp;  ó</I></B>
 </DL><BR>
     in <I>RV</I>, delete it
 </DL>
+
+<p>
 Always do step 5
-<BR><BR>
+</p>
+
+<p>
 Step 5:
+</p>
+
 <DL><DD>
+    <p>
     If the word ends with one of
-<BR><BR><DL><DD>
+    </p>
+    <DL><DD>
         <B><I>e  &nbsp;  é  &nbsp;  ê</I></B>
-</DL><BR>
+    </DL>
+    <p>
     in <I>RV</I>, delete it, and if preceded by <B><I>gu</I></B> (or <B><I>ci</I></B>) with the <B><I>u</I></B> (or <B><I>i</I></B>) in <I>RV</I>,
     delete the <B><I>u</I></B> (or <B><I>i</I></B>).
-<BR><BR>
+    </p>
+
+    <p>
     Or if the word ends <B><I>ç</I></B> remove the cedilla
+    </p>
 </DL>
+
+<p>
 And finally:
+</p>
+
 <DL><DD>
     Turn <B><I>a~</I></B>, <B><I>o~</I></B> back into <B><I>ã</I></B>, <B><I>õ</I></B>
 </DL>
 
-</TR>
-
-<TR><TD>
-<H2>The same algorithm in Snowball</H2>
+<h2>The same algorithm in Snowball</h2>
 
 <div class="highlight"><pre><span class="kd">routines</span> <span class="p">(</span>
            <span class="n">prelude</span> <span class="n">postlude</span> <span class="n">mark_regions</span>
@@ -589,8 +614,19 @@ And finally:
 <span class="cm">*/</span>
 </pre></div>
 
-</TR>
 
-</TABLE>
+        </div><!-- /.col-md-10 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+
+    <div class="container">
+      <footer class="footer">
+        <p>
+          <a href="lists.html">Write to our mailing list</a> if you have comments or questions about the project.
+        </p>
+      </footer>
+    </div> <!-- /container -->
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </body>
 </html>

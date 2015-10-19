@@ -1,59 +1,95 @@
-<HTML>
-<HEAD>
-<TITLE>Defining R1 and R2</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
-<TABLE WIDTH=75% ALIGN=CENTER COLS=1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <title>Defining R1 and R2</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
 
-<TR><TD>
+  <body>
+    <h1>Defining R1 and R2</h1>
 
-<BR><BR>
+    <!-- Static navbar removed for now-->
 
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <!--$menu-->
+        </div>
+        <div class="col-md-10">
 
-<BR>&nbsp;<H2>Defining <I>R</I>1 and <I>R</I>2</H2>
-
+<p>
 Most of the stemmers make use of at least one of the region definitions <I>R</I>1 and
 <I>R</I>2. They are defined as follows:
+</p>
 
-<BR><BR>
+<p>
 <I>R</I>1 is the region after the first non-vowel following a vowel, or is the null
 region at the end of the word if there is no such non-vowel.
-<BR><BR>
+</p>
+
+<p>
 <I>R</I>2 is the region after the first non-vowel following a vowel in <I>R</I>1, or is
 the null region at the end of the word if there is no such non-vowel.
-<BR><BR>
+</p>
 
+<p>
 The definition of <I>vowel</I> varies from language to language. In French, for
 example, <B><I>&eacute;</I></B> is a vowel, and in Italian <B><I>i</I></B> between two other vowels is not a
 vowel. The class of letters that constitute vowels is made clear in each stemmer.
-<BR><BR>
+</p>
+
+<p>
 Below, <I>R</I>1 and <I>R</I>2 are shown for a number of English words,
-<BR><PRE>
+</p>
+
+<PRE>
     b   e   a   u   t   i   f   u   l
                       |&lt;-------------&gt;|    R1
                               |&lt;-----&gt;|    R2
 </PRE>
+
+<p>
 Letter <B><I>t</I></B> is the first non-vowel following a vowel in <I>beautiful</I>, so <I>R</I>1
 is <B><I>iful</I></B>. In <B><I>iful</I></B>, the letter <B><I>f</I></B> is the first non-vowel following a
 vowel, so <I>R</I>2 is <B><I>ul</I></B>.
+</p>
 
-<BR><PRE>
+<PRE>
     b   e   a   u   t   y
                       |&lt;-&gt;|    R1
                         -&gt;|&lt;-  R2
 </PRE>
+
+<p>
 In <I>beauty</I>, the last letter <B><I>y</I></B> is classed as a vowel. Again, letter <B><I>t</I></B> is
 the first non-vowel following a vowel, so <I>R</I>1 is just the last letter, <B><I>y</I></B>.
 <I>R</I>1 contains no non-vowel, so <I>R</I>2 is the null region at the end of the word.
+</p>
 
-<BR><PRE>
+<PRE>
     b   e   a   u
                 -&gt;|&lt;-  R1
                 -&gt;|&lt;-  R2
 </PRE>
 In <I>beau</I>, <I>R</I>1 and <I>R</I>2 are both null.
-<BR><BR>
+</p>
+
+<p>
 Other examples:
-<BR><PRE>
+</p>
+
+<PRE>
     a   n   i   m   a   d   v   e   r   s   i   o   n
           |&lt;-----------------------------------------&gt;|    R1
                   |&lt;---------------------------------&gt;|    R2
@@ -67,8 +103,18 @@ Other examples:
                           |&lt;---------&gt;|    R2
 </PRE>
 
-</TR>
+        </div><!-- /.col-md-10 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
 
-</TABLE>
-</BODY>
-</HTML>
+    <div class="container">
+      <footer class="footer">
+        <p>
+          <a href="lists.html">Write to our mailing list</a> if you have comments or questions about the project.
+        </p>
+      </footer>
+    </div> <!-- /container -->
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

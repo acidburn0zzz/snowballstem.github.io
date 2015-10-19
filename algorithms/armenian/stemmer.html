@@ -7,31 +7,43 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
-    <link href="/styles.css" rel="stylesheet">
     <title>An Armenian stemming algorithm</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
 
-  <body bgcolor="white">
+  <body>
     <h1>An Armenian stemming algorithm</h1>
-<TABLE WIDTH=75% ALIGN=CENTER COLS=1>
-<TR><TD>
-<BR>&nbsp;<H2>Links to resources</H2>
 
-<DL><DD><TABLE CELLPADDING=0>
-<TR><TD><A HREF="../.."> Snowball main page</A>
-<TR><TD><A HREF="tarball.tgz"> Tar-gzipped file of the delivery from Astghik Mkrtchyan</A>
-</TABLE></DL>
+    <!-- Static navbar removed for now-->
 
-<BR><BR>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <!--$menu-->
+        </div>
+        <div class="col-md-10">
+<h2>Links to resources</h2>
 
+<ul>
+<li> <A HREF="../.."> Snowball main page</A>
+<li> <A HREF="tarball.tgz"> Tar-gzipped file of the delivery from Astghik Mkrtchyan</A>
+</ul>
+
+<p>
 A stemmer for Armenian was sent to us by Astghik Mkrtchyan with this accompanying
 email:
+</p>
 
-<BR><PRE>
-<DL><DD>
+<blockquote><pre>
 From: astghik mkrtchyan &lt;mkrtch.ast&#64;mail.ru&gt;
 Date: Sat, 12 Jun 2010 20:27:02 +0400
 Subject: Armenian Stemmer
+
 Hello,
 
 I newbie here. Recently I've googled for Armenian stemmer. So I have found
@@ -40,11 +52,9 @@ nothing, decided to write one. And now I'm sending Armenian stemmer
 
 Regards,
 Astghik
-</DL>
-</PRE>
+</pre></blockquote>
 
-<TR><TD>
-<H2>The algorithm in Snowball</H2>
+<h2>The algorithm in Snowball</h2>
 
 <div class="highlight"><pre><span class="kd">stringescapes</span> <span class="p">{}</span>
 
@@ -349,8 +359,19 @@ Astghik
 <span class="p">)</span>
 </pre></div>
 
-</TR>
 
-</TABLE>
+        </div><!-- /.col-md-10 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+
+    <div class="container">
+      <footer class="footer">
+        <p>
+          <a href="lists.html">Write to our mailing list</a> if you have comments or questions about the project.
+        </p>
+      </footer>
+    </div> <!-- /container -->
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </body>
 </html>

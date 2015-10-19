@@ -7,42 +7,51 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
-    <link href="/styles.css" rel="stylesheet">
     <title>Turkish stemming algorithm</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
 
-  <body bgcolor="white">
+  <body>
     <h1>Turkish stemming algorithm</h1>
-<TABLE WIDTH=75% ALIGN=CENTER COLS=1>
-<TR><TD>
-<BR>&nbsp;<H2>Links to resources</H2>
 
-<DL><DD><TABLE CELLPADDING=0>
-<TR><TD><A HREF="../.."> Snowball main page</A>
-<TR><TD><A HREF="stem_Unicode.sbl">    The stemmer in Snowball</A>
-<TR><TD><A HREF="accompanying_paper.doc">  Accompanying description</A> (this is a &nbsp;<code>.doc</code>&nbsp; file)
-</TABLE></DL>
+    <!-- Static navbar removed for now-->
 
-<BR><BR>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <!--$menu-->
+        </div>
+        <div class="col-md-10">
 
+<h2>Links to resources</h2>
+
+<ul>
+<li> <A HREF="../.."> Snowball main page</A>
+<li> <A HREF="stem_Unicode.sbl">    The stemmer in Snowball</A>
+<li> <A HREF="accompanying_paper.doc">  Accompanying description</A> (this is a &nbsp;<code>.doc</code>&nbsp; file)
+</ul>
+
+<p>
 This page is a &#8216;placeholder&#8217; for the Turkish stemming algorithm provided by
 Evren Kapusuz Cilden. Evren explains that she has been following the paper,
+</p>
 
 <DL><DD>
-
+<p>
 Gulsen Eryigit and Esref Adali.
 <B><I>An Affix Stripping Morphological Analyzer for Turkish</I></B>
 Proceedings of the <FONT SIZE=-1>IAESTED</FONT> International
 Conference
 <FONT SIZE=-1>ARTIFICIAL INTELLIGENCE AND APPLICATIONS</FONT>, February 16-18,2004, Innsbruck, Austria.
-
+</p>
 </DL>
 
-
-</TR>
-
-<TR><TD>
-<H2>The algorithm in Snowball</H2>
+<h2>The algorithm in Snowball</h2>
 
 <div class="highlight"><pre><span class="cm">/* Stemmer for Turkish</span>
 <span class="cm">	* author: Evren (Kapusuz) Çilden</span>
@@ -521,8 +530,19 @@ Conference
 <span class="p">)</span>
 </pre></div>
 
-</TR>
 
-</TABLE>
+        </div><!-- /.col-md-10 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+
+    <div class="container">
+      <footer class="footer">
+        <p>
+          <a href="lists.html">Write to our mailing list</a> if you have comments or questions about the project.
+        </p>
+      </footer>
+    </div> <!-- /container -->
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </body>
 </html>

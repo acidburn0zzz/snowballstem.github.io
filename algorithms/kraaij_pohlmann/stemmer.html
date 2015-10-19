@@ -7,36 +7,48 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
-    <link href="/styles.css" rel="stylesheet">
     <title>The Kraaij-Pohlmann stemming algorithm</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
 
-  <body bgcolor="white">
+  <body>
     <h1>The Kraaij-Pohlmann stemming algorithm</h1>
-<TABLE WIDTH=75% ALIGN=CENTER COLS=1>
-<H1 ALIGN=CENTER>The Kraaij-Pohlmann stemming algorithm</H1>
 
-<TR><TD>
-<BR>&nbsp;<H2>Links to resources</H2>
+    <!-- Static navbar removed for now-->
 
-<DL><DD><TABLE CELLPADDING=0>
-<TR><TD><A HREF="../.."> Snowball main page</A>
-<TR><TD><A HREF="stem_ISO_8859_1.sbl">    The stemmer in Snowball</A>
-<TR><TD><A HREF="stem.c">      The ANSI C stemmer</A>
-<TR><TD><A HREF="stem.h">      &#x2014; and its header</A>
-<TR><TD><A HREF="voc.txt">     Sample vocabulary</A>
-<TR><TD><A HREF="output.txt">  Its stemmed equivalent</A>
-<BR><BR>
-<TR><TD><A HREF="http://www-uilots.let.uu.nl/uplift">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <!--$menu-->
+        </div>
+        <div class="col-md-10">
+
+<h2>Links to resources</h2>
+
+<ul>
+<li> <A HREF="../.."> Snowball main page</A>
+<li> <A HREF="stem_ISO_8859_1.sbl">    The stemmer in Snowball</A>
+<li> <A HREF="stem.c">      The ANSI C stemmer</A>
+<li> <A HREF="stem.h">      &#x2014; and its header</A>
+<li> <A HREF="voc.txt">     Sample vocabulary</A>
+<li> <A HREF="output.txt">  Its stemmed equivalent</A>
+<li> <A HREF="http://www-uilots.let.uu.nl/uplift">
 The UPLIFT project page, from where the original stemmer can be downloaded</A>
-</TABLE></DL>
+</ul>
 
+<p>
 The Kraaij-Pohlmann stemming algorithm is an ANSI C program for stemming in Dutch. Although
 advertised as an algorithm, it is in fact a program without an accompanying
 algorithmic description. It is possible to produce a fairly clean Snowball
 version, but only by sacrificing exact functional equivalence. But that does not
 matter too much, since in the demonstration vocabulary only 32 words out of over
 45,000 stem differently. Here they are:
+</p>
 
 <DL><DD><TABLE CELLPADDING=0>
 <TR><TD>
@@ -55,7 +67,7 @@ matter too much, since in the demonstration vocabulary only 32 words out of over
 <TR><TD> gevrey            <TD></TD><TD>         gevrey          <TD></TD><TD>            vrey
 <TR><TD> geysels           <TD></TD><TD>         ysel            <TD></TD><TD>            gey
 <TR><TD> grootmeesteres    <TD></TD><TD>         grootmee        <TD></TD><TD>            grootmeest
-<TR><TD> grïotmeesteres    <TD></TD><TD>         grïotmee        <TD></TD><TD>            grïotmeest
+<TR><TD> gr√≤otmeesteres    <TD></TD><TD>         gr√≤otmee        <TD></TD><TD>            gr√≤otmeest
 <TR><TD> hectares          <TD></TD><TD>         hectaar         <TD></TD><TD>            hect
 <TR><TD> huys              <TD></TD><TD>         huys            <TD></TD><TD>            huy
 <TR><TD> kayen             <TD></TD><TD>         kayen           <TD></TD><TD>            kaay
@@ -75,14 +87,16 @@ matter too much, since in the demonstration vocabulary only 32 words out of over
 <TR><TD> zangeres          <TD></TD><TD>         zanger          <TD></TD><TD>            zang
 </TABLE></DL>
 
+<p>
 The Kraaij-Pohmann stemmer can make fairly drastic reductions to a word. For
 example, infixed <B><I>ge</I></B> is removed, so <I>geluidgevoelige</I> stems to
 <I>luidvoel</I>. Often, therefore, the original word cannot be easily guessed from
 the stemmed form.
-<BR><BR>
+</p>
+
+<p>
 Here then is the Snowball equivalent of the Kraaij-Pohlmann algorithm.
-<BR><BR>
-<TR><TD>
+</p>
 
 <div class="highlight"><pre><span class="kd">strings</span> <span class="p">(</span> <span class="n">ch</span> <span class="p">)</span>
 <span class="kd">integers</span> <span class="p">(</span> <span class="n">x</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
@@ -330,8 +344,19 @@ Here then is the Snowball equivalent of the Kraaij-Pohlmann algorithm.
 <span class="p">)</span>
 </pre></div>
 
-</TR>
 
-</TABLE>
+        </div><!-- /.col-md-10 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+
+    <div class="container">
+      <footer class="footer">
+        <p>
+          <a href="lists.html">Write to our mailing list</a> if you have comments or questions about the project.
+        </p>
+      </footer>
+    </div> <!-- /container -->
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </body>
 </html>

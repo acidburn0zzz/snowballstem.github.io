@@ -7,28 +7,40 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
-    <link href="/styles.css" rel="stylesheet">
     <title>A Basque stemming algorithm</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
 
-  <body bgcolor="white">
+  <body>
     <h1>A Basque stemming algorithm</h1>
-<TABLE WIDTH=75% ALIGN=CENTER COLS=1>
-<TR><TD>
-<BR>&nbsp;<H2>Links to resources</H2>
 
-<DL><DD><TABLE CELLPADDING=0>
-<TR><TD><A HREF="../.."> Snowball main page</A>
-<TR><TD><A HREF="tarball.tgz"> Tar-gzipped file of the delivered resources</A>
-<TR><TD><A HREF="http://www.santurtzieus.com/gelairekia/unitateak/3/lagun/atzizkien_zerrenda.htm"> Basque suffixes</A> (as referenced below)
-</TABLE></DL>
+    <!-- Static navbar removed for now-->
 
-<BR><BR>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <!--$menu-->
+        </div>
+        <div class="col-md-10">
+<h2>Links to resources</h2>
+
+<ul>
+<li> <A HREF="../.."> Snowball main page</A>
+<li> <A HREF="tarball.tgz"> Tar-gzipped file of the delivered resources</A>
+<li> <A HREF="http://www.santurtzieus.com/gelairekia/unitateak/3/lagun/atzizkien_zerrenda.htm"> Basque suffixes</A> (as referenced below)
+</ul>
+
+<p>
 A stemmer for the Basque (Euskera) language was sent us by
 Mikel Otxandorena of <A HREF="http://www.isoco.com">iSOCO</A> with this accompanying email:
+</p>
 
-<BR><PRE>
-<DL><DD>
+<blockquote><pre>
 From: Mikel Otxandorena &lt;motxandorena&#64;isoco.com&gt;
 Date: Mon, 26 Jul 2010 13:04:19 +0200
 Subject: Basque Snowball Stemmer
@@ -55,16 +67,15 @@ Snowball community.
 Kind Regards,
 
 Mikel Otxandorena
+</pre></blockquote>
 
-</DL>
-</PRE>
-
+<p>
 Mikel has confirmed that he wishes <A HREF="http://www.isoco.com">iSOCO</A> to be
 duly acknowledged on the Snowball site, and that the stemmer itself is
 free for use under the BSD license.
+</p>
 
-<TR><TD>
-<H2>The algorithm in Snowball</H2>
+<h2>The algorithm in Snowball</h2>
 
 <div class="highlight"><pre><span class="kd">routines</span> <span class="p">(</span>
            <span class="n">aditzak</span>
@@ -217,8 +228,19 @@ free for use under the BSD license.
 <span class="cm">*/</span>
 </pre></div>
 
-</TR>
 
-</TABLE>
+        </div><!-- /.col-md-10 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+
+    <div class="container">
+      <footer class="footer">
+        <p>
+          <a href="lists.html">Write to our mailing list</a> if you have comments or questions about the project.
+        </p>
+      </footer>
+    </div> <!-- /container -->
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </body>
 </html>

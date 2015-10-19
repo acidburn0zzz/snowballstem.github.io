@@ -1,73 +1,96 @@
-<HTML>
-<HEAD>
-<TITLE>Character codes</TITLE></HEAD>
-<BODY BGCOLOR=WHITE>
-<TABLE WIDTH=75% ALIGN=CENTER COLS=1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <title>Character codes</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
 
-<TR><TD>
-<BR><BR>
-<H1>Character codes</H1>
-<BR><BR>
-</TR>
+  <body>
+    <h1>Character codes</h1>
 
+    <!-- Static navbar removed for now-->
 
-<TR><TD BGCOLOR="wheat">
-<BR>&nbsp;<H2>Links</H2>
-<DL>
-<DT><A HREF=".."> Snowball main page</A>
-<BR><BR>
-<DT>Snowball header files for
-    <DD><A HREF="ISO-Latin-1-hex.txt"> ISO Latin 1 (hex form)</A>
-</DL>
-</TR>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <!--$menu-->
+        </div>
+        <div class="col-md-10">
 
-<TR><TD>
-<BR><BR>
+<h2>Links</h2>
 
+<ul>
+<li> <A HREF=".."> Snowball main page</A>
+<li> Snowball header files for <A HREF="ISO-Latin-1-hex.txt"> ISO Latin 1 (hex form)</A>
+</ul>
+
+<p>
 The Snowball scripts on this site define the codings of accented letters and
 other non-ASCII forms in a series of explicit declarations. For example, the
 German stemmer includes the lines
-<BR><PRE>
-    /* special characters (in ISO Latin I) */
+</p>
 
-    stringdef a"   hex 'E4'
-    stringdef o"   hex 'F6'
-    stringdef u"   hex 'FC'
-    stringdef ss   hex 'DF'
+<div class="highlight"><pre>    <span class="cm">/* special characters (in ISO Latin I) */</span>
 
-</PRE>
+    <span class="kd">stringdef</span> <span class="n">a&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;E4&#39;</span>
+    <span class="kd">stringdef</span> <span class="n">o&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;F6&#39;</span>
+    <span class="kd">stringdef</span> <span class="n">u&quot;</span>   <span class="mh">hex</span> <span class="s">&#39;FC&#39;</span>
+    <span class="kd">stringdef</span> <span class="n">ss</span>   <span class="mh">hex</span> <span class="s">&#39;DF&#39;</span>
+</pre></div>
+
+
+<p>
 In the ISO Latin I code set, hex E4, F6, FC and DF are the numeric values
 of characters <B><I>&auml;</I></B>, <B><I>&ouml;</I></B>, <B><I>&uuml;</I></B> and <B><I>&szlig;</I></B> respectively. These codings
 in the stemmer scripts then correspond to the codings used in the sample
 data.
+</p>
 
-<BR><BR>
-
+<p>
 For a more general approach, you may wish to replace the set of &nbsp;<code>stringdef</code>s
 by a &nbsp;<code>get</code>&nbsp; directive of the form,
-<BR><PRE>
-    get 'ISO-Latin-1'
-</PRE>
+</p>
+
+<div class="highlight"><pre>    <span class="kn">get</span> <span class="s">&#39;ISO-Latin-1&#39;</span>
+</pre></div>
+
+
+<p>
 possibly compiling with an &nbsp;<code>-include</code>&nbsp; option that declares the
 directory where this and other files are held,
-<BR><PRE>
+</p>
+
+<PRE>
     Snowball gstem.sbl -o gstem ... -include /home/shazzer/snowball/codesets
 </PRE>
 
+<p>
 Appropriate code sets for ISO Latin I are provided via the links
 above, and others will be added on demand or if submitted to us.
+</p>
 
-<BR><BR>
-
+<p>
 For Russian, two sets of &nbsp;<code>stringdef</code>s are given in the script &#x2014; KOI8-R,
 and (commented out) Unicode. For the other stemmers currently on offer the
 Unicode placings correspond to the ISO-Latin I placings, so no extra headers
 for Unicode need, at present, be given.
+</p>
 
-<BR><BR>
-
+<p>
 If you wish to describe other Latin-alphabet based codesets for use in
 Snowball headers, you should adhere to the following conventions:
+</p>
 
 <DL><DD><TABLE CELLPADDING=0>
 <TR><TD> <I>accent</I> <TD></TD><TD> <I>ASCII form</I> <TD></TD><TD> <I>example</I>
@@ -85,23 +108,34 @@ Snowball headers, you should adhere to the following conventions:
 <TR><TD> double acute <TD></TD><TD> letter q <TD></TD><TD> &nbsp;<code>oq</code> for &#x151;
 </TABLE></DL>
 
+<p>
 And, should they ever arise, use &nbsp;<code>r</code>&nbsp; for left and right
 hook (as in Polish), and &nbsp;<code>v</code>&nbsp; for hacek (as in Czech).
+</p>
 
-<BR><BR>
-
+<p>
 The &#8216;line-through&#8217; accent covers a numbers of miscellaneous cases: the
 Scandinavian &nbsp;<code>o/</code>, Icelandic &nbsp;<code>d/</code>&nbsp; and Polish &nbsp;<code>l/</code>.
+</p>
 
-<BR><BR>
-
+<p>
 Use &nbsp;<code>ae</code>&nbsp; and &nbsp;<code>ss</code>&nbsp; for <B><I>&aelig;</I></B> ligature and the German
 <B><I>&szlig;</I></B>, with
 upper case forms &nbsp;<code>AE</code>&nbsp; and &nbsp;<code>SS</code>. Use &nbsp;<code>th</code>&nbsp; for Icelandic thorn.
+</p>
 
+        </div><!-- /.col-md-10 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
 
-</TR>
-
-</TABLE>
-</BODY>
-</HTML>
+    <div class="container">
+      <footer class="footer">
+        <p>
+          <a href="lists.html">Write to our mailing list</a> if you have comments or questions about the project.
+        </p>
+      </footer>
+    </div> <!-- /container -->
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

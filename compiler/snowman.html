@@ -7,27 +7,38 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
-    <link href="/styles.css" rel="stylesheet">
     <title>Snowball Manual</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
 
-  <body bgcolor="white">
+  <body>
     <h1>Snowball Manual</h1>
-<TABLE WIDTH=75% ALIGN=CENTER COLS=1>
-<TR><TD BGCOLOR="wheat">
-<h2>Links to resources</h2>
-<DL><DD><TABLE CELLPADDING=0>
-<TR><TD><A HREF=".."> Snowball main page</A>
-<TR><TD><A HREF="../runtime/use.html">          Using Snowball</A>
-<TR><TD><A HREF="../algorithms/porter/stemmer.html"> Porter stemmer &#x2014; a case study</A>
-</TABLE></DL>
-</TR>
 
-<TR><TD>
-<BR><BR>
+    <!-- Static navbar removed for now-->
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <!--$menu-->
+        </div>
+        <div class="col-md-10">
+
+<h2>Links to resources</h2>
+
+<ul>
+<li> <A HREF=".."> Snowball main page</A>
+<li> <A HREF="../runtime/use.html">          Using Snowball</A>
+<li> <A HREF="../algorithms/porter/stemmer.html"> Porter stemmer &#x2014; a case study</A>
+</ul>
 
 <h2>Snowball definition</h2>
 
+<p>
 Snowball is a small string-handling language, and its name was chosen as a
 tribute to SNOBOL (Farber 1964, Griswold 1968 &#x2014;
 see the references at the end of the
@@ -35,27 +46,36 @@ see the references at the end of the
 with which it shares the
 concept of string patterns delivering signals that are used to control the
 flow of the program.
+</p>
 
 <h2>1 Data types</h2>
 
+<p>
 The basic data types handled by Snowball are strings of characters, signed
 integers, and boolean truth values, or more simply <I>strings</I>, <I>integers</I>
 and <I>booleans</I>. Snowball's characters are either 8-bit wide, or
 16-bit, depending on the mode of use. In particular, both 8-bit
 ASCII and 16-bit Unicode are supported.
+</p>
 
 <h2>2 Names</h2>
 
+<p>
 A name in Snowball is a letter followed by zero or more letters, digits
 and underlines. A name can be of type <I>string</I>, <I>integer</I>, <I>boolean</I>,
 <I>routine</I>, <I>external</I> or <I>grouping</I>. All names must be declared. A
 declaration has the form
-<BR><PRE>
+</p>
+
+<PRE>
     Ts ( ... )
 </PRE>
+
+<p>
 where symbol &nbsp;<code>T</code>&nbsp; is one of &nbsp;<code>string</code>, &nbsp;<code>integer</code>&nbsp; etc, and the region in
 brackets contains a list of names separated by whitespace. For example,
-<BR>
+</p>
+
 <div class="highlight"><pre>    <span class="kd">integers</span> <span class="p">(</span> <span class="n">p1</span> <span class="n">p2</span> <span class="p">)</span>
     <span class="kd">booleans</span> <span class="p">(</span> <span class="n">Y_found</span> <span class="p">)</span>
 
@@ -70,27 +90,34 @@ brackets contains a list of names separated by whitespace. For example,
     <span class="kd">groupings</span> <span class="p">(</span> <span class="n">v</span> <span class="n">v_WXY</span> <span class="n">v_LSZ</span> <span class="p">)</span>
 </pre></div>
 
+
+<p>
 <code>p1</code>&nbsp; and &nbsp;<code>p2</code>&nbsp; are integers, &nbsp;<code>Y_found</code>&nbsp; is boolean, and so on. Snowball is quite
 strict about the declarations, so all the names go in the same name space,
 no name may be declared twice, all used names must be declared, no two
 routine definitions can have the same name, etc. Names declared and
 subsequently not used are merely reported in a warning message. A name may
 not be one of the reserved words of Snowball.
+</p>
 
 <h2>3 Literals</h2>
 
+<p>
 A literal integer is a digit sequence, and is always interpreted as
 decimal. A literal string is written between single quotes, for example,
+</p>
 
 <div class="highlight"><pre>    <span class="s">&#39;aeiouy&#39;</span>
 </pre></div>
 
 
+<p>
 In a &nbsp;<code>stringdef</code>&nbsp; (see below), string may be preceded by the word &nbsp;<code>hex</code>,
 or the word &nbsp;<code>decimal</code>,
 in which case the contents are
 interpreted as characters written out in hexadecimal, or decimal, notation.
 The characters should be separated by spaces. For example,
+</p>
 
 <div class="highlight"><pre>    <span class="mh">hex</span> <span class="s">&#39;DA&#39;</span>        <span class="cm">/* is character hex DA */</span>
     <span class="mh">hex</span> <span class="s">&#39;D A&#39;</span>       <span class="cm">/* is the two characters, hex D and A (carriage</span>
@@ -101,7 +128,9 @@ The characters should be separated by spaces. For example,
 </pre></div>
 
 
+<p>
 The following forms are equivalent,
+</p>
 
 <div class="highlight"><pre>    <span class="mh">hex</span> <span class="s">&#39;d a&#39;</span>      <span class="cm">/* lower case also allowed */</span>
     <span class="mh">hex</span> <span class="s">&#39;0D 000A&#39;</span>  <span class="cm">/* leading zeroes ignored */</span>
@@ -109,13 +138,18 @@ The following forms are equivalent,
 </pre></div>
 
 
+<p>
 <code>stringdef</code>s define special <I>string macros</I>, to handle unusual
 character combinations.
-<BR><BR>
+</p>
+
+<p>
 Macro &nbsp;<code>m</code>&nbsp; is defined in the form &nbsp;<code>stringdef m 'S'</code>, where &nbsp;<code>'S'</code>&nbsp; is a
 string, and &nbsp;<code>m</code>&nbsp; a sequence of one or more printing characters terminating
 with whitespace.
-<BR><BR>
+</p>
+
+<p>
 Two special <I>insert characters</I> are defined by the directive
 <span class="highlight"><code><span class="n">stringescapes</span> <span class="n">AB</span>
 </code></span>
@@ -123,23 +157,31 @@ Two special <I>insert characters</I> are defined by the directive
 , where &nbsp;<code>A</code>&nbsp; and &nbsp;<code>B</code>&nbsp; are printing characters, and &nbsp;<code>A</code>&nbsp; is not
 single quote. (<code>B</code>&nbsp; may equal &nbsp;<code>A</code>, but then &nbsp;<code>A</code>&nbsp; itself can never be escaped.) For
 example,
+</p>
 
 <div class="highlight"><pre>    <span class="kd">stringescapes</span> <span class="p">{}</span>
 </pre></div>
 
 
-A subsequent occurrence of the same directive redefines the insert
-characters.
-<BR><BR>
+<p>
+A subsequent occurrence of the same directive redefines the insert characters.
+</p>
+
+<p>
 Thereafter, &nbsp;<code>{m}</code>&nbsp; inside a string causes &nbsp;<code>S</code>&nbsp; to be substituted in place of &nbsp;<code>m</code>.
-<BR><BR>
+</p>
+
+<p>
 Immediately after the stringescapes directive, &nbsp;<code>{'}</code>&nbsp; will substitute &nbsp;<code>'</code>&nbsp; and
 <code>{{}</code>&nbsp; will substitute &nbsp;<code>{</code>, although macros &nbsp;<code>'</code>&nbsp; and &nbsp;<code>{</code>&nbsp; may subsequently be
 redefined. A further feature is that &nbsp;<code>{<I>W</I>}</code>&nbsp; inside a string, where &nbsp;<code><I>W</I></code>&nbsp; is a
 sequence of whitespace characters including one or more newlines, is
 ignored. This enables long strings to be written over a number of lines.
-<BR><BR>
+</p>
+
+<p>
 For example,
+</p>
 
 <div class="highlight"><pre>    <span class="kd">stringescapes</span> <span class="p">{}</span>
 
@@ -167,15 +209,19 @@ these as literal characters in your strings.</p>
 
 <h2>4 Routines</h2>
 
+<p>
 A routine definition has the form
+</p>
 
 <div class="highlight"><pre>    <span class="kd">define</span> <span class="n">R</span> <span class="k">as</span> <span class="n">C</span>
 </pre></div>
 
 
+<p>
 where &nbsp;<code>R</code>&nbsp; is the routine name and &nbsp;<code>C</code>&nbsp; is a command, or bracketed group of
 commands. So a routine is defined as a sequence of zero or more commands.
 Snowball routines do not (at present) take parameters. For example,
+</p>
 
 <div class="highlight"><pre>    <span class="kd">define</span> <span class="n">Step_5b</span> <span class="k">as</span> <span class="p">(</span>      <span class="c1">// this defines Step_5b</span>
         <span class="p">[</span><span class="s">&#39;l&#39;</span><span class="p">]</span>                <span class="c1">// three commands here: [, &#39;l&#39; and ]</span>
@@ -188,48 +234,65 @@ Snowball routines do not (at present) take parameters. For example,
 </pre></div>
 
 
+<p>
 A routine is called simply by using its name, &nbsp;<code>R</code>, as a command.
+</p>
 
 <h2>5 Commands and signals</h2>
 
+<p>
 The flow of control in Snowball is arranged by the implicit use of
 <I>signals</I>, rather than the explicit use of constructs like the &nbsp;<code>if</code>,
 <code>then</code>, &nbsp;<code>break</code>&nbsp; of C. The scheme is designed for handling strings, but is
 perhaps easier to introduce using integers. Suppose &nbsp;<code>x</code>, &nbsp;<code>y</code>, &nbsp;<code>z</code>&nbsp; ... are
 integers. The command
+</p>
 
 <div class="highlight"><pre>    <span class="o">$</span><span class="n">x</span> <span class="o">=</span> <span class="m">1</span>
 </pre></div>
 
 
+<p>
 sets &nbsp;<code>x</code>&nbsp; to 1. The command
+</p>
 
 <div class="highlight"><pre>    <span class="o">$</span><span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span>
 </pre></div>
 
 
+<p>
 tests if &nbsp;<code>x</code>&nbsp; is greater than zero. Both commands give a signal <B><I>t</I></B> or <B><I>f</I></B>,
 (<I>true</I> or <I>false</I>), but while the second command gives <B><I>t</I></B> if &nbsp;<code>x</code>&nbsp; is greater
 than zero and <B><I>f</I></B> otherwise, the first command always gives <B><I>t</I></B>. In Snowball,
 every command gives a <B><I>t</I></B> or <B><I>f</I></B> signal. A sequence of commands can be turned
 into a single command by putting them in a list surrounded by round
 brackets:
-<BR><PRE>
+</p>
+
+<PRE>
     ( C<SUB>1</SUB> C<SUB>2</SUB> C<SUB>3</SUB> ... C<SUB>i</SUB> C<SUB>i+1</SUB> ... )
 </PRE>
+
+<p>
 When this is obeyed, &nbsp;<code>C<SUB>i+1</SUB></code>&nbsp; will be obeyed if each of the preceding &nbsp;<code>C<SUB>1</SUB></code>&nbsp; ...
 <code>C<SUB>i</SUB></code>&nbsp; give <B><I>t</I></B>, but as soon as a &nbsp;<code>C<SUB>i</SUB></code>&nbsp; gives <B><I>f</I></B>, the subsequent &nbsp;<code>C<SUB>i+1</SUB> C<SUB>i+2</SUB></code>&nbsp; ...
 are ignored, and the whole sequence gives signal <B><I>f</I></B>. If all the &nbsp;<code>C<SUB>i</SUB></code>&nbsp; give <B><I>t</I></B>,
 however, the bracketed command sequence also gives <B><I>t</I></B>. So,
+</p>
 
 <div class="highlight"><pre>    <span class="o">$</span><span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span>  <span class="o">$</span><span class="n">y</span> <span class="o">=</span> <span class="m">1</span>
 </pre></div>
 
 
+<p>
 sets &nbsp;<code>y</code>&nbsp; to 1 if &nbsp;<code>x</code>&nbsp; is greater than zero. If &nbsp;<code>x</code>&nbsp; is less than or equal to zero
 the two commands give <B><I>f</I></B>.
-<BR><BR>
+</p>
+
+<p>
 If &nbsp;<code>C<SUB>1</SUB></code>&nbsp; and &nbsp;<code>C<SUB>2</SUB></code>&nbsp; are commands, we can build up the larger commands,
+</p>
+
 <DL><DD><DL>
     <DT><code>C<SUB>1</SUB> or C<SUB>2</SUB></code>
         <DD>&#x2014; Do &nbsp;<code>C<SUB>1</SUB></code>. If it gives <B><I>t</I></B> ignore &nbsp;<code>C<SUB>2</SUB></code>, otherwise do &nbsp;<code>C<SUB>2</SUB></code>. The resulting
@@ -244,7 +307,11 @@ If &nbsp;<code>C<SUB>1</SUB></code>&nbsp; and &nbsp;<code>C<SUB>2</SUB></code>&n
     <DT><code>fail C</code>
         <DD>&#x2014; Do &nbsp;<code>C</code>. The resulting signal is <B><I>f</I></B> whatever the signal of &nbsp;<code>C</code>.
 </DL></DL>
+
+<p>
 So for example,
+</p>
+
 <DL><DD><DL>
     <DT><span class="highlight"><code><span class="p">(</span><span class="o">$</span><span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span>  <span class="o">$</span><span class="n">y</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="o">$</span><span class="n">y</span> <span class="o">=</span> <span class="m">0</span><span class="p">)</span>
 </code></span>
@@ -256,70 +323,100 @@ So for example,
 
         <DD>&#x2014; sets &nbsp;<code>y</code>&nbsp; to 1 if both &nbsp;<code>x</code>&nbsp; and &nbsp;<code>z</code>&nbsp; are greater than 0, and gives <B><I>t</I></B>.
 </DL></DL>
+
+<p>
 This last example is the same as
+</p>
 
 <div class="highlight"><pre>    <span class="ow">try</span><span class="p">(</span><span class="o">$</span><span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span>  <span class="o">$</span><span class="n">z</span> <span class="o">&gt;</span> <span class="m">0</span>  <span class="o">$</span><span class="n">y</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
 </pre></div>
 
 
+<p>
 so that &nbsp;<code>and</code>&nbsp; seems unnecessary here. But we will see that &nbsp;<code>and</code>&nbsp; has a
 particular significance in string commands.
-<BR><BR>
+</p>
+
+<p>
 When a &#8216;monadic&#8217; construct like &nbsp;<code>not</code>, &nbsp;<code>try</code>&nbsp; or &nbsp;<code>fail</code>&nbsp; is not followed by a
 round bracket, the construct applies to the shortest following valid command.
 So for example
+</p>
 
 <div class="highlight"><pre>    <span class="ow">try</span> <span class="ow">not</span> <span class="o">$</span><span class="n">x</span> <span class="o">&lt;</span> <span class="m">1</span> <span class="o">$</span><span class="n">z</span> <span class="o">&gt;</span> <span class="m">0</span>
 </pre></div>
 
 
+<p>
 would mean
+</p>
 
 <div class="highlight"><pre>    <span class="ow">try</span> <span class="p">(</span> <span class="ow">not</span> <span class="p">(</span> <span class="o">$</span><span class="n">x</span> <span class="o">&lt;</span> <span class="m">1</span> <span class="p">)</span> <span class="p">)</span> <span class="o">$</span><span class="n">z</span> <span class="o">&gt;</span> <span class="m">0</span>
 </pre></div>
 
 
+<p>
 because <span class="highlight"><code><span class="o">$</span><span class="n">x</span> <span class="o">&lt;</span> <span class="m">1</span>
 </code></span>
 
  is the shortest valid command following &nbsp;<code>not</code>, and then
 <code>not $x &lt; 1</code>&nbsp; is the shortest valid command following &nbsp;<code>try</code>.
-<BR><BR>
+</p>
+
+<p>
 The &#8216;dyadic&#8217; constructs like &nbsp;<code>and</code>&nbsp; and &nbsp;<code>or</code>&nbsp; must sit in a bracketed list
 of commands anyway, for example,
-<BR><PRE>
+</p>
+
+<PRE>
     ( C<SUB>1</SUB> C<SUB>2</SUB> and C<SUB>3</SUB> C<SUB>4</SUB> or C<SUB>5</SUB> )
 </PRE>
+
+<p>
 And then in this case &nbsp;<code>C<SUB>2</SUB></code>&nbsp; and &nbsp;<code>C<SUB>3</SUB></code>&nbsp; are connected by the &nbsp;<code>and</code>; &nbsp;<code>C<SUB>4</SUB></code>&nbsp; and &nbsp;<code>C<SUB>5</SUB></code>&nbsp; are
 connected by the &nbsp;<code>or</code>. So
+</p>
 
 <div class="highlight"><pre>    <span class="o">$</span><span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span>  <span class="ow">not</span> <span class="o">$</span><span class="n">y</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="ow">or</span> <span class="ow">not</span> <span class="o">$</span><span class="n">z</span> <span class="o">&gt;</span> <span class="m">0</span>  <span class="o">$</span><span class="n">t</span> <span class="o">&gt;</span> <span class="m">0</span>
 </pre></div>
 
 
+<p>
 means
+</p>
 
 <div class="highlight"><pre>    <span class="o">$</span><span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span>  <span class="p">((</span><span class="ow">not</span> <span class="p">(</span><span class="o">$</span><span class="n">y</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="o">$</span><span class="n">z</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">)))</span>  <span class="o">$</span><span class="n">t</span> <span class="o">&gt;</span> <span class="m">0</span>
 </pre></div>
 
 
+<p>
 <code>and</code>&nbsp; and &nbsp;<code>or</code>&nbsp; are equally binding, and bind from left to right,
 so &nbsp;<code>C<SUB>1</SUB> or C<SUB>2</SUB> and C<SUB>3</SUB></code>&nbsp; means &nbsp;<code>(C<SUB>1</SUB> or C<SUB>2</SUB>) and C<SUB>3</SUB></code>&nbsp; etc.
+</p>
 
 <h2>6 AEs and integer commands</h2>
 
+<p>
 An AE (arithmetic expression) consists of integer names and literal
 numbers connected by dyadic &nbsp;<code>+</code>, &nbsp;<code>-</code>, &nbsp;<code>*</code>&nbsp; and &nbsp;<code>/</code>, and monadic &nbsp;<code>-</code>, with the same
 binding powers and semantics as C. An integer command has the form
-<BR><PRE>
+</p>
+
+<PRE>
     $X <I>op</I> AE
 </PRE>
+
+<p>
 where &nbsp;<code>X</code>&nbsp; is an integer name and <I>op</I> is one of the six tests &nbsp;<code>==</code>, &nbsp;<code>!=</code>, &nbsp;<code>&gt;=</code>, &nbsp;<code>&gt;</code>,
 <code>&lt;=</code>, &nbsp;<code>&lt;</code>, or five assignments &nbsp;<code>=</code>, &nbsp;<code>+=</code>, &nbsp;<code>-=</code>, &nbsp;<code>*=</code>, &nbsp;<code>/=</code>. Again, the meanings are the
 same as in C.
-<BR><BR>
+</p>
+
+<p>
 As well as integer names and literal numbers, the following may be used in
 AEs:
+</p>
+
 <DL><DD><TABLE CELLPADDING=0>
 <TR><TD><code>minint</code>&nbsp;   <TD></TD><TD>  &#x2014; the minimum negative number
 <TR><TD><code>maxint</code>&nbsp;   <TD></TD><TD>  &#x2014; the maximum positive number
@@ -328,22 +425,31 @@ AEs:
 <TR><TD><code>limit</code>&nbsp;    <TD></TD><TD>  &#x2014; the current value of the string <I>limit</I>
 <TR><TD><code>size</code>&nbsp;     <TD></TD><TD>  &#x2014; the size of the string, in characters
 </TABLE></DL>
+
+<p>
 The <I>cursor</I> and <I>limit</I> concepts are explained below.
-<BR><BR>
+</p>
+
+<p>
 Examples of integer commands are,
+</p>
 
 <div class="highlight"><pre>    <span class="o">$</span><span class="n">p1</span> <span class="o">&lt;=</span> <span class="ow">cursor</span>  <span class="c1">// signal is f if the cursor is before position p1</span>
     <span class="o">$</span><span class="n">p1</span> <span class="o">=</span> <span class="ow">limit</span>    <span class="c1">// set p1 to the string limit</span>
 </pre></div>
 
 
-
 <h2>7 String commands</h2>
 
+<p>
 If &nbsp;<code>s</code>&nbsp; is a string name, a string command has the form
-<BR><PRE>
-    $s C
-</PRE>
+</p>
+
+<div class="highlight"><pre>    <span class="o">$</span><span class="n">s</span> <span class="n">C</span>
+</pre></div>
+
+
+<p>
 where &nbsp;<code>C</code>&nbsp; is a command that operate on the string. Strings can be processed
 left-to-right or right-to-left, but we will describe only the
 left-to-right case for now. The string has a <I>cursor</I>, which we will
@@ -352,23 +458,31 @@ advances towards <B><I>l</I></B> in the course of a string command, but the vari
 constructs &nbsp;<code>and</code>, &nbsp;<code>or</code>, &nbsp;<code>not</code>&nbsp; etc have side-effects which keep moving it
 backwards. Initially <B><I>c</I></B> is at the start and <B><I>l</I></B> the end of the string. For
 example,
-<BR><PRE>
+</p>
+
+<PRE>
         'a|n|i|m|a|d|v|e|r|s|i|o|n'
         |                         |
         c                         l
 </PRE>
+
+<p>
 <B><I>c</I></B>, and <B><I>l</I></B>, mark the boundaries between characters, and not
 characters themselves. The characters between <B><I>c</I></B> and <B><I>l</I></B> will be denoted by
 <B><I>c:l</I></B>.
-<BR><BR>
+</p>
+
+<p>
 If &nbsp;<code>C</code>&nbsp; gives <B><I>t</I></B>, the cursor <B><I>c</I></B> will have a new, well-defined value. But if &nbsp;<code>C</code>
 gives <B><I>f</I></B>, <B><I>c</I></B> is undefined. Its later value will in fact be determined by the
 outer context of commands in which &nbsp;<code>C</code>&nbsp; came to be obeyed, not by &nbsp;<code>C</code>&nbsp; itself.
-<BR><BR>
+</p>
+
+<p>
 Here is a list of the commands that can be used to operate on strings.
+</p>
 
 <h4>a) Setting a value</h4>
-
 
 <DL>
 <DT><code>= S</code>
@@ -535,25 +649,33 @@ Here is a list of the commands that can be used to operate on strings.
 
 <h4>c) Moving text about</h4>
 
-
+<p>
 We have seen in (a) that &nbsp;<code>$x = y</code>, when &nbsp;<code>x</code>&nbsp; and &nbsp;<code>y</code>&nbsp; are strings, sets <B><I>c:l</I></B> of &nbsp;<code>x</code>
 to the value of &nbsp;<code>y</code>. Conversely
+</p>
 
 <div class="highlight"><pre>        <span class="o">$</span><span class="n">x</span> <span class="o">=&gt;</span> <span class="n">y</span>
 </pre></div>
 
 
+<p>
 sets the value of &nbsp;<code>y</code>&nbsp; to the <B><I>c:l</I></B> region of &nbsp;<code>x</code>.
-<BR><BR>
+</p>
+
+<p>
 A more delicate mechanism for pushing text around is to define a substring,
 or <I>slice</I> of the string being tested. Then
+</p>
 
 <DL>
-<DT><code>[</code>
-    <DD>sets the left-end of the slice to <B><I>c</I></B>,
-<DT><code>]</code>
-    <DD>sets the right-end of the slice to <B><I>c</I></B>,
+<DT><span class="highlight"><code><span class="p">[</span>
+</code></span>
 
+    <DD>sets the left-end of the slice to <B><I>c</I></B>,
+<DT><span class="highlight"><code><span class="p">]</span>
+</code></span>
+
+    <DD>sets the right-end of the slice to <B><I>c</I></B>,
 <DT><span class="highlight"><code><span class="o">-&gt;</span> <span class="n">s</span>
 </code></span>
 
@@ -563,7 +685,10 @@ or <I>slice</I> of the string being tested. Then
 
     <DD>replaces the slice with variable (or literal) &nbsp;<code>S</code>.
 </DL>
+
+<p>
 For example
+</p>
 
 <div class="highlight"><pre>        <span class="cm">/* assume x holds &#39;animadversion&#39; */</span>
         <span class="o">$</span><span class="n">x</span> <span class="p">(</span> <span class="p">[</span>          <span class="c1">// &#39;[animadversion&#39; - [ set as indicated</span>
@@ -575,9 +700,11 @@ For example
 </pre></div>
 
 
+<p>
 For any string, the slice ends should be assumed to be unset until they are
 set with the two commands &nbsp;<code>[</code>, &nbsp;<code>]</code>. Thereafter the slice ends will retain
 the same values until altered.
+</p>
 
 <DL>
 <DT><span class="highlight"><code><span class="ow">delete</span>
@@ -588,7 +715,9 @@ the same values until altered.
 
 </DL>
 
+<p>
 This next example deletes all vowels in x,
+</p>
 
 <div class="highlight"><pre>        <span class="kd">define</span> <span class="n">vowel</span> <span class="p">(</span><span class="s">&#39;a&#39;</span> <span class="ow">or</span> <span class="s">&#39;e&#39;</span> <span class="ow">or</span> <span class="s">&#39;i&#39;</span> <span class="ow">or</span> <span class="s">&#39;o&#39;</span> <span class="ow">or</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
         <span class="cm">/* ... */</span>
@@ -596,12 +725,17 @@ This next example deletes all vowels in x,
 </pre></div>
 
 
+<p>
 As this example shows, the slice markers &nbsp;<code>[</code>&nbsp; and &nbsp;<code>]</code>&nbsp; often appear as
 pairs in a bracketed style, which makes for easy reading of the Snowball
 scripts. But it must be remembered that, unusually in a computer
 programming language, they are not true brackets.
-<BR><BR>
+</p>
+
+<p>
 More simply, text can be inserted at <B><I>c</I></B>.
+</p>
+
 <DL>
 <DT><span class="highlight"><code><span class="ow">insert</span> <span class="n">S</span>
 </code></span>
@@ -617,15 +751,21 @@ More simply, text can be inserted at <B><I>c</I></B>.
 
 <h4>d) Marks</h4>
 
-
+<p>
 The cursor, <B><I>c</I></B>, (and the limit, <B><I>l</I></B>) can be thought of as having a numeric
 value, from zero upwards:
-<BR><PRE>
+</p>
+
+<PRE>
          | a | n | i | m | a | d | v | e | r | s | i | o | n |
          0   1   2   3   4   5   6   7   8   9  10  11  12  13
 </PRE>
+
+<p>
 It is these numeric values of <B><I>c</I></B> and <B><I>l</I></B> which are accessible through
 <code>cursor</code>&nbsp; and &nbsp;<code>limit</code>&nbsp; in arithmetic expressions.
+</p>
+
 <DL>
 <DT><span class="highlight"><code><span class="ow">setmark</span> <span class="n">X</span>
 </code></span>
@@ -642,6 +782,8 @@ It is these numeric values of <B><I>c</I></B> and <B><I>l</I></B> which are acce
 
     <DD>tests if <B><I>c</I></B> is at position AE (<B><I>t</I></B> or <B><I>f</I></B> signal).
 </DL>
+
+<p>
 In the case of <span class="highlight"><code><span class="ow">tomark</span> <span class="n">AE</span>
 </code></span>
 
@@ -651,15 +793,21 @@ In the case of <span class="highlight"><code><span class="ow">tomark</span> <spa
 .
 If <B><I>c</I></B> is already beyond AE, or if position <B><I>l</I></B> is before position AE, the
 signal is <B><I>f</I></B>.
-<BR><BR>
+</p>
+
+<p>
 In the stemming algorithms, certain regions of the word are defined by
 setting marks, and later the failure condition of <span class="highlight"><code><span class="ow">tomark</span>
 </code></span>
 
  is used to see if
 <B><I>c</I></B> is inside a particular region.
-<BR><BR>
+</p>
+
+<p>
 Two other commands put <B><I>c</I></B> at <B><I>l</I></B>, and test if <B><I>c</I></B> is at <B><I>l</I></B>,
+</p>
+
 <DL>
 <DT><span class="highlight"><code><span class="ow">tolimit</span>
 </code></span>
@@ -674,23 +822,29 @@ Two other commands put <B><I>c</I></B> at <B><I>l</I></B>, and test if <B><I>c</
 
 <h4>e) Changing <B><I>l</I></B></h4>
 
-
+<p>
 In this account of string commands we see <B><I>c</I></B> moving right towards <B><I>l</I></B>, while
 <B><I>l</I></B> stays fixed at the end. In fact <B><I>l</I></B> can be reset to a new position between
 <B><I>c</I></B> and its old position, to act as a shorter barrier for the movement of <B><I>c</I></B>.
+</p>
 
 <DL>
 <DT><code>setlimit C<SUB>1</SUB> for C<SUB>2</SUB></code>
     <DD><code>C<SUB>1</SUB></code>&nbsp; is obeyed, and if it gives <B><I>f</I></B> the signal from &nbsp;<code>setlimit</code>
      is <B><I>f</I></B> with no further action.
-<BR><BR>
+</p>
+
+<p>
     Otherwise, the final value of <B><I>c</I></B> becomes the new
     position of <B><I>l</I></B>. <B><I>c</I></B> is then set back to its old value before &nbsp;<code>C<SUB>1</SUB></code>&nbsp; was
     obeyed, and &nbsp;<code>C<SUB>2</SUB></code>&nbsp; is obeyed. Finally <B><I>l</I></B> is set back to its old position,
     and the signal of &nbsp;<code>C<SUB>2</SUB></code>&nbsp; becomes the signal of &nbsp;<code>setlimit</code>.
-<BR><BR>
+</p>
+
+<p>
     So the signal is <B><I>f</I></B> if either &nbsp;<code>C<SUB>1</SUB></code>&nbsp; or &nbsp;<code>C<SUB>2</SUB></code>&nbsp; gives <B><I>f</I></B>, otherwise <B><I>t</I></B>.
     For example,
+</p>
 
 <div class="highlight"><pre>    <span class="o">$</span><span class="n">x</span> <span class="p">(</span> <span class="ow">setlimit</span> <span class="ow">goto</span> <span class="s">&#39;s&#39;</span>  <span class="c1">// &#39;animadver}sion&#39; new l as marked &#39;}&#39;</span>
          <span class="k">for</span>                <span class="c1">// below, &#39;|&#39; marks c after each goto</span>
@@ -702,14 +856,19 @@ In this account of string commands we see <B><I>c</I></B> moving right towards <
 </pre></div>
 
 
+<p>
     This checks that x has characters &#8216;a&#8217;, &#8216;e&#8217; and &#8216;i&#8217; before the first
     &#8216;s&#8217;.
+</p>
+
 </DL>
 
 <h4>f) Backward processing</h4>
 
+<p>
 String commands have been described with <B><I>c</I></B> to the left of <B><I>l</I></B> and moving
 right. But the process can be reversed.
+</p>
 
 <DL>
 <DT><span class="highlight"><code><span class="ow">backwards</span> <span class="n">C</span>
@@ -737,10 +896,12 @@ right. But the process can be reversed.
     restriction Snowball's semantics would become very untidy.)
 </DL>
 
+<p>
 Forward and backward processing are entirely symmetric, except that forward
 processing is the default direction, and literal strings are always
 written out forwards, even when they are being tested backwards. So the
 following are equivalent,
+</p>
 
 <div class="highlight"><pre>    <span class="o">$</span><span class="n">x</span> <span class="p">(</span>
         <span class="s">&#39;ani&#39;</span> <span class="s">&#39;mad&#39;</span> <span class="s">&#39;version&#39;</span> <span class="ow">atlimit</span>
@@ -752,11 +913,14 @@ following are equivalent,
 </pre></div>
 
 
+<p>
 If a routine is defined for backwards mode processing, it must be included
 inside a &nbsp;<code>backwardmode(...)</code>&nbsp; declaration.
+</p>
 
 <h4>g) substring and among</h4>
 
+<p>
 The use of <span class="highlight"><code><span class="ow">substring</span>
 </code></span>
 
@@ -766,33 +930,47 @@ The use of <span class="highlight"><code><span class="ow">substring</span>
  is central to the implementation of the
 stemming algorithms. It is like a case switch on strings. In its simpler
 form,
-<BR><PRE>
+</p>
+
+<PRE>
         substring among('S<SUB>1</SUB>' 'S<SUB>2</SUB>' 'S<SUB>3</SUB>' ...)
 </PRE>
+
+<p>
 searches for the longest matching substring &nbsp;<code>'S<SUB>1</SUB>'</code>&nbsp; or &nbsp;<code>'S<SUB>2</SUB>'</code>&nbsp; or &nbsp;<code>'S<SUB>3</SUB>'</code>&nbsp; ... from
 position <B><I>c</I></B>. (The &nbsp;<code>'S<SUB>i</SUB>'</code>&nbsp; must all be different.) So this has the same
 semantics as
-<BR><PRE>
+</p>
+
+<PRE>
         ('S<SUB>1</SUB>' or 'S<SUB>2</SUB>' or 'S<SUB>3</SUB>' ...)
 </PRE>
+
+<p>
 &#x2014; so long as the &nbsp;<code>'S<SUB>i</SUB>'</code>&nbsp; are written out in decreasing order of length.
-<BR><BR>
+</p>
+
+<p>
 <code>substring</code>&nbsp; may be omitted, in which case it is attached to its following
 <code>among</code>, so
+</p>
 
 <div class="highlight"><pre>    <span class="k">among</span><span class="p">(</span><span class="cm">/*...*/</span><span class="p">)</span>
 </pre></div>
 
 
+<p>
 without a preceding <span class="highlight"><code><span class="ow">substring</span>
 </code></span>
 
  is equivalent to
+</p>
 
 <div class="highlight"><pre>    <span class="p">(</span><span class="ow">substring</span> <span class="k">among</span><span class="p">(</span><span class="cm">/*...*/</span><span class="p">))</span>
 </pre></div>
 
 
+<p>
 <span class="highlight"><code><span class="ow">substring</span>
 </code></span>
 
@@ -808,7 +986,9 @@ The more general form of <span class="highlight"><code><span class="ow">substrin
 </code></span>
 
  is,
-<BR><PRE>
+</p>
+
+<PRE>
     substring
     ...
     among( 'S<SUB>11</SUB>' 'S<SUB>12</SUB>' ... (C<SUB>1</SUB>)
@@ -818,28 +998,38 @@ The more general form of <span class="highlight"><code><span class="ow">substrin
            'S<SUB>n1</SUB>' 'S<SUB>n2</SUB>' ... (C<SUB>n</SUB>)
          )
 </PRE>
+
+<p>
 Obeying &nbsp;<code>substring</code>&nbsp; searches for a longest match among the &nbsp;<code>'S<SUB>ij</SUB>'</code>. The
 signal from &nbsp;<code>substring</code>&nbsp; is <B><I>t</I></B> if a match is found, otherwise <B><I>f</I></B>. When the
 <code>among</code>&nbsp; comes to be obeyed, the &nbsp;<code>C<SUB>i</SUB></code>&nbsp; corresponding to the matched &nbsp;<code>'S<SUB>ij</SUB>'</code>&nbsp; is
 obeyed, and its signal becomes the signal of the &nbsp;<code>among</code>&nbsp; command.
-<BR><BR>
+</p>
+
+<p>
 <code>substring/among</code>&nbsp; pairs must match up textually inside each routine
 definition. But there is no problem with an &nbsp;<code>among</code>&nbsp; containing other
 <code>substring/among</code>&nbsp; pairs, and &nbsp;<code>substring</code>&nbsp; is optional before &nbsp;<code>among</code>&nbsp; anyway.
 The essential constraint is that two &nbsp;<code>substring</code>s must be separated by an
 <code>among</code>, and each &nbsp;<code>substring</code>&nbsp; must be followed by an &nbsp;<code>among</code>.
-<BR><BR>
+</p>
+
+<p>
 The effect of obeying &nbsp;<code>among</code>&nbsp; when the preceding &nbsp;<code>substring</code>&nbsp; is not obeyed
 is undefined. This would happen for example here,
+</p>
 
 <div class="highlight"><pre>    <span class="ow">try</span><span class="p">(</span><span class="o">$</span><span class="n">x</span> <span class="o">!=</span> <span class="m">617</span> <span class="ow">substring</span><span class="p">)</span>
     <span class="k">among</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="c1">// &#39;substring&#39; is bypassed in the exceptional case where x == 617</span>
 </pre></div>
 
 
+<p>
 The significance of separating the &nbsp;<code>substring</code>&nbsp; from the &nbsp;<code>among</code>&nbsp; is to allow
 them to work in different contexts. For example,
-<BR><PRE>
+</p>
+
+<PRE>
     setlimit tomark L for substring
 
     among( 'S<SUB>11</SUB>' 'S<SUB>12</SUB>' ... (C<SUB>1</SUB>)
@@ -848,10 +1038,14 @@ them to work in different contexts. For example,
            'S<SUB>n1</SUB>' 'S<SUB>n2</SUB>' ... (C<SUB>n</SUB>)
          )
 </PRE>
+
+<p>
 Here the test for the longest &nbsp;<code>'S<SUB>ij</SUB>'</code>&nbsp; is constrained to the region between <B><I>c</I></B>
 and the mark point given by integer &nbsp;<code>L</code>. But the commands &nbsp;<code>C<SUB>i</SUB></code>&nbsp; operate outside
 this limit. Another example is
-<BR><PRE>
+</p>
+
+<PRE>
     reverse substring
 
     among( 'S<SUB>11</SUB>' 'S<SUB>12</SUB>' ... (C<SUB>1</SUB>)
@@ -860,22 +1054,34 @@ this limit. Another example is
            'S<SUB>n1</SUB>' 'S<SUB>n2</SUB>' ... (C<SUB>n</SUB>)
          )
 </PRE>
+
+<p>
 The substring test is in the opposite direction in the string to the
 direction of the commands &nbsp;<code>C<SUB>i</SUB></code>.
-<BR><BR>
+</p>
+
+<p>
 The last &nbsp;<code>(C<SUB>n</SUB>)</code>&nbsp; may be omitted, in which case &nbsp;<code>(true)</code>&nbsp; is assumed.
-<BR><BR>
+</p>
+
+<p>
 Another possible abbreviation is that when &nbsp;<code>substring</code>&nbsp; is omitted, a
 construct such as
-<BR><PRE>
+</p>
+
+<PRE>
     among( 'S<SUB>11</SUB>' 'S<SUB>12</SUB>' ... (C C<SUB>1</SUB>)
            'S<SUB>21</SUB>' 'S<SUB>22</SUB>' ... (C C<SUB>2</SUB>)
            ...
            'S<SUB>n1</SUB>' 'S<SUB>n2</SUB>' ... (C C<SUB>n</SUB>)
          )
 </PRE>
+
+<p>
 can be written
-<BR><PRE>
+</p>
+
+<PRE>
     among( (C)
            'S<SUB>11</SUB>' 'S<SUB>12</SUB>' ... (C<SUB>1</SUB>)
            'S<SUB>21</SUB>' 'S<SUB>22</SUB>' ... (C<SUB>2</SUB>)
@@ -883,8 +1089,12 @@ can be written
            'S<SUB>n1</SUB>' 'S<SUB>n2</SUB>' ... (C<SUB>n</SUB>)
          )
 </PRE>
+
+<p>
 and this is just equivalent to
-<BR><PRE>
+</p>
+
+<PRE>
     substring C
     among( 'S<SUB>11</SUB>' 'S<SUB>12</SUB>' ... (C<SUB>1</SUB>)
            'S<SUB>21</SUB>' 'S<SUB>22</SUB>' ... (C<SUB>2</SUB>)
@@ -893,9 +1103,12 @@ and this is just equivalent to
          )
 </PRE>
 
+<p>
 In its most general form, each string &nbsp;<code>'S<SUB>ij</SUB>'</code>&nbsp; may be optionally followed by a
 routine name,
-<BR><PRE>
+</p>
+
+<PRE>
     among( (C)
            'S<SUB>11</SUB>' R<SUB>11</SUB> 'S<SUB>12</SUB>' R<SUB>12</SUB> ... (C<SUB>1</SUB>)
            'S<SUB>21</SUB>' R<SUB>21</SUB> 'S<SUB>22</SUB>' R<SUB>22</SUB> ... (C<SUB>2</SUB>)
@@ -903,13 +1116,17 @@ routine name,
            'S<SUB>n1</SUB>' R<SUB>n1</SUB> 'S<SUB>n2</SUB>' R<SUB>n1</SUB> ... (C<SUB>n</SUB>)
          )
 </PRE>
+
+<p>
 So here each &nbsp;<code>R<SUB>ij</SUB></code>&nbsp; is either a routine name or is null. If null, it is equivalent
 to a routine which simply returns signal <B><I>t</I></B>,
+</p>
 
 <div class="highlight"><pre>    <span class="kd">define</span> <span class="n">null</span> <span class="k">as</span> <span class="kc">true</span>
 </pre></div>
 
 
+<p>
 &#x2014; so we can imagine each &nbsp;<code>'S<SUB>ij</SUB>'</code>&nbsp; having its associated routine
 <code>R<SUB>ij</SUB></code>. Then obeying the &nbsp;<code>among</code>&nbsp; causes a search for the longest
 <code>'S<SUB>ij</SUB>'</code>&nbsp; whose corresponding routine
@@ -917,9 +1134,11 @@ to a routine which simply returns signal <B><I>t</I></B>,
 <code>R<SUB>ij</SUB></code>&nbsp; should be written without any side-effects, other than the inevitable cursor
 movement. (<B><I>c</I></B> is in any case set back to its old value following a call of
 <code>R<SUB>ij</SUB></code>.)
+</p>
 
 <h2>8 Booleans</h2>
 
+<p>
 <span class="highlight"><code><span class="ow">set</span> <span class="n">B</span>
 </code></span>
 
@@ -932,6 +1151,7 @@ boolean name. <span class="highlight"><code><span class="n">B</span>
 
  as a command gives a signal <B><I>t</I></B> if it is set true, <B><I>f</I></B>
 otherwise. For example,
+</p>
 
 <div class="highlight"><pre>    <span class="kd">booleans</span> <span class="p">(</span> <span class="n">Y_found</span> <span class="p">)</span>   <span class="c1">// declare the boolean</span>
 
@@ -960,16 +1180,24 @@ otherwise. For example,
 
 <h2>9 Groupings</h2>
 
+<p>
 A grouping brings characters together and enables them to be looked for
 with a single test.
-<BR><BR>
+</p>
+
+<p>
 If &nbsp;<code>G</code>&nbsp; is declared as a grouping, it can be defined by
-<BR><PRE>
+</p>
+
+<PRE>
     define G G<SUB>1</SUB> <I>op</I> G<SUB>2</SUB> <I>op</I> G<SUB>3</SUB> ...
 </PRE>
+
+<p>
 where <I>op</I> is &nbsp;<code>+</code>&nbsp; or &nbsp;<code>-</code>, and &nbsp;<code>G<SUB>1</SUB></code>, &nbsp;<code>G<SUB>2</SUB></code>, &nbsp;<code>G<SUB>3</SUB></code>&nbsp; are literal strings, or groupings that
 have already been defined. (There can be zero or more of these additional
 <I>op</I> components). For example,
+</p>
 
 <div class="highlight"><pre>    <span class="kd">define</span> <span class="n">capital_letter</span>  <span class="s">&#39;ABDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span>
     <span class="kd">define</span> <span class="n">small_letter</span>    <span class="s">&#39;abdefghijklmnopqrstuvwxyz&#39;</span>
@@ -981,12 +1209,19 @@ have already been defined. (There can be zero or more of these additional
 </pre></div>
 
 
+<p>
 Once &nbsp;<code>G</code>&nbsp; is defined, it can be used as a command, and is equivalent to a test
-<BR><PRE>
+</p>
+
+<PRE>
     'ch1' or 'ch2' or ...
 </PRE>
+
+<p>
 where &nbsp;<code>ch1</code>, &nbsp;<code>ch2</code>&nbsp; ... list all the characters in the grouping.
-<BR><BR>
+</p>
+
+<p>
 <span class="highlight"><code><span class="ow">non</span> <span class="n">G</span>
 </code></span>
 
@@ -998,33 +1233,42 @@ characters of &nbsp;<code>G</code>. Note that <span class="highlight"><code><spa
 </code></span>
 
 , in fact
-<BR><PRE>
+</p>
+
+<PRE>
     non G    is equivalent to     (not G next)
 </PRE>
+
+<p>
 <span class="highlight"><code><span class="ow">non</span>
 </code></span>
 
  may be optionally followed by hyphen, so one may write
+</p>
 
 <div class="highlight"><pre>    <span class="ow">non-</span><span class="n">vowel</span>
     <span class="ow">non-</span><span class="n">digit</span>
 </pre></div>
 
 
+<p>
 etc.
+</p>
 
 <h2>10 A Snowball program</h2>
 
-
+<p>
 A complete program consists of a sequence of declarations followed by a
 sequence of definitions of groupings and routines. Routines which are
 implicitly defined as operating on <B><I>c:l</I></B> from right to left must be included
 in a &nbsp;<code>backwardmode(...)</code>&nbsp; declaration.
-<BR><BR>
+</p>
+
+<p>
 A Snowball program is called up via a simple
 <A HREF="../runtime/use.html">API</A>
-through its defined
-externals. For example,
+through its defined externals. For example,
+</p>
 
 <div class="highlight"><pre>    <span class="kd">externals</span> <span class="p">(</span> <span class="n">stem1</span> <span class="n">stem2</span> <span class="p">)</span>
     <span class="cm">/* ... */</span>
@@ -1033,55 +1277,80 @@ externals. For example,
 </pre></div>
 
 
+<p>
 The API also allows a current string to be defined, and this becomes the
 <B><I>c:l</I></B> string for the external routine to work on. Its final value is the
 result handed back through the API.
-<BR><BR>
+</p>
+
+<p>
 The strings, integers and booleans are accessible from any point in the
 program, and exist throughout the running of the Snowball program. They are
 therefore like static declarations in C.
+</p>
 
 <h2>11 Comments, and other whitespace fillers</h2>
 
+<p>
 At a deeper level, a program is a sequence of <I>tokens</I>, interspersed with
 whitespace. Names, reserved words, literal numbers and strings are all
 tokens. Various symbols, made up of non-alphanumerics, are also tokens.
-<BR><BR>
+</p>
+
+<p>
 A name, reserved word or number is terminated by the first character that
 cannot form part of it. A symbol is recognised as the longest sequence of
 characters that forms a valid symbol. So &nbsp;<code>+=-</code>&nbsp; is two symbols, &nbsp;<code>+=</code>&nbsp; and
 <code>-</code>, because &nbsp;<code>+=</code>&nbsp; is a valid symbol in the language while &nbsp;<code>+=-</code>&nbsp; is not.
 Whitespace separates tokens but is otherwise ignored. This of course is
 like C.
-<BR><BR>
+</p>
+
+<p>
 Anywhere that whitespace can occur, there may also occur:
-<BR><BR>
-(a) Comments, in the usual multi-line &nbsp;<code>/* .... */</code>&nbsp; or single line
-<code>// ...</code>&nbsp; format.
-<BR><BR>
+</p>
+
+<p>
+(a) Comments, in the usual multi-line <span class="highlight"><code><span class="cm">/* .... */</span>
+</code></span>
+
+ or single line
+<span class="highlight"><code><span class="c1">// ...</span>
+</code></span>
+
+ format.
+</p>
+
+<p>
 (b) Get directives. These are like &nbsp;<code>#include</code>&nbsp; commands in C, and have the form
 <span class="highlight"><code><span class="kn">get</span> <span class="s">&#39;S&#39;</span>
 </code></span>
 
 , where &nbsp;<code>'S'</code>&nbsp; is a literal string. For example,
+</p>
 
 <div class="highlight"><pre>    <span class="kn">get</span> <span class="s">&#39;/home/martin/snowball/main-hdr&#39;</span> <span class="c1">// include the file contents</span>
 </pre></div>
 
 
+<p>
 (c) <span class="highlight"><code><span class="n">stringescapes</span> <span class="n">XY</span>
 </code></span>
 
  where &nbsp;<code>X</code>&nbsp; and &nbsp;<code>Y</code>&nbsp; are any two printing characters.
-<BR><BR>
+</p>
+
+<p>
 (d) <span class="highlight"><code><span class="kd">stringdef</span> <span class="n">m</span> <span class="s">&#39;S&#39;</span>
 </code></span>
 
  where &nbsp;<code>m</code>&nbsp; is sequence of characters not including
 whitespace and terminated with whitespace, and &nbsp;<code>'S'</code>&nbsp; is a literal string.
+</p>
 
 <h2>12 Character representation</h2>
 
+<p>
 In this description of Snowball, it is assumed that strings are composed of
 <I>characters</I>, and that characters can be defined numerically, but the numeric range
 of these characters is not defined. As implemented, three different schemes
@@ -1089,9 +1358,9 @@ are supported. Characters can either be (<I>a</I>) bytes in the range 0 to 255,
 as in traditional C strings, or (<I>b</I>) byte pairs in the range 0 to 65535,
 as in Java strings, or (<I>c</I>) UTF-8 encoded bytes sequences in the range 0
 to 65535, so that a character may occupy 1, 2 or 3 bytes.
+</p>
 
-<BR><BR>
-
+<p>
 For case (<I>c</I>), we need to make a slight separation of the concept of
 <I>characters</I> into <I>symbols</I>, the units of text being represented, and
 <I>slots</I>, the units of space into which they map. (So in case (<I>a</I>), all
@@ -1102,31 +1371,30 @@ expressions). These values count the number of slots. Similarly
 counts. &nbsp;<code>size</code>&nbsp; and &nbsp;<code>sizeof</code>&nbsp; measure string size
 in slots, not symbols. However, &nbsp;<code>hop N</code>&nbsp; moves <B><I>c</I></B> over &nbsp;<code>N</code>&nbsp; symbols,
 not &nbsp;<code>N</code>&nbsp; slots, and &nbsp;<code>next</code>&nbsp; is equivalent to &nbsp;<code>hop 1</code>.
+</p>
 
-<BR><BR>
-
+<p>
 So long as these simple distinctions are recognised, the same Snowball
 script can be compiled to work with any of the three encoding schemes.
+</p>
 
-<BR><BR>
-<BR><BR>
-</TR>
-
-<TR><TD BGCOLOR="lightblue">
 <h2>Snowball syntax</h2>
 
 <DL><DD>
+<p>
 <code>||</code>&nbsp; is used for alternatives, &nbsp;<code>[<I>X</I>]</code>&nbsp; means that <I>X</I> is
 optional, and &nbsp;<code>[<I>X</I>]*</code>&nbsp; means that <I>X</I> is repeated zero or more
 times. meta-symbols are defined on the left. &nbsp;<code>&lt;char&gt;</code>&nbsp; means any
 character.
-<BR><BR>
+</p>
+
+<p>
 The definition of &nbsp;<code>literal string</code>&nbsp; does not allow for the escaping
 conventions established by the &nbsp;<code>stringescapes</code>&nbsp; directive. The command
 <code>?</code>&nbsp; is a debugging aid.
-<BR><BR>
+</p>
 
-<BR><PRE>
+<PRE>
 &lt;letter&gt;        ::= a || b || ... || z || A || B || ... || Z
 &lt;digit&gt;         ::= 0 || 1 || ... || 9
 &lt;name&gt;          ::= &lt;letter&gt; [ &lt;letter&gt; || &lt;digit&gt; || _ ]*
@@ -1192,11 +1460,18 @@ P              ::=  [P]* || &lt;declaration&gt; ||
 synonyms:      &lt;+ for insert
 </PRE>
 
+        </div><!-- /.col-md-10 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
 
-</DL>
-
-</TR>
-
-</TABLE>
+    <div class="container">
+      <footer class="footer">
+        <p>
+          <a href="lists.html">Write to our mailing list</a> if you have comments or questions about the project.
+        </p>
+      </footer>
+    </div> <!-- /container -->
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </body>
 </html>
