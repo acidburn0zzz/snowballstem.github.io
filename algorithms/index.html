@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
-    <title>Stemming algorithms for various European languages</title>
+    <title>Stemming algorithms for various European languages - Snowball</title>
     <link href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="/styles.css" rel="stylesheet">
     <!--[if lt IE 9]>
@@ -17,6 +17,7 @@
   </head>
 
   <body>
+
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top">
       <div class="container">
@@ -40,35 +41,50 @@
       </div>
     </nav>
 
-    <!-- Side navbar needs sorting out -->
-
     <div class="container">
       <div class="row">
         <div class="col-md-2">
-          <!--$menu-->
+          <div class='list-group'><a class="list-group-item" href="/">Introduction</a><a class="list-group-item" href="/demo.html">Demo</a><a class="list-group-item active" href="/algorithms/">Algorithms</a><a class="list-group-item" href="/download.html">Download</a><a class="list-group-item" href="/lists.html">Mailing Lists</a><a class="list-group-item" href="/license.html">License</a><a class="list-group-item" href="/credits.html">Credits</a><a class="list-group-item" href="/projects.html">Projects</a><a class="list-group-item" href="https://github.com/snowballstem">Source on github</a><br>
+</div>
+
+<!--
+<form NAME=P METHOD=GET ACTION="omega.cgi" TARGET="_top">
+<center>
+<input NAME=P VALUE="" SIZE=12>
+<input TYPE=SUBMIT VALUE="Search" BORDER=0>
+<input TYPE=hidden NAME=DB VALUE="snowball-website">
+<input TYPE=hidden NAME=FMT VALUE="snquery">
+</form>
+<br>
+-->
+
+
         </div>
         <div class="col-md-10">
+          <h1>Stemming algorithms for various European languages</h1>
 
-        <h1>Stemming algorithms for various European languages</h1>
 
 <h2>Links to resources</h2>
 
 <ul>
     <li><A HREF="../algorithms/porter/stemmer.html">English (porter)</A>
     <li><A HREF="../algorithms/english/stemmer.html">English (porter2)</A>
-    <li><A HREF="../texts/romance.html">Romance stemmers:</A>
+    <li><a href="../texts/earlyenglish.html">A note on early English</a></li>
+    <li><A HREF="/algorithms/romance.html">Romance stemmers:</A>
     <ul>
         <li><A HREF="../algorithms/french/stemmer.html">French</A>
         <li><A HREF="../algorithms/spanish/stemmer.html">Spanish</A>
         <li><A HREF="../algorithms/portuguese/stemmer.html">Portuguese</A>
         <li><A HREF="../algorithms/italian/stemmer.html">Italian</A>
+	<li><a href="../algorithms/romanian/stemmer.html">Romanian</a></li>
     </ul>
-    <li><A HREF="../texts/germanic.html">Germanic stemmers</A>
+    <li><A HREF="/algorithms/germanic.html">Germanic stemmers</A>
     <ul>
         <li><A HREF="../algorithms/german/stemmer.html">German</A>
+	<li><a href="../algorithms/german2/stemmer.html">(German variant)</a></li>
         <li><A HREF="../algorithms/dutch/stemmer.html">Dutch</A>
     </ul>
-    <li><A HREF="../texts/scandinavian.html">Scandinavian stemmers</A>
+    <li><A HREF="/algorithms/scandinavian.html">Scandinavian stemmers</A>
     <ul>
         <li><A HREF="../algorithms/swedish/stemmer.html">Swedish</A>
         <li><A HREF="../algorithms/norwegian/stemmer.html">Norwegian</A>
@@ -80,7 +96,7 @@
 
 <p>
 We present stemming algorithms, and Snowball stemmers, for English, for Russian,
-for the Romance languages French, Spanish, Portuguese and Italian, for
+for the Romance languages French, Spanish, Portuguese, Italian and Romanian, for
 German and Dutch, for Swedish, Norwegian (bokm&aring;l dialect)
 and Danish, and for Finnish.
 </p>
