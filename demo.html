@@ -63,22 +63,42 @@
         <div class="col-md-10">
           <h1>Demo</h1>
 
-<script language=javascript src="js/base-stemmer.js"></script>
-<script language=javascript src="js/english-stemmer.js"></script>
 
-<div>
-Enter some words to stem, using the English stemming algorithm, and then click on Submit:<br>
-<textarea id="words" rows="10" cols="50">
+<p>
+Enter some words to stem, then click "Stem":
+</p>
+
+<textarea id="words" rows="5" cols="50">
 </textarea>
 <br>
-<button onclick="stem_demo();">Submit</button
-</div>
+<select id="lang"><option value='Danish'>Danish</option><option value='Dutch'>Dutch</option><option value='English' selected>English</option><option value='Finnish'>Finnish</option><option value='French'>French</option><option value='German'>German</option><option value='Hungarian'>Hungarian</option><option value='Italian'>Italian</option><option value='Norwegian'>Norwegian</option><option value='Porter'>Porter</option><option value='Portuguese'>Portuguese</option><option value='Romanian'>Romanian</option><option value='Russian'>Russian</option><option value='Spanish'>Spanish</option><option value='Swedish'>Swedish</option><option value='Tamil'>Tamil</option><option value='Turkish'>Turkish</option></select><button onclick="stem_demo();">Stem</button>
 
 <div id="results"></div>
 
+<script language=javascript src="js/base-stemmer.js"></script>
+<script language=javascript src="js/danish-stemmer.js"></script>
+<script language=javascript src="js/dutch-stemmer.js"></script>
+<script language=javascript src="js/english-stemmer.js"></script>
+<script language=javascript src="js/finnish-stemmer.js"></script>
+<script language=javascript src="js/french-stemmer.js"></script>
+<script language=javascript src="js/german-stemmer.js"></script>
+<script language=javascript src="js/hungarian-stemmer.js"></script>
+<script language=javascript src="js/italian-stemmer.js"></script>
+<script language=javascript src="js/norwegian-stemmer.js"></script>
+<script language=javascript src="js/porter-stemmer.js"></script>
+<script language=javascript src="js/portuguese-stemmer.js"></script>
+<script language=javascript src="js/romanian-stemmer.js"></script>
+<script language=javascript src="js/russian-stemmer.js"></script>
+<script language=javascript src="js/spanish-stemmer.js"></script>
+<script language=javascript src="js/swedish-stemmer.js"></script>
+<script language=javascript src="js/tamil-stemmer.js"></script>
+<script language=javascript src="js/turkish-stemmer.js"></script>
 <script>
 function stem_demo() {
-  var s = new EnglishStemmer();
+  var lang = document.getElementById('lang').value;
+  if (lang.search(/[^-A-Za-z0-9_]/) >= 0) return;
+  lang += "Stemmer";
+  var s = eval("new "+lang+"()");
   var words = document.getElementById('words').value;
   var result = '';
   var a = words.split(/[^\w]+/);
