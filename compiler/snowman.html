@@ -117,8 +117,23 @@ brackets contains a list of names separated by whitespace. For example,
 strict about the declarations, so all the names go in the same name space,
 no name may be declared twice, all used names must be declared, no two
 routine definitions can have the same name, etc. Names declared and
-subsequently not used are merely reported in a warning message. A name may
-not be one of the reserved words of Snowball.
+subsequently not used are merely reported in a warning message.</p>
+
+<p>
+A name may not be one of the reserved words of Snowball.  Additionally, names
+for externals must be valid function/method names in the language being
+generated in most cases, which generally means they can't be reserved words
+in that language (e.g. <span class="highlight"><code><span class="kd">externals</span> <span class="p">(</span><span class="n">null</span><span class="p">)</span>
+</code></span>
+
+ will generate
+invalid Java code containing a method <code>public boolean null()</code>.)
+For internal symbols we add a prefix to avoid this issue, but an external
+has to provide an external interface.  When generating C code, the
+<code>-eprefix</code> provides a solution to this issue, but for portability
+you need to consider this issue when naming externals (e.g. when using
+Snowball to implement stemming algorithms, the convention is that the external
+method is called <code>stem</code>, which should be safe.)
 </p>
 
 <h2>3 Literals</h2>
@@ -264,7 +279,7 @@ A routine is called simply by using its name, &nbsp;<code>R</code>, as a command
 <p>
 The flow of control in Snowball is arranged by the implicit use of
 <I>signals</I>, rather than the explicit use of constructs like the &nbsp;<code>if</code>,
-<code>then</code>, &nbsp;<code>break</code>&nbsp; of C. The scheme is designed for handling strings, but is
+<code>else</code>, &nbsp;<code>break</code>&nbsp; of C. The scheme is designed for handling strings, but is
 perhaps easier to introduce using integers. Suppose &nbsp;<code>x</code>, &nbsp;<code>y</code>, &nbsp;<code>z</code>&nbsp; ... are
 integers. The command
 </p>
